@@ -242,6 +242,13 @@ class DentGoRequestHandler(BaseHTTPRequestHandler):
                 self._send_html(200, conteudo)
                 return
 
+        if path == "/b2b" or path == "/b2b.html" or path == "/portal":
+            caminho_b2b = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "b2b.html"
+            if caminho_b2b.exists():
+                conteudo = caminho_b2b.read_text(encoding="utf-8")
+                self._send_html(200, conteudo)
+                return
+
         self._send_json(404, {"erro": "Rota nao encontrada"})
 
     def do_POST(self):
