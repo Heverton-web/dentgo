@@ -14,6 +14,37 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   
   <style>
+    @keyframes rotaAntPath {
+      from {
+        stroke-dashoffset: 40;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    .rota-animada {
+      animation: rotaAntPath 1.2s linear infinite;
+    }
+    .map-custom-pin {
+      background: #FFFFFF;
+      border: 2px solid #18181B;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      overflow: hidden;
+    }
+    .map-custom-pin.destino {
+      border: 2px solid #16A34A;
+      background: #FFFFFF;
+    }
+    .map-custom-pin svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
     :root {
       --bg: #FAFAFA;
       --surface: #FFFFFF;
@@ -2055,20 +2086,57 @@
             attribution: '© OpenStreetMap'
           }).addTo(mapInstance);
 
-          L.marker([-23.5670, -46.6900]).addTo(mapInstance)
-            .bindPopup('<b>Distribuidor Dental</b><br>Pinheiros, SP').openPopup();
+          // Pega logo da empresa do último pedido ou Conexão default
+          const ultPed = historicoPedidos[0];
+          const empId = ultPed ? ultPed.empresaId : "conexao";
+          const empresa = EMPRESAS.find(e => e.id === empId) || EMPRESAS[0];
 
-          L.marker([-23.5630, -46.6545]).addTo(mapInstance)
-            .bindPopup('<b>Seu Consultório</b><br>Av. Paulista, 1000');
+          // Pin Remetente (Origem com Logo Oficial Colorido da Marca)
+          const iconRemetente = L.divIcon({
+            className: 'map-custom-pin',
+            html: `<div style="width:28px; height:28px; display:flex; align-items:center; justify-content:center;">${empresa.logoSvg}</div>`,
+            iconSize: [38, 38],
+            iconAnchor: [19, 19]
+          });
 
-          const polyline = L.polyline(ROTA_REAL_COORDS, {
-            color: '#18181B',
-            weight: 5,
-            opacity: 0.9,
+          // Pin Destino (Consultório / Clínico com Estetoscópio/Cruz Odonto)
+          const iconDestino = L.divIcon({
+            className: 'map-custom-pin destino',
+            html: `<div style="width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>`,
+            iconSize: [38, 38],
+            iconAnchor: [19, 19]
+          });
+
+          L.marker([-23.5670, -46.6900], { icon: iconRemetente }).addTo(mapInstance)
+            .bindPopup(`<b>${empresa.nome}</b><br>Centro de Distribuição Expressa`).openPopup();
+
+          L.marker([-23.5630, -46.6545], { icon: iconDestino }).addTo(mapInstance)
+            .bindPopup('<b>Dr. Lucas Silveira</b><br>Av. Paulista, 1000 - Cj. 42');
+
+          // Linha de base estática (corredor rodoviário cinza suave)
+          L.polyline(ROTA_REAL_COORDS, {
+            color: '#CBD5E1',
+            weight: 6,
+            opacity: 0.7,
             lineJoin: 'round'
           }).addTo(mapInstance);
 
-          mapInstance.fitBounds(polyline.getBounds(), { padding: [25, 25] });
+          // Traçado dinâmico animado (Ant Path em preto/escuro clínico)
+          const polylineAnimada = L.polyline(ROTA_REAL_COORDS, {
+            color: '#18181B',
+            weight: 4,
+            opacity: 0.95,
+            dashArray: '8, 12',
+            className: 'rota-animada',
+            lineJoin: 'round'
+          }).addTo(mapInstance);
+
+          mapInstance.fitBounds(polylineAnimada.getBounds(), { padding: [35, 35] });
         } else {
           mapInstance.invalidateSize();
         }
