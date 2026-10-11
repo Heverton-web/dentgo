@@ -39,12 +39,28 @@ def criar_pedido(
             # 2. Calcula total dos produtos e reserva estoque
             total_produtos = 0.0
             itens_processados = []
+            marca_referencia = None
 
             for item in itens:
                 prod_id = item["produto_id"]
                 qtd = int(item["quantidade"])
                 if qtd <= 0:
                     raise ValueError("Quantidade deve ser maior que zero.")
+
+                # Valida que todos os produtos pertencem ao mesmo fabricante/marca
+                prod_row = conn.execute(
+                    "SELECT marca_id FROM produtos WHERE id = ?", (prod_id,)
+                ).fetchone()
+                if prod_row:
+                    marca_do_item = prod_row["marca_id"]
+                    if marca_referencia is None:
+                        marca_referencia = marca_do_item
+                    elif marca_referencia != marca_do_item:
+                        raise ValueError(
+                            f"Inconsistência multi-vendor: O produto {prod_id} pertence à marca '{marca_do_item}', "
+                            f"enquanto o pedido já contém itens da marca '{marca_referencia}'. "
+                            "Pedidos cirúrgicos devem pertencer a um único fabricante."
+                        )
 
                 # Consulta preco e estoque no distribuidor
                 est = conn.execute(

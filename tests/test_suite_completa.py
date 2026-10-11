@@ -120,6 +120,59 @@ def test_fluxo_checkout_split_e_telemetria(db_suite_completa: Path, monkeypatch)
     assert pedido_final["status"] == "ENTREGUE"
 
 
+def test_rejeicao_pedido_multi_vendor_marcas_distintas(db_suite_completa: Path, monkeypatch):
+    """
+    BDD / TDD: Garante que o checkout rejeita pedidos contendo produtos
+    de fabricantes/marcas distintas no mesmo checkout (segregação estrita).
+    """
+    monkeypatch.setattr("src.modules.checkout_split.service.get_connection", lambda: get_connection(db_suite_completa))
+    monkeypatch.setattr("src.modules.autenticacao_cro.service.get_connection", lambda: get_connection(db_suite_completa))
+
+    # Cria comprador com CRO ativo
+    user = cadastrar_comprador(
+        nome="Dr. Lucas Cirurgiao",
+        email="lucas@odonto.com",
+        cpf="111.222.333-44",
+        cro_numero="12345",
+        cro_uf="SP",
+        whatsapp="11988889999",
+    )
+
+    # Insere marca straumann e produto no mesmo distribuidor para teste
+    conn = get_connection(db_suite_completa)
+    with conn:
+        conn.execute("INSERT OR IGNORE INTO marcas (id, nome, slug) VALUES ('straumann', 'Straumann', 'straumann')")
+        conn.execute("INSERT OR IGNORE INTO conexoes_proteticas (id, tipo, descricao, marca_id) VALUES ('st-cm', 'CM', 'Cone Morse Straumann', 'straumann')")
+        conn.execute(
+            """
+            INSERT INTO produtos (id, tipo, marca_id, conexao_id, nome, sku, diametro, comprimento, categoria)
+            VALUES ('prod-straumann-1', 'implante', 'straumann', 'st-cm', 'Implante BLT', 'ST-BLT-4110', 4.1, 10.0, 'implante')
+            """
+        )
+        conn.execute(
+            """
+            INSERT INTO estoque_distribuidor (id, distribuidor_id, produto_id, preco, quantidade)
+            VALUES ('est-st-1', 'dist-1', 'prod-straumann-1', 350.00, 5)
+            """
+        )
+
+    # Tenta submeter produtos de marcas distintas (cx e straumann) no mesmo pedido
+    with pytest.raises(ValueError) as excinfo:
+        criar_pedido(
+            comprador_id=user["id"],
+            distribuidor_id="dist-1",
+            itens=[
+                {"produto_id": "prod-10", "quantidade": 1},
+                {"produto_id": "prod-straumann-1", "quantidade": 1}
+            ],
+            modalidade_entrega="CHEGA_HOJE",
+            dest_latitude=-23.561414,
+            dest_longitude=-46.655881,
+            dest_endereco="Av. Paulista, 1000",
+        )
+    assert "Inconsistência multi-vendor" in str(excinfo.value)
+
+
 def test_radar_noticias_jornal_vivo(db_suite_completa: Path, monkeypatch):
     monkeypatch.setattr("src.modules.radar_noticias.service.get_connection", lambda: get_connection(db_suite_completa))
 

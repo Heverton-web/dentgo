@@ -923,6 +923,79 @@
       </div>
     </div>
 
+    <!-- Portal B2B / Dashboard da Empresa Parceira -->
+    <div id="view-empresa" style="display: none;">
+      <div class="profile-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <span style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted);">Portal Fabricante Homologado</span>
+            <h2 id="b2b-nome-empresa" style="font-size:16px; font-weight:800; color:var(--text); margin-top:2px;">Conexão Implantes</h2>
+          </div>
+          <select id="b2b-select-marca" class="clean-input" style="font-size:11px; padding:6px 8px; width:auto;" onchange="trocarEmpresaB2B(this.value)">
+            <option value="conexao">Conexão Implantes</option>
+            <option value="straumann">Straumann</option>
+            <option value="neodent">Neodent</option>
+            <option value="sin">S.I.N. Implantes</option>
+            <option value="titanium">Titanium Fix</option>
+            <option value="dsp">DSP Biomedical</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+          <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center;">
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">VENDAS HOJE</div>
+            <div id="b2b-kpi-vendas" class="mono" style="font-size:15px; font-weight:800; color:var(--text); margin-top:2px;">R$ 14.890</div>
+          </div>
+          <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center;">
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">PEDIDOS</div>
+            <div id="b2b-kpi-pedidos" class="mono" style="font-size:15px; font-weight:800; color:var(--text); margin-top:2px;">19 despachados</div>
+          </div>
+          <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center;">
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">FLASH 2H</div>
+            <div id="b2b-kpi-flash" class="mono" style="font-size:15px; font-weight:800; color:var(--text); margin-top:2px;">Ativo (SP)</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:10px; font-size:11px;">
+          <span style="color:var(--text-muted);">SLA Pronta-Entrega</span>
+          <span style="font-weight:700; color:var(--text);">Corte 14:00h (Motoboy Dedicado)</span>
+        </div>
+      </div>
+
+      <!-- Gerenciamento de Catálogo da Marca -->
+      <div class="wallet-section" style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-size:14px; font-weight:700; color:var(--text);">Componentes em Linha</h3>
+          <span id="b2b-total-itens" style="font-size:11px; color:var(--text-muted); font-weight:700;">14 SKUs</span>
+        </div>
+
+        <div id="b2b-lista-produtos" style="display:flex; flex-direction:column; gap:8px;"></div>
+
+        <div class="card-input-group">
+          <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Cadastrar Novo Componente Cirúrgico</span>
+          <input type="text" id="cad-prod-nome" class="clean-input" placeholder="Nome do produto (Ex: Implante Torq CM 4.3 x 11.5mm)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <input type="text" id="cad-prod-sku" class="clean-input mono" placeholder="SKU (Ex: CX-TQ-4311)">
+            <input type="text" id="cad-prod-preco" class="clean-input mono" placeholder="Preço R$ (Ex: 198.00)">
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <select id="cad-prod-conexao" class="clean-input" style="padding:9px 12px;">
+              <option value="CM">Cone Morse (CM)</option>
+              <option value="HI">Hexágono Interno (HI)</option>
+              <option value="HE">Hexágono Externo (HE)</option>
+            </select>
+            <select id="cad-prod-prazo" class="clean-input" style="padding:9px 12px;">
+              <option value="hoje">Mesmo Dia (Corte 14h)</option>
+              <option value="amanha">D+1 (Amanhã)</option>
+            </select>
+          </div>
+          <button class="btn-action" style="justify-content:center;" onclick="cadastrarProdutoB2B()">
+            Publicar Produto no Catálogo
+          </button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <div id="cart-drawer" class="cart-drawer">
@@ -1067,6 +1140,10 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>
       Radar
     </button>
+    <button id="tab-nav-empresa" class="tab-item" onclick="alternarAba('empresa')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Portal Marca
+    </button>
     <button class="tab-item" onclick="abrirModalTrackingDireto()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       Tracking
@@ -1090,9 +1167,9 @@
         ofereceFlash: true,
         regrasPagamento: ["Cartão de Crédito (até 6x)", "PIX Direto", "Boleto Faturado 28D"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
-          <path d="M50 20C33.431 20 20 33.431 20 50C20 66.569 33.431 80 50 80C62.5 80 73.2 72.4 77.8 61.5H64.2C60.9 67.2 55.8 70 50 70C39 70 30 61 30 50C30 39 39 30 50 30C55.8 30 60.9 32.8 64.2 38.5H77.8C73.2 27.6 62.5 20 50 20Z" fill="#FFFFFF"/>
-          <circle cx="50" cy="50" r="7.5" fill="#FFFFFF"/>
+          <rect width="100" height="100" rx="16" fill="#005C8A"/>
+          <circle cx="50" cy="50" r="32" stroke="#FFFFFF" stroke-width="8"/>
+          <circle cx="50" cy="50" r="14" fill="#00A3E0"/>
         </svg>`
       },
       { 
@@ -1105,9 +1182,9 @@
         ofereceFlash: true,
         regrasPagamento: ["Cartão de Crédito (1x)", "PIX Cirúrgico Antecipado"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
-          <path d="M22 66L42 26H58L38 66H22Z" fill="#FFFFFF"/>
-          <path d="M48 66L68 26H78L58 66H48Z" fill="#71717A"/>
+          <rect width="100" height="100" rx="16" fill="#000000"/>
+          <path d="M20 70L45 22H62L37 70H20Z" fill="#E30613"/>
+          <path d="M52 70L77 22H86L61 70H52Z" fill="#FFFFFF"/>
         </svg>`
       },
       { 
@@ -1120,8 +1197,8 @@
         ofereceFlash: true,
         regrasPagamento: ["Cartão de Crédito (até 3x)", "PIX"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
-          <circle cx="50" cy="50" r="28" stroke="#FFFFFF" stroke-width="7"/>
+          <rect width="100" height="100" rx="16" fill="#003A70"/>
+          <circle cx="50" cy="50" r="28" stroke="#00A3E0" stroke-width="7"/>
           <path d="M38 34V66L62 34V66" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`
       },
@@ -1135,7 +1212,7 @@
         ofereceFlash: false,
         regrasPagamento: ["Cartão de Crédito", "PIX"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <rect width="100" height="100" rx="16" fill="#E31837"/>
           <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">S.I.N.</text>
         </svg>`
       },
@@ -1149,9 +1226,9 @@
         ofereceFlash: true,
         regrasPagamento: ["Cartão de Crédito", "PIX"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <rect width="100" height="100" rx="16" fill="#002D62"/>
           <path d="M26 34H74V44H56V72H44V44H26V34Z" fill="#FFFFFF"/>
-          <rect x="62" y="56" width="12" height="16" fill="#71717A"/>
+          <rect x="62" y="56" width="12" height="16" fill="#00A859"/>
         </svg>`
       },
       { 
@@ -1164,8 +1241,8 @@
         ofereceFlash: false,
         regrasPagamento: ["PIX Antecipado", "Cartão de Crédito"],
         logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="20" fill="#09090B"/>
-          <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="26" fill="#FFFFFF" text-anchor="middle">DSP</text>
+          <rect width="100" height="100" rx="16" fill="#1C3F94"/>
+          <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="26" fill="#FDB813" text-anchor="middle">DSP</text>
         </svg>`
       }
     ];
@@ -1354,14 +1431,15 @@
     function obterIconeBandeira(bandeira) {
       if (bandeira === "VISA") {
         return `<svg viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="32" rx="4" fill="#09090B"/>
+          <rect width="48" height="32" rx="4" fill="#1434CB"/>
           <path d="M19.5 21L21.8 7H25.4L23.1 21H19.5ZM34.2 7.3C33.5 7 32.3 6.8 30.8 6.8C27 6.8 24.3 8.8 24.3 11.6C24.3 13.7 26.2 14.8 27.7 15.5C29.2 16.2 29.7 16.7 29.7 17.4C29.7 18.5 28.4 19 27.2 19C25.5 19 24.5 18.7 23.6 18.3L23.1 20.7C24.1 21.2 25.8 21.5 27.5 21.5C31.5 21.5 34.1 19.5 34.1 16.4C34.1 14.7 33 13.4 30.6 12.2C29.3 11.5 28.5 11 28.5 10.2C28.5 9.4 29.4 8.7 30.7 8.7C31.8 8.7 32.8 8.9 33.6 9.3L34.2 7.3ZM41.8 7H39C38.1 7 37.4 7.5 37.1 8.3L31.6 21H35.4L36.2 18.8H40.8L41.2 21H44.6L41.8 7ZM37.2 16.2C37.5 15.3 38.8 11.8 38.8 11.8C38.8 11.8 39.2 10.7 39.4 10.1L39.7 11.7C39.7 11.7 40.5 15.5 40.6 16.2H37.2ZM15.4 7L11.8 16.8L11.4 14.8C10.7 12.3 8.3 9.6 5.8 8.2L9.2 21H13.1L19.2 7H15.4Z" fill="#FFFFFF"/>
         </svg>`;
       } else {
         return `<svg viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="32" rx="4" fill="#09090B"/>
-          <circle cx="19" cy="16" r="9" fill="#FFFFFF"/>
-          <circle cx="29" cy="16" r="9" fill="#71717A" fill-opacity="0.8"/>
+          <rect width="48" height="32" rx="4" fill="#0A0A0A"/>
+          <circle cx="18" cy="16" r="9" fill="#EB001B"/>
+          <circle cx="30" cy="16" r="9" fill="#F79E1B" fill-opacity="0.95"/>
+          <path d="M24 9.6C26 11.3 27.3 13.5 27.3 16C27.3 18.5 26 20.7 24 22.4C22 20.7 20.7 18.5 20.7 16C20.7 13.5 22 11.3 24 9.6Z" fill="#FF5F00"/>
         </svg>`;
       }
     }
@@ -1521,21 +1599,25 @@
       const vCat = document.getElementById("view-catalogo");
       const vRad = document.getElementById("view-radar");
       const vPer = document.getElementById("view-perfil");
+      const vEmp = document.getElementById("view-empresa");
       
       const bCat = document.getElementById("toggle-catalogo");
       const bRad = document.getElementById("toggle-radar");
       
       const tabCat = document.getElementById("tab-nav-catalogo");
       const tabRad = document.getElementById("tab-nav-radar");
+      const tabEmp = document.getElementById("tab-nav-empresa");
       const tabPer = document.getElementById("tab-nav-perfil");
 
       vCat.style.display = "none";
       vRad.style.display = "none";
       vPer.style.display = "none";
+      if (vEmp) vEmp.style.display = "none";
       bCat.classList.remove("active");
       bRad.classList.remove("active");
       tabCat.classList.remove("active");
       tabRad.classList.remove("active");
+      if (tabEmp) tabEmp.classList.remove("active");
       tabPer.classList.remove("active");
 
       if (aba === "catalogo") {
@@ -1546,6 +1628,10 @@
         vRad.style.display = "block";
         bRad.classList.add("active");
         tabRad.classList.add("active");
+      } else if (aba === "empresa") {
+        if (vEmp) vEmp.style.display = "block";
+        if (tabEmp) tabEmp.classList.add("active");
+        renderizarDashboardB2B();
       } else if (aba === "perfil") {
         vPer.style.display = "block";
         tabPer.classList.add("active");
@@ -1556,10 +1642,34 @@
 
     function adicionarAoCarrinho(id) {
       const prod = PRODUTOS.find(p => p.id === id);
-      if (prod) {
-        carrinho.push(prod);
-        atualizarCarrinho();
+      if (!prod) return;
+
+      // Validação Multi-vendor: Um pedido só pode conter itens de 1 único fabricante/distribuidor
+      if (carrinho.length > 0) {
+        const empresaAtualId = carrinho[0].empresaId;
+        if (prod.empresaId !== empresaAtualId) {
+          const empAtual = EMPRESAS.find(e => e.id === empresaAtualId);
+          const empNova = EMPRESAS.find(e => e.id === prod.empresaId);
+          const nomeAtual = empAtual ? empAtual.nome : empresaAtualId;
+          const nomeNova = empNova ? empNova.nome : prod.empresaId;
+
+          const desejaTrocar = confirm(
+            `Atenção: Seu pedido atual contém itens da ${nomeAtual}.\n\n` +
+            `Por regras logísticas e sanitárias, pedidos expressos são faturados e despachados diretamente por cada fabricante.\n\n` +
+            `Deseja esvaziar o carrinho da ${nomeAtual} para iniciar um novo pedido com a ${nomeNova}?`
+          );
+
+          if (desejaTrocar) {
+            carrinho = [prod];
+            flashAtivo = false;
+            atualizarCarrinho();
+          }
+          return;
+        }
       }
+
+      carrinho.push(prod);
+      atualizarCarrinho();
     }
 
     function alternarOpcaoFlash() {
@@ -1744,6 +1854,79 @@
           mapInstance.invalidateSize();
         }
       }, 200);
+    }
+
+    function renderizarDashboardB2B() {
+      const select = document.getElementById("b2b-select-marca");
+      if (!select) return;
+      trocarEmpresaB2B(select.value);
+    }
+
+    function trocarEmpresaB2B(marcaId) {
+      const emp = EMPRESAS.find(e => e.id === marcaId) || EMPRESAS[0];
+      const nomeEl = document.getElementById("b2b-nome-empresa");
+      const kpiFlashEl = document.getElementById("b2b-kpi-flash");
+      const totalItensEl = document.getElementById("b2b-total-itens");
+      const listaEl = document.getElementById("b2b-lista-produtos");
+
+      if (nomeEl) nomeEl.innerText = emp.nome;
+      if (kpiFlashEl) kpiFlashEl.innerText = emp.ofereceFlash ? "Ativo (SP)" : "Desativado";
+
+      const prodsDaEmpresa = PRODUTOS.filter(p => p.empresaId === emp.id);
+      if (totalItensEl) totalItensEl.innerText = `${prodsDaEmpresa.length} SKUs`;
+
+      if (listaEl) {
+        listaEl.innerHTML = prodsDaEmpresa.map(p => `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 12px;">
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--text);">${p.nome}</div>
+              <div style="font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.sku} • Conexão ${p.conexao} • SLA: ${p.prazo === 'hoje' ? 'Mesmo Dia' : 'D+1'}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+              <span class="sla-badge ${p.prazo === 'hoje' ? 'badge-hoje' : 'badge-amanha'}" style="font-size:9px;">${p.prazo === 'hoje' ? 'Corte 14h' : 'D+1'}</span>
+            </div>
+          </div>
+        `).join("");
+      }
+    }
+
+    function cadastrarProdutoB2B() {
+      const select = document.getElementById("b2b-select-marca");
+      const marcaId = select ? select.value : "conexao";
+      const nome = document.getElementById("cad-prod-nome").value.trim();
+      const sku = document.getElementById("cad-prod-sku").value.trim();
+      const preco = parseFloat(document.getElementById("cad-prod-preco").value.replace(',', '.'));
+      const conexao = document.getElementById("cad-prod-conexao").value;
+      const prazo = document.getElementById("cad-prod-prazo").value;
+
+      if (!nome || !sku || isNaN(preco) || preco <= 0) {
+        alert("Preencha nome, SKU e valor unitário válido para cadastrar.");
+        return;
+      }
+
+      const novoProd = {
+        id: "prod_" + Date.now(),
+        empresaId: marcaId,
+        nome: nome,
+        sku: sku,
+        preco: preco,
+        conexao: conexao,
+        diametro: 4.1,
+        comprimento: 10.0,
+        categoria: "implante",
+        prazo: prazo,
+        compatibilidade: [conexao]
+      };
+
+      PRODUTOS.unshift(novoProd);
+      document.getElementById("cad-prod-nome").value = "";
+      document.getElementById("cad-prod-sku").value = "";
+      document.getElementById("cad-prod-preco").value = "";
+
+      trocarEmpresaB2B(marcaId);
+      renderizarProdutos();
+      alert(`Produto "${nome}" publicado com sucesso no catálogo oficial da marca!`);
     }
 
     renderizarEmpresas();
