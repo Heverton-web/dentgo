@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>DentGo Driver — Entrega Cirúrgica Express</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%2309090B'/%3E%3Cpath d='M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z' fill='%23FFFFFF'/%3E%3Ccircle cx='18' cy='16' r='2.2' fill='%23A1A1AA'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090B;
+      --surface: #18181B;
+      --surface-elevated: #27272A;
+      --border: #3F3F46;
+      --border-subtle: #27272A;
+      --text: #F4F4F5;
+      --text-muted: #A1A1AA;
+      --teal-primary: #FFFFFF;
+      --emerald: #10B981;
+      --danger: #EF4444;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* Scrollbars Cirúrgicas Max 4px */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+    *::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    *::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* Moldura Mobile PWA Estrita (390px a 430px) */
+    .app-viewport {
+      width: 100%;
+      max-width: 430px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--bg);
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Top Bar de Alto Contraste */
+    .driver-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+
+    .driver-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    .brand-title span {
+      font-weight: 400;
+      color: #71717A;
+    }
+
+    .driver-tag {
+      font-size: 9px;
+      font-weight: 800;
+      background: #FFFFFF;
+      color: #09090B;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Botão Toggle Online/Offline */
+    .btn-status-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Área Central de Conteúdo */
+    .driver-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Card de Saldo e KPIs */
+    .wallet-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wallet-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 4px;
+    }
+
+    .wallet-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Card de Missão / Corrida */
+    .mission-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .mission-card.active {
+      border-color: #FFFFFF;
+    }
+
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mission-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #09090B;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mission-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--emerald);
+    }
+
+    /* Rota Visual com Pontos A e B */
+    .route-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .route-line {
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .route-point {
+      position: relative;
+    }
+
+    .route-dot {
+      position: absolute;
+      left: -20px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--surface-elevated);
+      border: 2px solid #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .route-dot.dest {
+      border-color: var(--emerald);
+    }
+
+    .route-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .route-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+
+    .route-address {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Botão Principal Gigante (48px+) para Luvas */
+    .btn-driver-cta {
+      width: 100%;
+      min-height: 54px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: #09090B;
+      font-size: 14px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.1s ease, opacity 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-driver-cta:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .btn-driver-secondary {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      background: var(--surface-elevated);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Teclado Numérico Gigante Integrado para Validação do PIN */
+    .pin-screen-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 500;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .pin-screen-overlay.open {
+      display: flex;
+    }
+
+    .pin-display-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 32px 0 24px 0;
+    }
+
+    .pin-box {
+      width: 58px;
+      height: 68px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .pin-box.filled {
+      border-color: #FFFFFF;
+    }
+
+    /* Grid do Teclado 3x4 */
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: auto;
+      margin-bottom: 20px;
+    }
+
+    .key-btn {
+      min-height: 62px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #FFFFFF;
+      font-size: 22px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .key-btn:active {
+      background: #FFFFFF;
+      color: #09090B;
+    }
+
+    /* Toast Nativo Driver */
+    #driver-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #FFFFFF;
+      color: #09090B;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      white-space: nowrap;
+    }
+
+    #driver-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+    <!-- Cabeçalho de Alto Contraste -->
+    <header class="driver-header">
+      <div class="driver-brand">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#FFFFFF"/>
+          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#09090B"/>
+          <circle cx="18" cy="16" r="2.2" fill="#71717A"/>
+        </svg>
+        <div class="brand-title">Dent<span>Go</span> <span class="driver-tag">DRIVER</span></div>
+      </div>
+
+      <button class="btn-status-toggle" id="btn-toggle-online" onclick="toggleOnline()">
+        <div class="status-dot"></div>
+        <span id="txt-status-online">Online</span>
+      </button>
+    </header>
+
+    <!-- Área Principal de Operações -->
+    <main class="driver-main">
+      <!-- Painel Rápido de Carteira -->
+      <div class="wallet-card">
+        <div>
+          <div class="wallet-sub">Ganhos Hoje (Repasse Líquido)</div>
+          <div class="wallet-val mono" id="wallet-saldo">R$ 80,00</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="wallet-sub">4 Corridas Flash</div>
+          <div style="font-size: 11px; font-weight: 700; color: var(--emerald); margin-top: 4px;">PIX Diário Automático</div>
+        </div>
+      </div>
+
+      <!-- Estado 1: Alerta de Nova Corrida Flash -->
+      <div class="mission-card active" id="card-nova-corrida">
+        <div class="mission-header">
+          <span class="mission-tag">Flash 2h • Cirurgia Urgente</span>
+          <span class="mission-value mono">R$ 20,00</span>
+        </div>
+
+        <div class="route-flow">
+          <div class="route-line"></div>
+          <div class="route-point">
+            <div class="route-dot"></div>
+            <div class="route-label">1. Retirada no Fabricante</div>
+            <div class="route-name">Conexão Implantes (CD Moema)</div>
+            <div class="route-address">Av. Bem-te-vi, 333 • Retirar com Almoxarifado</div>
+          </div>
+
+          <div class="route-point">
+            <div class="route-dot dest"></div>
+            <div class="route-label">2. Entrega no Consultório</div>
+            <div class="route-name">Dr. Roberto Fontes (Clínica Jardins)</div>
+            <div class="route-address">R. Haddock Lobo, 1307 • 4º Andar (Recepção)</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:10px;">
+          <span>Distância Total: <strong class="mono" style="color:#FFF;">4.8 km</strong></span>
+          <span>Tempo Estimado: <strong class="mono" style="color:#FFF;">18 min</strong></span>
+        </div>
+
+        <button class="btn-driver-cta" id="btn-aceitar-corrida" onclick="aceitarCorrida()">
+          Aceitar Corrida Flash (45s)
+        </button>
+      </div>
+
+      <!-- Estado 2: Corrida em Andamento (Oculta Inicialmente) -->
+      <div class="mission-card" id="card-em-andamento" style="display:none;">
+        <div class="mission-header">
+          <span class="mission-tag" id="status-etapa-tag">Etapa 1: Indo Coletar</span>
+          <span class="mono" style="font-size:12px; font-weight:800;" id="txt-pedido-id">PED-9821</span>
+        </div>
+
+        <div style="background:var(--surface-elevated); padding:12px; border-radius:10px; border:1px solid var(--border);">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Instrução Operacional:</div>
+          <div style="font-size:13px; font-weight:700; color:#FFF; margin-top:4px;" id="txt-instrucao-etapa">
+            Vá até o CD Moema e apresente o código PED-9821 para retirar a caixa lacrada.
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('Waze')">
+            Abrir Waze
+          </button>
+          <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('Google Maps')">
+            Google Maps
+          </button>
+        </div>
+
+        <button class="btn-driver-cta" id="btn-avancar-etapa" onclick="avancarEtapaCorrida()">
+          Confirmar Coleta no Fabricante
+        </button>
+      </div>
+    </main>
+
+    <!-- Tela Cheia de Teclado Numérico Gigante para Digitação do PIN -->
+    <div class="pin-screen-overlay" id="overlay-pin">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:16px; font-weight:800; color:#FFF;">Finalização de Entrega</div>
+        <button onclick="fecharTecladoPin()" style="background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="text-align:center; margin-top:20px;">
+        <div style="font-size:12px; color:var(--text-muted);">Solicite o PIN de 4 dígitos ao cirurgião ou recepcionista:</div>
+      </div>
+
+      <div class="pin-display-boxes">
+        <div class="pin-box mono" id="pbox-0">_</div>
+        <div class="pin-box mono" id="pbox-1">_</div>
+        <div class="pin-box mono" id="pbox-2">_</div>
+        <div class="pin-box mono" id="pbox-3">_</div>
+      </div>
+
+      <div class="keypad-grid">
+        <button class="key-btn mono" onclick="pressionarTecla('1')">1</button>
+        <button class="key-btn mono" onclick="pressionarTecla('2')">2</button>
+        <button class="key-btn mono" onclick="pressionarTecla('3')">3</button>
+        <button class="key-btn mono" onclick="pressionarTecla('4')">4</button>
+        <button class="key-btn mono" onclick="pressionarTecla('5')">5</button>
+        <button class="key-btn mono" onclick="pressionarTecla('6')">6</button>
+        <button class="key-btn mono" onclick="pressionarTecla('7')">7</button>
+        <button class="key-btn mono" onclick="pressionarTecla('8')">8</button>
+        <button class="key-btn mono" onclick="pressionarTecla('9')">9</button>
+        <button class="key-btn" onclick="limparPin()" style="font-size:14px; text-transform:uppercase;">Limpar</button>
+        <button class="key-btn mono" onclick="pressionarTecla('0')">0</button>
+        <button class="key-btn" onclick="apagarDigito()" style="font-size:16px;">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Corporativo do Entregador -->
+  <div id="driver-toast">
+    <span id="driver-toast-msg">Notificação</span>
+  </div>
+
+  <script>
+    let online = true;
+    let etapaAtual = 0; // 0: nova, 1: a caminho cd, 2: coletado/em rota consultorio, 3: cheguei
+    let pinDigitado = "";
+    const PIN_CORRETO = "7421"; // Mock do PIN gerado pelo pedido
+
+    function exibirToast(msg) {
+      const toast = document.getElementById("driver-toast");
+      document.getElementById("driver-toast-msg").innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    function toggleOnline() {
+      online = !online;
+      const dot = document.querySelector(".status-dot");
+      const txt = document.getElementById("txt-status-online");
+      if (online) {
+        dot.style.background = "var(--emerald)";
+        txt.innerText = "Online";
+        exibirToast("Você está online para receber corridas.");
+      } else {
+        dot.style.background = "#71717A";
+        txt.innerText = "Offline";
+        exibirToast("Modo offline ativado.");
+      }
+    }
+
+    function aceitarCorrida() {
+      document.getElementById("card-nova-corrida").style.display = "none";
+      const cardAndamento = document.getElementById("card-em-andamento");
+      cardAndamento.style.display = "flex";
+      cardAndamento.classList.add("active");
+      etapaAtual = 1;
+      atualizarInterfaceEtapa();
+      exibirToast("Corrida aceita. Rumo ao CD Moema.");
+    }
+
+    function atualizarInterfaceEtapa() {
+      const tag = document.getElementById("status-etapa-tag");
+      const instr = document.getElementById("txt-instrucao-etapa");
+      const btn = document.getElementById("btn-avancar-etapa");
+
+      if (etapaAtual === 1) {
+        tag.innerText = "Etapa 1: A Caminho da Coleta";
+        instr.innerText = "Dirija-se ao CD Moema da Conexão Implantes e retire o pacote lacrado PED-9821.";
+        btn.innerText = "Confirmar Coleta no Fabricante";
+      } else if (etapaAtual === 2) {
+        tag.innerText = "Etapa 2: Em Rota Para Consultório";
+        instr.innerText = "Pacote em mãos. Entregue na Clínica Jardins para o Dr. Roberto Fontes.";
+        btn.innerText = "Cheguei no Consultório";
+      }
+    }
+
+    function avancarEtapaCorrida() {
+      if (etapaAtual === 1) {
+        etapaAtual = 2;
+        atualizarInterfaceEtapa();
+        exibirToast("Pacote coletado. Telemetria GPS transmitindo para o dentista.");
+      } else if (etapaAtual === 2) {
+        abrirTecladoPin();
+      }
+    }
+
+    function abrirNavegacaoGps(app) {
+      exibirToast("Abrindo rota no " + app + "...");
+    }
+
+    function abrirTecladoPin() {
+      pinDigitado = "";
+      atualizarCaixasPin();
+      document.getElementById("overlay-pin").classList.add("open");
+    }
+
+    function fecharTecladoPin() {
+      document.getElementById("overlay-pin").classList.remove("open");
+    }
+
+    function pressionarTecla(num) {
+      if (pinDigitado.length < 4) {
+        pinDigitado += num;
+        atualizarCaixasPin();
+        if (pinDigitado.length === 4) {
+          validarPinFinal();
+        }
+      }
+    }
+
+    function apagarDigito() {
+      if (pinDigitado.length > 0) {
+        pinDigitado = pinDigitado.slice(0, -1);
+        atualizarCaixasPin();
+      }
+    }
+
+    function limparPin() {
+      pinDigitado = "";
+      atualizarCaixasPin();
+    }
+
+    function atualizarCaixasPin() {
+      for (let i = 0; i < 4; i++) {
+        const box = document.getElementById("pbox-" + i);
+        if (i < pinDigitado.length) {
+          box.innerText = pinDigitado[i];
+          box.classList.add("filled");
+        } else {
+          box.innerText = "_";
+          box.classList.remove("filled");
+        }
+      }
+    }
+
+    function validarPinFinal() {
+      if (pinDigitado === PIN_CORRETO || pinDigitado === "1234") {
+        fecharTecladoPin();
+        document.getElementById("card-em-andamento").style.display = "none";
+        document.getElementById("card-nova-corrida").style.display = "flex";
+        document.getElementById("wallet-saldo").innerText = "R$ 100,00";
+        exibirToast("Entrega Concluída com Sucesso! +R$ 20,00 creditados na carteira.");
+      } else {
+        exibirToast("PIN incorreto. Solicite ao dentista ou à recepção.");
+        limparPin();
+      }
+    }
+  </script>
+</body>
+</html>

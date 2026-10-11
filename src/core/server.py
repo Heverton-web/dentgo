@@ -249,6 +249,13 @@ class DentGoRequestHandler(BaseHTTPRequestHandler):
                 self._send_html(200, conteudo)
                 return
 
+        if path == "/driver" or path == "/driver.html" or path == "/entregador":
+            caminho_drv = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "driver.html"
+            if caminho_drv.exists():
+                conteudo = caminho_drv.read_text(encoding="utf-8")
+                self._send_html(200, conteudo)
+                return
+
         self._send_json(404, {"erro": "Rota nao encontrada"})
 
     def do_POST(self):
