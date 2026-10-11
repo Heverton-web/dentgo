@@ -1,0 +1,1 @@
+/opt/data/projetos/dentgo/governance/AGENTS.md

@@ -1,0 +1,789 @@
+{
+  "versao_schema": "1.0.0",
+  "fluxo_alvo": 1,
+  "metadados_projeto": {
+    "nome": "DentGo",
+    "slug": "dentgo",
+    "dominio": "odontologia-b2b-logistica",
+    "descricao": "Marketplace hiperlocal cirurgico e protetico odontologico com rastreamento em tempo real e radar de noticias"
+  },
+  "quarteto_sine_qua_non": {
+    "swagger": true,
+    "webhooks": true,
+    "mcp": true,
+    "documentacao": true
+  },
+  "arquitetura_alvo": {
+    "padrao_frontend": "tanstack_router_typescript_tailwind",
+    "padrao_backend": "fastapi_modular_vsa",
+    "persistencia": "sqlite_wal"
+  },
+  "modulos_funcionais": [
+    {
+      "nome": "nucleo",
+      "slug": "nucleo",
+      "entidades": [
+        {
+          "nome": "RegistroPrincipal",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-nucleo-01",
+          "descricao": "O modulo nucleo aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo nucleo aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    },
+    {
+      "nome": "catalogo_compatibilidade",
+      "slug": "catalogo-compatibilidade",
+      "entidades": [
+        {
+          "nome": "Catalogo_compatibilidadeRegistro",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-catalogo-compatibilidade-01",
+          "descricao": "O modulo catalogo_compatibilidade aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo catalogo_compatibilidade aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    },
+    {
+      "nome": "autenticacao_cro",
+      "slug": "autenticacao-cro",
+      "entidades": [
+        {
+          "nome": "Autenticacao_croRegistro",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-autenticacao-cro-01",
+          "descricao": "O modulo autenticacao_cro aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo autenticacao_cro aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    },
+    {
+      "nome": "checkout_split",
+      "slug": "checkout-split",
+      "entidades": [
+        {
+          "nome": "Checkout_splitRegistro",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-checkout-split-01",
+          "descricao": "O modulo checkout_split aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo checkout_split aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    },
+    {
+      "nome": "telemetria_logistica",
+      "slug": "telemetria-logistica",
+      "entidades": [
+        {
+          "nome": "Telemetria_logisticaRegistro",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-telemetria-logistica-01",
+          "descricao": "O modulo telemetria_logistica aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo telemetria_logistica aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    },
+    {
+      "nome": "radar_noticias",
+      "slug": "radar-noticias",
+      "entidades": [
+        {
+          "nome": "Radar_noticiasRegistro",
+          "campos": [
+            {
+              "nome": "id",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "nome",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "status",
+              "tipo": "string",
+              "obrigatorio": true
+            },
+            {
+              "nome": "criado_em",
+              "tipo": "datetime",
+              "obrigatorio": true
+            }
+          ]
+        }
+      ],
+      "regras_negocio": [
+        {
+          "id": "RN-radar-noticias-01",
+          "descricao": "O modulo radar_noticias aplica suas regras a cada entrada",
+          "criterio_aceitacao": "O comportamento de 'O modulo radar_noticias aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+        }
+      ]
+    }
+  ],
+  "camadas": [
+    "dominio",
+    "aplicacao",
+    "infraestrutura",
+    "interfaces",
+    "quarteto",
+    "fatia:nucleo",
+    "fatia:catalogo-compatibilidade",
+    "fatia:autenticacao-cro",
+    "fatia:checkout-split",
+    "fatia:telemetria-logistica",
+    "fatia:radar-noticias"
+  ],
+  "fases": [
+    "F02-construtor-pure",
+    "F03-harmonizacao-master",
+    "F04-blindagem-enterprise",
+    "F05-infraestrutura-ops"
+  ],
+  "tickets": [
+    {
+      "id": "TCK-C01",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "nucleo",
+        "slug": "nucleo",
+        "entidades": [
+          "RegistroPrincipal"
+        ],
+        "regras_negocio": [
+          "RN-nucleo-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-001"
+        ],
+        "fatia_esperada": "src/modules/nucleo/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `nucleo` gerada em `src/modules/nucleo/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/nucleo/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-C02",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "catalogo_compatibilidade",
+        "slug": "catalogo-compatibilidade",
+        "entidades": [
+          "Catalogo_compatibilidadeRegistro"
+        ],
+        "regras_negocio": [
+          "RN-catalogo-compatibilidade-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-002"
+        ],
+        "fatia_esperada": "src/modules/catalogo-compatibilidade/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `catalogo-compatibilidade` gerada em `src/modules/catalogo-compatibilidade/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/catalogo-compatibilidade/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-C03",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "autenticacao_cro",
+        "slug": "autenticacao-cro",
+        "entidades": [
+          "Autenticacao_croRegistro"
+        ],
+        "regras_negocio": [
+          "RN-autenticacao-cro-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-003"
+        ],
+        "fatia_esperada": "src/modules/autenticacao-cro/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `autenticacao-cro` gerada em `src/modules/autenticacao-cro/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/autenticacao-cro/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-C04",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "checkout_split",
+        "slug": "checkout-split",
+        "entidades": [
+          "Checkout_splitRegistro"
+        ],
+        "regras_negocio": [
+          "RN-checkout-split-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-004"
+        ],
+        "fatia_esperada": "src/modules/checkout-split/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `checkout-split` gerada em `src/modules/checkout-split/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/checkout-split/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-C05",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "telemetria_logistica",
+        "slug": "telemetria-logistica",
+        "entidades": [
+          "Telemetria_logisticaRegistro"
+        ],
+        "regras_negocio": [
+          "RN-telemetria-logistica-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-005"
+        ],
+        "fatia_esperada": "src/modules/telemetria-logistica/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `telemetria-logistica` gerada em `src/modules/telemetria-logistica/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/telemetria-logistica/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-C06",
+      "ferramenta_destino": "aidd-pure",
+      "entrada": {
+        "modulo": "radar_noticias",
+        "slug": "radar-noticias",
+        "entidades": [
+          "Radar_noticiasRegistro"
+        ],
+        "regras_negocio": [
+          "RN-radar-noticias-01"
+        ],
+        "bdd_cenarios": [
+          "SCN-006"
+        ],
+        "fatia_esperada": "src/modules/radar-noticias/",
+        "hoteis_do_c1": {
+          "leis_e_guardas": []
+        }
+      },
+      "saida_esperada": "Fatia vertical `radar-noticias` gerada em `src/modules/radar-noticias/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`src/modules/radar-noticias/` existe com testes reais do modulo e `HANDOFF_ENGINE_MASTER.json` grava os slices com hash da arvore"
+    },
+    {
+      "id": "TCK-MASTER",
+      "ferramenta_destino": "aidd-master",
+      "entrada": {
+        "fatias": [
+          "src/modules/nucleo/",
+          "src/modules/catalogo-compatibilidade/",
+          "src/modules/autenticacao-cro/",
+          "src/modules/checkout-split/",
+          "src/modules/telemetria-logistica/",
+          "src/modules/radar-noticias/"
+        ],
+        "rotas_quarteto": [
+          "/api",
+          "/docs",
+          "/webhook",
+          "/mcp",
+          "/docs/guia"
+        ],
+        "casca_compartilhada": [
+          "src/core/",
+          "src/shared/",
+          "frontend/"
+        ],
+        "dependencias": [
+          "TCK-C01",
+          "TCK-C02",
+          "TCK-C03",
+          "TCK-C04",
+          "TCK-C05",
+          "TCK-C06"
+        ]
+      },
+      "saida_esperada": "Monolito modular VSA com as 4 rotas do Quarteto subindo (/api, /docs, /webhook, /mcp, /docs/guia) e `HANDOFF_MASTER_ENTERPRISE.json` gravado",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "As 4 rotas do Quarteto respondem 2xx/3xx medido e nenhum slice ficou fora de src/core, src/shared ou frontend"
+    },
+    {
+      "id": "TCK-ENTERPRISE",
+      "ferramenta_destino": "aidd-enterprise",
+      "entrada": {
+        "componentes_candidatos": [
+          "src/core/nucleo/",
+          "src/core/catalogo-compatibilidade/",
+          "src/core/autenticacao-cro/",
+          "src/core/checkout-split/",
+          "src/core/telemetria-logistica/",
+          "src/core/radar-noticias/"
+        ],
+        "catalogo_de_blindagem": "injetor/G_INJECT.py",
+        "dependencias": [
+          "TCK-MASTER"
+        ]
+      },
+      "saida_esperada": "Componentes de missao critica blindados com SHA-256 e `HANDOFF_ENTERPRISE_OPS.json` gravado com selo e drift medido",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`COMPONENT-REGISTRY.json` confere com o sha256 de cada componente e o verificar-drift devolve exit 0"
+    },
+    {
+      "id": "TCK-OPS",
+      "ferramenta_destino": "aidd-ops",
+      "entrada": {
+        "perfil_app": {
+          "modulos": [
+            "nucleo",
+            "catalogo-compatibilidade",
+            "autenticacao-cro",
+            "checkout-split",
+            "telemetria-logistica",
+            "radar-noticias"
+          ],
+          "entidades": [
+            "nucleo.RegistroPrincipal",
+            "catalogo-compatibilidade.Catalogo_compatibilidadeRegistro",
+            "autenticacao-cro.Autenticacao_croRegistro",
+            "checkout-split.Checkout_splitRegistro",
+            "telemetria-logistica.Telemetria_logisticaRegistro",
+            "radar-noticias.Radar_noticiasRegistro"
+          ],
+          "banco": "sqlite_wal",
+          "filas": [],
+          "integracoes_externas": [],
+          "rotas_quarteto": [
+            "/api",
+            "/docs",
+            "/webhook",
+            "/mcp",
+            "/docs/guia"
+          ],
+          "portas": [
+            8000
+          ]
+        },
+        "servicos_declarados": [
+          {
+            "nome": "nucleo",
+            "slug": "nucleo",
+            "entidades": [
+              {
+                "nome": "RegistroPrincipal",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-nucleo-01",
+                "descricao": "O modulo nucleo aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo nucleo aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          },
+          {
+            "nome": "catalogo_compatibilidade",
+            "slug": "catalogo-compatibilidade",
+            "entidades": [
+              {
+                "nome": "Catalogo_compatibilidadeRegistro",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-catalogo-compatibilidade-01",
+                "descricao": "O modulo catalogo_compatibilidade aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo catalogo_compatibilidade aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          },
+          {
+            "nome": "autenticacao_cro",
+            "slug": "autenticacao-cro",
+            "entidades": [
+              {
+                "nome": "Autenticacao_croRegistro",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-autenticacao-cro-01",
+                "descricao": "O modulo autenticacao_cro aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo autenticacao_cro aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          },
+          {
+            "nome": "checkout_split",
+            "slug": "checkout-split",
+            "entidades": [
+              {
+                "nome": "Checkout_splitRegistro",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-checkout-split-01",
+                "descricao": "O modulo checkout_split aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo checkout_split aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          },
+          {
+            "nome": "telemetria_logistica",
+            "slug": "telemetria-logistica",
+            "entidades": [
+              {
+                "nome": "Telemetria_logisticaRegistro",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-telemetria-logistica-01",
+                "descricao": "O modulo telemetria_logistica aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo telemetria_logistica aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          },
+          {
+            "nome": "radar_noticias",
+            "slug": "radar-noticias",
+            "entidades": [
+              {
+                "nome": "Radar_noticiasRegistro",
+                "campos": [
+                  {
+                    "nome": "id",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "nome",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "status",
+                    "tipo": "string",
+                    "obrigatorio": true
+                  },
+                  {
+                    "nome": "criado_em",
+                    "tipo": "datetime",
+                    "obrigatorio": true
+                  }
+                ]
+              }
+            ],
+            "regras_negocio": [
+              {
+                "id": "RN-radar-noticias-01",
+                "descricao": "O modulo radar_noticias aplica suas regras a cada entrada",
+                "criterio_aceitacao": "O comportamento de 'O modulo radar_noticias aplica suas regras a cada entrada' responde 2xx e persiste de forma atomica"
+              }
+            ]
+          }
+        ],
+        "dependencias": [
+          "TCK-ENTERPRISE"
+        ]
+      },
+      "saida_esperada": "Infra gerada a partir do perfil do app (Dockerfile, docker-compose.yml, deploy.sh e nginx) com os servicos que a planta pediu — nada de nicho adivinhado",
+      "pecas_do_almoxarifado": [],
+      "criterio_de_aceite": "`docker-compose.yml` lista exatamente os servicos de `perfil_app` (modulos, banco, filas, integracoes e portas) e o build sobe sem nicho fixo"
+    }
+  ],
+  "entrada_construtor": {
+    "origem_export": {
+      "caminho": "PLANNER.json",
+      "hash": "501aa46a7febeffbc9bf7ed6a5a6d14c14fbfe142253ac51ab75de73d8d380c7"
+    },
+    "ideia": "Marketplace hiperlocal cirurgico e protetico odontologico com rastreamento em tempo real e radar de noticias",
+    "capacidade_llm": "nenhuma"
+  },
+  "perfil_app": {
+    "modulos": [
+      "nucleo",
+      "catalogo-compatibilidade",
+      "autenticacao-cro",
+      "checkout-split",
+      "telemetria-logistica",
+      "radar-noticias"
+    ],
+    "entidades": [
+      "nucleo.RegistroPrincipal",
+      "catalogo-compatibilidade.Catalogo_compatibilidadeRegistro",
+      "autenticacao-cro.Autenticacao_croRegistro",
+      "checkout-split.Checkout_splitRegistro",
+      "telemetria-logistica.Telemetria_logisticaRegistro",
+      "radar-noticias.Radar_noticiasRegistro"
+    ],
+    "banco": "sqlite_wal",
+    "filas": [],
+    "integracoes_externas": [],
+    "rotas_quarteto": [
+      "/api",
+      "/docs",
+      "/webhook",
+      "/mcp",
+      "/docs/guia"
+    ],
+    "portas": [
+      8000
+    ]
+  },
+  "avisos": [
+    "C1 ausente (.aidd/HANDOFF_FORGE_PLANNER.json): a planta foi desenhada sem evidencia de almoxarifado e sem ancoragem de governanca — nenhum ticket cita peca"
+  ]
+}

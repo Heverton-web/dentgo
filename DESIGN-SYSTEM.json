@@ -1,0 +1,57 @@
+{
+  "versao": "2.0.0",
+  "projeto": "dentgo",
+  "gerado_em": "2026-10-11T18:28:27Z",
+  "fonte": "catalogo-deterministico + motor topologico mobbin (zero LLM, Lei #1)",
+  "paleta": {
+    "nome": "Oceano Clínico",
+    "primaria": "#0F766E",
+    "primaria_hover": "#0B5D57",
+    "neutro": "slate"
+  },
+  "dual_mode": {
+    "light": {
+      "background": "#ffffff",
+      "surface": "#f8fafc",
+      "primary": "#3b82f6",
+      "foreground": "#0f172a",
+      "muted": "#64748b",
+      "border": "rgba(0, 0, 0, 0.08)"
+    },
+    "dark": {
+      "background": "#0b0f17",
+      "surface": "#111827",
+      "primary": "#3b82f6",
+      "foreground": "#f8fafc",
+      "muted": "#94a3b8",
+      "border": "rgba(255, 255, 255, 0.12)"
+    }
+  },
+  "regras_craft_floor": [
+    "Proibição estrita de emojis em interfaces corporativas: utilizar exclusivamente vetores SVG com stroke e fill semânticos",
+    "Suporte nativo dual e espelhado a Light e Dark modes via :root e data-theme com transição atômica",
+    "Responsividade fluida mobile-first com breakpoints declarados (mobile: <640px, tablet: 640-1024px, desktop: >1024px)",
+    "Ergonomia móvel estrita: touch targets mínimos de 48px e suporte a env(safe-area-inset-*)",
+    "Proibido usar classes de cor arbitrárias fora da paleta extraída",
+    "Razão mínima de 1.25x entre títulos e texto de apoio para evitar flat-type-hierarchy",
+    "Botões devem possuir obrigatoriamente estados hover, active e focus-visible acessíveis"
+  ],
+  "arquetipo_topologico": {
+    "plataforma": "desktop_web",
+    "arquetipo": "analytics_canvas",
+    "descricao": "Painel Analítico Multimétric com Gráficos e Tabelas de Auditoria",
+    "ergonomia": {
+      "touch_target_min": "32px",
+      "safe_area_top": "0px",
+      "safe_area_bottom": "0px",
+      "nav_position": "left_sidebar_or_rail",
+      "tabbar_height": "none",
+      "modal_pattern": "dialog_centered"
+    },
+    "densidade": {
+      "data_display": "tabela_multicoluna_com_sparklines",
+      "table_allowed": true,
+      "max_colunas_grid": 4
+    }
+  }
+}
