@@ -2,26 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>DentGo B2B Hub — Central de Expedição & Fabricantes</title>
+  <title>DentGo B2B Hub — Central de Expedição & Fabricante</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%2309090B'/%3E%3Cpath d='M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z' fill='%23FFFFFF'/%3E%3Ccircle cx='18' cy='16' r='2.2' fill='%23A1A1AA'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #F8FAFC;
+      --bg: #FAFAFA;
       --surface: #FFFFFF;
-      --surface-subtle: #F1F5F9;
-      --border: #E2E8F0;
-      --border-strong: #94A3B8;
-      --text: #0F172A;
-      --text-muted: #64748B;
-      --primary: #0F172A;
-      --teal-accent: #0D9488;
-      --danger: #EF4444;
-      --warning: #F59E0B;
-      --success: #10B981;
-      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --surface-subtle: #F4F4F5;
+      --border: #E4E4E7;
+      --border-strong: #A1A1AA;
+      --text: #09090B;
+      --text-muted: #71717A;
+      --teal-primary: #18181B;
+      --teal-dark: #09090B;
+      --teal-light: #F4F4F5;
+      --teal-accent: #27272A;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -29,13 +29,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(9, 9, 11, 0.25) transparent;
     }
 
-    /* Scrollbars Cirúrgicas de 4px */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(15, 23, 42, 0.25) transparent;
-    }
+    /* Scrollbars Cirúrgicas DentGo Max 4px */
     *::-webkit-scrollbar {
       width: 4px;
       height: 4px;
@@ -44,7 +42,7 @@
       background: transparent;
     }
     *::-webkit-scrollbar-thumb {
-      background: rgba(15, 23, 42, 0.25);
+      background: rgba(9, 9, 11, 0.25);
       border-radius: 4px;
     }
     *::-webkit-scrollbar-thumb:hover {
@@ -65,9 +63,108 @@
       font-family: var(--font-mono);
     }
 
-    /* Sidebar Desktop */
+    /* Tela de Autenticação Segura Isolada por Tenant */
+    #auth-screen-b2b {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-card {
+      width: 440px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+    }
+
+    .auth-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 12px;
+      color: var(--text);
+    }
+
+    .auth-title span {
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .auth-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-subtle);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--text);
+      background: var(--surface);
+    }
+
+    .btn-primary-b2b {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--text);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary-b2b:hover {
+      opacity: 0.9;
+    }
+
+    /* Sidebar B2B */
     .sidebar {
-      width: 240px;
+      width: 250px;
       background: #09090B;
       color: #FFFFFF;
       display: flex;
@@ -80,19 +177,62 @@
       padding: 20px 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    .brand-title span {
+      font-weight: 400;
+      color: #A1A1AA;
     }
 
     .brand-tag-b2b {
       font-size: 9px;
       font-weight: 800;
-      background: var(--teal-accent);
-      color: #FFF;
+      background: #27272A;
+      color: #F4F4F5;
       padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .sidebar-company-box {
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .company-label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #71717A;
+      letter-spacing: 0.05em;
+    }
+
+    .company-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .company-cnpj {
+      font-size: 10px;
+      color: #A1A1AA;
+      margin-top: 2px;
     }
 
     .sidebar-menu {
@@ -109,9 +249,9 @@
       gap: 10px;
       padding: 10px 14px;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #94A3B8;
+      font-size: 12px;
+      font-weight: 700;
+      color: #A1A1AA;
       cursor: pointer;
       transition: all 0.15s ease;
       background: none;
@@ -128,17 +268,30 @@
     .menu-item.active {
       color: #FFFFFF;
       background: rgba(255,255,255,0.12);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .sidebar-footer {
       padding: 14px 18px;
       border-top: 1px solid rgba(255,255,255,0.08);
       font-size: 11px;
-      color: #64748B;
+      color: #71717A;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Conteúdo Principal */
+    .btn-logout {
+      background: none;
+      border: none;
+      color: #EF4444;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* Painel Principal */
     .main-wrapper {
       flex: 1;
       display: flex;
@@ -157,28 +310,26 @@
       flex-shrink: 0;
     }
 
-    .header-selector-marca {
+    .header-context {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .select-marca {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+    .tenant-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
       background: var(--surface-subtle);
-      font-size: 13px;
-      font-weight: 700;
+      border: 1px solid var(--border);
       color: var(--text);
-      cursor: pointer;
-      outline: none;
     }
 
     .header-badges {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .badge-status {
@@ -194,25 +345,27 @@
     }
 
     .dot-pulse {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+      background: #10B981;
     }
 
     .content-area {
       flex: 1;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       padding: 24px;
     }
 
-    /* KPI Cards */
+    /* KPIs Fixos no Topo */
     .kpi-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
     }
 
     .kpi-card {
@@ -223,8 +376,8 @@
     }
 
     .kpi-label {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -239,18 +392,19 @@
 
     .kpi-sub {
       font-size: 11px;
-      color: var(--success);
+      color: var(--text-muted);
       margin-top: 4px;
       font-weight: 600;
     }
 
-    /* Kanban de Expedição */
+    /* Kanban de Expedição - Altura Total com Scroll Apenas Interno nas Colunas */
     .kanban-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      height: calc(100vh - 250px);
-      min-height: 480px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .kanban-col {
@@ -259,6 +413,7 @@
       border-radius: 12px;
       display: flex;
       flex-direction: column;
+      min-height: 0;
       overflow: hidden;
     }
 
@@ -269,13 +424,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .kanban-col-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -290,6 +446,7 @@
       border-radius: 10px;
     }
 
+    /* Scroll Exclusivo nas Colunas */
     .kanban-cards-wrapper {
       flex: 1;
       overflow-y: auto;
@@ -299,24 +456,28 @@
       gap: 10px;
     }
 
+    /* Altura Padronizada e Rigorosa para Todos os Cards */
     .kanban-card {
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 14px;
+      min-height: 146px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
       transition: all 0.15s ease;
     }
 
     .kanban-card:hover {
       border-color: var(--text);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .kanban-card.flash {
-      border-color: var(--teal-accent);
-      background: #F0FDFA;
+      border-color: var(--text);
+      background: #FFFFFF;
     }
 
     .card-top {
@@ -336,22 +497,23 @@
       font-size: 9px;
       font-weight: 800;
       padding: 2px 6px;
-      border-radius: 6px;
+      border-radius: 4px;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .badge-flash {
-      background: #CCFBF1;
-      color: #0F766E;
+      background: var(--text);
+      color: #FFFFFF;
     }
 
     .badge-normal {
-      background: #E2E8F0;
-      color: #475569;
+      background: var(--border);
+      color: var(--text-muted);
     }
 
     .card-client {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
@@ -372,102 +534,198 @@
       padding-top: 8px;
     }
 
-    .btn-b2b {
+    .btn-b2b-action {
       padding: 6px 10px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
-      border: none;
+      border: 1px solid var(--border);
       cursor: pointer;
-      background: var(--text);
-      color: #FFF;
-      transition: opacity 0.15s ease;
-    }
-    .btn-b2b:hover {
-      opacity: 0.85;
+      background: var(--surface-subtle);
+      color: var(--text);
+      transition: all 0.15s ease;
     }
 
-    /* Modal B2B */
+    .btn-b2b-action:hover {
+      background: var(--text);
+      color: #FFFFFF;
+      border-color: var(--text);
+    }
+
+    /* Modal Cirúrgico Nativo HTML/CSS */
     .b2b-modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(9, 9, 11, 0.45);
       backdrop-filter: blur(2px);
-      z-index: 1000;
+      z-index: 3000;
       align-items: center;
       justify-content: center;
     }
+
     .b2b-modal-backdrop.open {
       display: flex;
     }
+
     .b2b-modal-dialog {
       background: var(--surface);
-      width: 580px;
-      border-radius: 16px;
+      width: 540px;
+      border-radius: 14px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.16);
       padding: 24px;
+    }
+
+    .b2b-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .b2b-modal-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .btn-close-modal:hover {
+      color: var(--text);
+    }
+
+    /* Toast Nativo B2B */
+    #b2b-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 4000;
+    }
+
+    #b2b-toast.show {
+      transform: translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar Fixa -->
+  <!-- Tela de Login Dedicada & Isolamento Estrito de Tenant B2B -->
+  <div id="auth-screen-b2b">
+    <div class="auth-card">
+      <div class="auth-header">
+        <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="9" fill="#09090B"/>
+          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#FFFFFF"/>
+          <circle cx="18" cy="16" r="2.2" fill="#A1A1AA"/>
+        </svg>
+        <div class="auth-title">DentGo <span>B2B Hub</span></div>
+        <div class="auth-subtitle">Acesso restrito para fabricantes e distribuidores homologados</div>
+      </div>
+
+      <form onsubmit="autenticarFabricante(event)">
+        <div class="form-group">
+          <label class="form-label">Chave de Acesso / Usuário do Fabricante</label>
+          <input type="text" id="login-usuario" class="form-input mono" placeholder="ex: conexao.expedicao" value="conexao.expedicao" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Senha Operacional</label>
+          <input type="password" id="login-senha" class="form-input" placeholder="••••••••••••" value="cx@exp2026" required />
+        </div>
+
+        <button type="submit" class="btn-primary-b2b">
+          Acessar Painel do Fabricante
+        </button>
+      </form>
+
+      <div style="margin-top: 18px; font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4;">
+        Ambiente isolado criptograficamente por tenant.<br>Acesso rastreado para conformidade com a ANVISA.
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Fixa do Fabricante Logado -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-        <rect width="32" height="32" rx="8" fill="#FFFFFF"/>
-        <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#09090B"/>
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#09090B" stroke="rgba(255,255,255,0.2)"/>
+        <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#FFFFFF"/>
+        <circle cx="18" cy="16" r="2.2" fill="#A1A1AA"/>
       </svg>
       <div>
-        <div style="font-size: 15px; font-weight: 800; letter-spacing: -0.02em;">DentGo <span class="brand-tag-b2b">B2B HUB</span></div>
-        <div style="font-size: 10px; color: #64748B;">Portal do Fabricante</div>
+        <div class="brand-title">Dent<span>Go</span> <span class="brand-tag-b2b">B2B</span></div>
       </div>
     </div>
 
+    <!-- Tenant Isolado (Sem Dropdown) -->
+    <div class="sidebar-company-box">
+      <div class="company-label">Fabricante Autenticado</div>
+      <div class="company-name" id="sidebar-nome-empresa">Conexão Implantes</div>
+      <div class="company-cnpj mono" id="sidebar-cnpj-empresa">CNPJ: 01.884.238/0001-09</div>
+    </div>
+
     <div class="sidebar-menu">
-      <button class="menu-item active" onclick="trocarAbaB2B('expedicao')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <button class="menu-item active" onclick="trocarAbaB2B('expedicao', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Torre de Expedição
       </button>
-      <button class="menu-item" onclick="trocarAbaB2B('catalogo')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="8" height="8" x="13" y="13" rx="1"/></svg>
-        Estoque & SKUs
+      <button class="menu-item" onclick="trocarAbaB2B('estoque', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="8" height="8" x="13" y="13" rx="1"/></svg>
+        Catálogo & Lotes
       </button>
-      <button class="menu-item" onclick="trocarAbaB2B('promocoes')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Combos & Promoções
+      <button class="menu-item" onclick="trocarAbaB2B('combos', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Combos Cirúrgicos
       </button>
       <button class="menu-item" onclick="window.open('/', '_blank')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        Ver App Mobile (Cliente) &nearr;
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        App Clínico (Dentista) &nearr;
       </button>
     </div>
 
     <div class="sidebar-footer">
-      <div>CD Central: <strong>SP-Capital (Moema)</strong></div>
-      <div style="margin-top: 4px;">Versão 1.0.0 • SQLite WAL</div>
+      <div>CD: <span class="mono" style="color:#FFF;">SP-Moema</span></div>
+      <button class="btn-logout" onclick="encerrarSessaoB2B()">Sair</button>
     </div>
   </aside>
 
   <!-- Painel Principal Desktop -->
   <div class="main-wrapper">
     <header class="top-header">
-      <div class="header-selector-marca">
-        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Fabricante Selecionado:</span>
-        <select class="select-marca" id="b2b-marca-select" onchange="atualizarFabricanteB2B(this.value)">
-          <option value="conexao">Conexão Implantes (Oficial)</option>
-          <option value="straumann">Straumann Brasil</option>
-          <option value="neodent">Neodent</option>
-          <option value="sin">S.I.N. Implantes</option>
-        </select>
+      <div class="header-context">
+        <span class="tenant-badge" id="top-tenant-badge">Conexão Implantes • Central de Expedição</span>
+        <span style="font-size: 11px; color: var(--text-muted);">Sessão Exclusiva</span>
       </div>
 
       <div class="header-badges">
         <div class="badge-status">
           <div class="dot-pulse"></div>
-          <span>Bipagem ANVISA Ativa</span>
+          <span>Bipagem ANVISA Conforme</span>
         </div>
         <div class="badge-status mono" style="font-weight: 800;">
           <span>Corte Flash: 14:00</span>
@@ -476,55 +734,53 @@
     </header>
 
     <div class="content-area">
-      <!-- KPIs da Operação -->
+      <!-- KPIs do Fabricante -->
       <div class="kpi-row">
         <div class="kpi-card">
           <div class="kpi-label">Pedidos Hoje</div>
-          <div class="kpi-val mono" id="kpi-pedidos-hoje">14</div>
+          <div class="kpi-val mono" id="kpi-pedidos">14</div>
           <div class="kpi-sub">8 Flash 2h • 6 D+1</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">SLA Médio Separação</div>
+          <div class="kpi-label">SLA Médio de Separação</div>
           <div class="kpi-val mono">11 min</div>
-          <div class="kpi-sub">&uarr; 3 min abaixo da meta</div>
+          <div class="kpi-sub">Meta estrita: 15 min</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Faturamento do Dia</div>
-          <div class="kpi-val mono" id="kpi-faturamento">R$ 18.490,00</div>
-          <div class="kpi-sub">100% split liquidado</div>
+          <div class="kpi-label">Faturamento Líquido (Dia)</div>
+          <div class="kpi-val mono">R$ 18.490,00</div>
+          <div class="kpi-sub">Cartão & PIX Direto</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Rastreio ANVISA</div>
-          <div class="kpi-val mono" style="color: var(--teal-accent);">100%</div>
-          <div class="kpi-sub">Lotes conferidos por bip</div>
+          <div class="kpi-label">Conformidade ANVISA</div>
+          <div class="kpi-val mono">100%</div>
+          <div class="kpi-sub">100% de lotes conferidos</div>
         </div>
       </div>
 
       <!-- Kanban de Separação em Tempo Real -->
-      <div class="kanban-board" id="board-expedicao">
+      <div class="kanban-board">
         <!-- 1. Novos Pedidos -->
         <div class="kanban-col">
           <div class="kanban-col-header">
-            <div class="kanban-col-title">
-              <span style="color: #EF4444;">●</span> 1. Novos Pedidos
-            </div>
-            <span class="kanban-count" id="count-col-novos">2</span>
+            <div class="kanban-col-title">1. Novos Pedidos</div>
+            <span class="kanban-count" id="count-novos">2</span>
           </div>
           <div class="kanban-cards-wrapper" id="col-novos">
-            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9821')">
+            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9821', 'Dr. Roberto Fontes (Jardins)', ['4x Implante Flash CM 3.5x10 (SKU: CX-FL-3510)', '4x Munhão Angulado 17° CM 3.5 (SKU: CX-MN-17-3525)'])">
               <div class="card-top">
                 <span class="card-id mono">PED-9821</span>
-                <span class="card-sla-badge badge-flash">⚡ Flash 2h</span>
+                <span class="card-sla-badge badge-flash">Flash 2h</span>
               </div>
               <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
-              <div class="card-items-desc">4x Implante Flash CM 3.5x10 • 4x Munhão Angulado 17°</div>
+              <div class="card-items-desc">4x Implante Flash CM • 4x Munhão Angulado 17°</div>
               <div class="card-bottom">
-                <span class="mono" style="font-size:12px; font-weight:800;">R$ 1.110,00</span>
-                <button class="btn-b2b" onclick="event.stopPropagation(); moverPedido('PED-9821', 'picking')">Iniciar Picking</button>
+                <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.110,00</span>
+                <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9821', 'picking')">Iniciar Picking</button>
               </div>
             </div>
 
-            <div class="kanban-card" onclick="abrirModalConferencia('PED-9818')">
+            <div class="kanban-card" onclick="abrirModalConferencia('PED-9818', 'Dra. Camila Prado (Moema)', ['1x Scan Body In-Lego Intraoral CM (SKU: CX-INL-CM-INTRA)'])">
               <div class="card-top">
                 <span class="card-id mono">PED-9818</span>
                 <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
@@ -532,8 +788,8 @@
               <div class="card-client">Dra. Camila Prado (Moema)</div>
               <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
               <div class="card-bottom">
-                <span class="mono" style="font-size:12px; font-weight:800;">R$ 120,00</span>
-                <button class="btn-b2b" onclick="event.stopPropagation(); moverPedido('PED-9818', 'picking')">Iniciar Picking</button>
+                <span class="mono" style="font-size:11px; font-weight:800;">R$ 120,00</span>
+                <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9818', 'picking')">Iniciar Picking</button>
               </div>
             </div>
           </div>
@@ -542,22 +798,20 @@
         <!-- 2. Picking / Separação -->
         <div class="kanban-col">
           <div class="kanban-col-header">
-            <div class="kanban-col-title">
-              <span style="color: #F59E0B;">●</span> 2. Picking & Bipagem
-            </div>
-            <span class="kanban-count" id="count-col-picking">1</span>
+            <div class="kanban-col-title">2. Picking & Bipagem</div>
+            <span class="kanban-count" id="count-picking">1</span>
           </div>
           <div class="kanban-cards-wrapper" id="col-picking">
-            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9799')">
+            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna (Itaim Bibi)', ['1x Kit Cirúrgico Compacto Cone Morse (SKU: CX-KIT-CM-COMP)'])">
               <div class="card-top">
                 <span class="card-id mono">PED-9799</span>
-                <span class="card-sla-badge badge-flash">⚡ Flash 2h</span>
+                <span class="card-sla-badge badge-flash">Flash 2h</span>
               </div>
               <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
               <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
               <div class="card-bottom">
-                <span class="mono" style="font-size:12px; font-weight:800;">R$ 1.890,00</span>
-                <button class="btn-b2b" style="background:#0D9488;" onclick="event.stopPropagation(); moverPedido('PED-9799', 'pronto')">Bipar & Embalar</button>
+                <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.890,00</span>
+                <button class="btn-b2b-action" onclick="event.stopPropagation(); abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna', ['1x Kit Cirúrgico Compacto CM'])">Bipar Lote</button>
               </div>
             </div>
           </div>
@@ -566,46 +820,42 @@
         <!-- 3. Pronto para Coleta -->
         <div class="kanban-col">
           <div class="kanban-col-header">
-            <div class="kanban-col-title">
-              <span style="color: #3B82F6;">●</span> 3. Pronto / Coleta
-            </div>
-            <span class="kanban-count" id="count-col-pronto">1</span>
+            <div class="kanban-col-title">3. Pronto / Coleta</div>
+            <span class="kanban-count" id="count-pronto">1</span>
           </div>
           <div class="kanban-cards-wrapper" id="col-pronto">
             <div class="kanban-card flash">
               <div class="card-top">
                 <span class="card-id mono">PED-9755</span>
-                <span class="card-sla-badge badge-flash">⚡ Flash 2h</span>
+                <span class="card-sla-badge badge-flash">Flash 2h</span>
               </div>
               <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
-              <div class="card-items-desc">Lote Conferido: LOT-CX-2026-884 (Val: 10/2031)</div>
+              <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
               <div class="card-bottom">
                 <span style="font-size:11px; color:var(--text-muted);">Motoboy: Carlos (3 min)</span>
-                <button class="btn-b2b" onclick="moverPedido('PED-9755', 'rota')">Despachar Rota</button>
+                <button class="btn-b2b-action" onclick="moverPedidoKanban('PED-9755', 'rota')">Despachar</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 4. Em Rota Flash / Entregue -->
+        <!-- 4. Em Rota Flash -->
         <div class="kanban-col">
           <div class="kanban-col-header">
-            <div class="kanban-col-title">
-              <span style="color: #10B981;">●</span> 4. Em Rota Flash
-            </div>
-            <span class="kanban-count" id="count-col-rota">1</span>
+            <div class="kanban-col-title">4. Em Rota Flash</div>
+            <span class="kanban-count" id="count-rota">1</span>
           </div>
           <div class="kanban-cards-wrapper" id="col-rota">
             <div class="kanban-card flash">
               <div class="card-top">
                 <span class="card-id mono">PED-91042</span>
-                <span class="card-sla-badge badge-flash">⚡ Em Rota</span>
+                <span class="card-sla-badge badge-flash">Em Trânsito</span>
               </div>
               <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
-              <div class="card-items-desc">PIN de Entrega: <strong class="mono" style="color:var(--teal-accent);">7421</strong> • ETA: 18 min</div>
+              <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
               <div class="card-bottom">
-                <span class="mono" style="font-size:12px; font-weight:800;">R$ 420,00</span>
-                <span style="font-size:10px; font-weight:700; color:#10B981;">● GPS Ativo</span>
+                <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
+                <span style="font-size:10px; font-weight:700; color:var(--text-muted);">Telemetria Ativa</span>
               </div>
             </div>
           </div>
@@ -614,77 +864,141 @@
     </div>
   </div>
 
-  <!-- Modal de Conferência e Bipagem de Lote ANVISA -->
-  <div class="b2b-modal-backdrop" id="modal-conferencia-b2b">
+  <!-- Modal Cirúrgico de Conferência e Bipagem ANVISA (Nativo HTML/CSS) -->
+  <div class="b2b-modal-backdrop" id="modal-conferencia">
     <div class="b2b-modal-dialog">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:16px;">
+      <div class="b2b-modal-header">
         <div>
-          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);" id="conf-ped-id">PED-9821</span>
-          <h3 style="font-size:17px; font-weight:800; color:var(--text);" id="conf-ped-cliente">Conferência de Expedição</h3>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);" id="conf-id">PED-9821</span>
+          <h3 class="b2b-modal-title" id="conf-cliente">Conferência de Expedição</h3>
         </div>
-        <button onclick="fecharModalConferencia()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
+        <button class="btn-close-modal" onclick="fecharModalConferencia()">&times;</button>
       </div>
 
-      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:16px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Itens para Separação Física</div>
-        <div id="conf-lista-itens" style="display:flex; flex-direction:column; gap:6px; font-size:12px;">
-          <div>✓ 4x Implante Flash CM 3.5 x 10mm (SKU: CX-FL-3510)</div>
-          <div>✓ 4x Munhão Angulado 17° CM 3.5 Cinta 2.5mm (SKU: CX-MN-17-3525)</div>
-        </div>
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+        <div style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Itens Cirúrgicos Requisitados</div>
+        <div id="conf-itens-container" style="display:flex; flex-direction:column; gap:6px; font-size:12px;"></div>
       </div>
 
-      <div style="margin-bottom:16px;">
-        <label style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text); display:block; margin-bottom:6px;">Bipar DataMatrix / Código de Barras (Lote ANVISA):</label>
-        <input type="text" id="input-bip-anvisa" placeholder="Bipe com o leitor óptico USB ou digite..." class="mono" style="width:100%; padding:10px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:13px; outline:none;" onkeydown="tratarBip(event)" />
-        <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Pressione Enter para validar o lote da caixa cirúrgica.</span>
+      <div style="margin-bottom:18px;">
+        <label class="form-label">Leitura de Código de Barras / DataMatrix (Lote ANVISA):</label>
+        <input type="text" id="input-bip-lote" class="form-input mono" placeholder="Aproxime o leitor óptico USB ou digite..." onkeydown="processarBip(event)" />
+        <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Pressione Enter para vincular o lote esterilizado ao pedido.</span>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
-        <button class="btn-b2b" style="background:var(--surface-subtle); color:var(--text); border:1px solid var(--border);" onclick="fecharModalConferencia()">Cancelar</button>
-        <button class="btn-b2b" style="background:#0D9488;" onclick="concluirConferencia()">Concluir & Liberar Despacho</button>
+        <button class="btn-b2b-action" onclick="fecharModalConferencia()">Fechar</button>
+        <button class="btn-b2b-action" style="background:var(--text); color:#FFFFFF; border-color:var(--text);" onclick="confirmarBipLote()">Concluir Separação & Liberar Despacho</button>
       </div>
     </div>
   </div>
 
+  <!-- Toast Corporativo B2B (Substituto de alert/confirm) -->
+  <div id="b2b-toast">
+    <span id="b2b-toast-msg">Notificação</span>
+  </div>
+
   <script>
-    function trocarAbaB2B(aba) {
+    const USUARIOS_HOMOLOGADOS = {
+      "conexao.expedicao": {
+        empresa: "Conexão Implantes",
+        cnpj: "01.884.238/0001-09",
+        cd: "SP-Moema"
+      },
+      "straumann.expedicao": {
+        empresa: "Straumann Brasil",
+        cnpj: "03.585.122/0001-44",
+        cd: "SP-Curitiba Hub"
+      },
+      "neodent.expedicao": {
+        empresa: "Neodent",
+        cnpj: "01.234.567/0001-88",
+        cd: "SP-Vila Olímpia"
+      },
+      "sin.expedicao": {
+        empresa: "S.I.N. Implantes",
+        cnpj: "05.123.456/0001-12",
+        cd: "SP-Mooca"
+      }
+    };
+
+    let usuarioAtivo = null;
+
+    function exibirToast(msg) {
+      const toast = document.getElementById("b2b-toast");
+      document.getElementById("b2b-toast-msg").innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3500);
+    }
+
+    function autenticarFabricante(e) {
+      e.preventDefault();
+      const login = document.getElementById("login-usuario").value.trim().toLowerCase();
+      const info = USUARIOS_HOMOLOGADOS[login];
+
+      if (!info) {
+        exibirToast("Acesso negado: Fabricante não localizado no registro seguro.");
+        return;
+      }
+
+      usuarioAtivo = info;
+      document.getElementById("sidebar-nome-empresa").innerText = info.empresa;
+      document.getElementById("sidebar-cnpj-empresa").innerText = "CNPJ: " + info.cnpj;
+      document.getElementById("top-tenant-badge").innerText = info.empresa + " • Central de Expedição";
+      document.getElementById("auth-screen-b2b").style.display = "none";
+      exibirToast("Sessão segura iniciada para " + info.empresa);
+    }
+
+    function encerrarSessaoB2B() {
+      usuarioAtivo = null;
+      document.getElementById("auth-screen-b2b").style.display = "flex";
+      exibirToast("Sessão finalizada com segurança.");
+    }
+
+    function trocarAbaB2B(aba, btn) {
       document.querySelectorAll(".menu-item").forEach(m => m.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      if (aba !== 'expedicao') {
-        alert("O módulo de '" + aba + "' está estruturado no PRD e pode ser expandido conforme a necessidade de estoque.");
+      btn.classList.add("active");
+      if (aba !== "expedicao") {
+        exibirToast("Módulo " + aba.toUpperCase() + " selecionado para " + (usuarioAtivo ? usuarioAtivo.empresa : "fabricante"));
       }
     }
 
-    function atualizarFabricanteB2B(marcaId) {
-      console.log("Alternando contexto B2B para:", marcaId);
-    }
-
-    function abrirModalConferencia(pedidoId) {
-      document.getElementById("conf-ped-id").innerText = pedidoId;
-      document.getElementById("modal-conferencia-b2b").classList.add("open");
-      setTimeout(() => document.getElementById("input-bip-anvisa").focus(), 100);
+    function abrirModalConferencia(id, cliente, itens) {
+      document.getElementById("conf-id").innerText = id;
+      document.getElementById("conf-cliente").innerText = cliente;
+      const cItens = document.getElementById("conf-itens-container");
+      cItens.innerHTML = "";
+      itens.forEach(item => {
+        const div = document.createElement("div");
+        div.innerText = "• " + item;
+        cItens.appendChild(div);
+      });
+      document.getElementById("modal-conferencia").classList.add("open");
+      setTimeout(() => document.getElementById("input-bip-lote").focus(), 100);
     }
 
     function fecharModalConferencia() {
-      document.getElementById("modal-conferencia-b2b").classList.remove("open");
+      document.getElementById("modal-conferencia").classList.remove("open");
     }
 
-    function tratarBip(e) {
+    function processarBip(e) {
       if (e.key === "Enter") {
         e.preventDefault();
-        alert("Lote ANVISA validado com sucesso: " + e.target.value);
-        concluirConferencia();
+        const cod = e.target.value.trim();
+        if (!cod) return;
+        exibirToast("Lote ANVISA validado: " + cod);
+        e.target.value = "";
+        setTimeout(fecharModalConferencia, 400);
       }
     }
 
-    function concluirConferencia() {
+    function confirmarBipLote() {
+      exibirToast("Conferência física concluída com sucesso.");
       fecharModalConferencia();
-      alert("Pedido bipado e pronto para coleta do motoboy!");
     }
 
-    function moverPedido(pedidoId, destino) {
-      console.log("Movendo pedido", pedidoId, "para", destino);
-      alert("Pedido " + pedidoId + " avançado na esteira para: " + destino.toUpperCase());
+    function moverPedidoKanban(id, destino) {
+      exibirToast("Pedido " + id + " transferido para " + destino.toUpperCase());
     }
   </script>
 </body>

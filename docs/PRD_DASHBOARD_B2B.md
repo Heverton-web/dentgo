@@ -59,7 +59,7 @@ O **DentGo B2B Hub** fornece uma interface desktop em tela cheia com densidade i
   * Nome do combo, badge promocional (ex: 20% OFF, Relâmpago).
   * Seleção de múltiplos SKUs e quantidades inclusas.
   * Preço original de tabela vs Preço promocional faturado.
-  * Data de vigência e formas de faturamento liberadas.
+  * Data de vigência e formas de pagamento aceitas (Cartão / PIX).
 
 ### 3.4. Torre de Despacho & Gestão de Motoboys
 * Lista de entregadores em trânsito com status da bateria, distância até o destino e tempo estimado.
