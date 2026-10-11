@@ -272,6 +272,28 @@
       color: #FFFFFF;
     }
 
+    .cat-pill {
+      padding: 6px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cat-pill:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+    .cat-pill.active {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--bg);
+    }
+
     .companies-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -900,6 +922,25 @@
           </button>
         </div>
 
+        <!-- Barra de Busca Rápida de Produtos -->
+        <div style="margin: 12px 0 10px 0; position: relative;">
+          <input type="text" id="input-busca-produto" placeholder="Buscar implante, munhão, kit ou SKU..." 
+            oninput="filtrarPorTexto(this.value)"
+            style="width: 100%; box-sizing: border-box; background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 14px 10px 36px; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--text)'" onblur="this.style.borderColor='var(--border)'" />
+          <svg style="position: absolute; left: 12px; top: 12px; color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <button id="btn-limpar-busca-prod" onclick="limparBuscaProduto()" style="display: none; position: absolute; right: 10px; top: 8px; border: none; background: none; font-size: 16px; color: var(--text-muted); cursor: pointer;">&times;</button>
+        </div>
+
+        <!-- Pílulas de Categorias de Produtos -->
+        <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none;">
+          <button class="cat-pill active" data-cat="todas" onclick="selecionarCategoriaProduto(this, 'todas')">Todos</button>
+          <button class="cat-pill" data-cat="implantes" onclick="selecionarCategoriaProduto(this, 'implantes')">Implantes</button>
+          <button class="cat-pill" data-cat="componentes" onclick="selecionarCategoriaProduto(this, 'componentes')">Componentes</button>
+          <button class="cat-pill" data-cat="kits" onclick="selecionarCategoriaProduto(this, 'kits')">Kits Cirúrgicos</button>
+          <button class="cat-pill" data-cat="biomateriais" onclick="selecionarCategoriaProduto(this, 'biomateriais')">Biomateriais</button>
+        </div>
+
         <div class="product-list" id="lista-produtos"></div>
       </div>
     </div>
@@ -1428,15 +1469,20 @@
     ];
 
     const PRODUTOS = [
-      { id: "p1", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Implante Flash CM 3.5 x 10mm", sku: "CX-FL-3510", preco: 185.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p2", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Munhão Angulado 17° CM 3.5 Cinta 2.5mm", sku: "CX-MN-17-3525", preco: 92.50, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p3", empresaId: "conexao", marca: "Conexão Implantes", conexao: "HI", nome: "Scan Body In-Lego Intraoral CM", sku: "CX-IN-LEGO-01", preco: 120.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p4", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Implante BLX Roxolid SLActive 3.75 x 10mm", sku: "STR-BLX-3710", preco: 420.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p5", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Base de Titânio Variobase para Coroa", sku: "STR-VB-35", preco: 195.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p6", empresaId: "neodent", marca: "Neodent", conexao: "CM", nome: "Implante Grand Morse Helix 3.5 x 11.5mm", sku: "NEO-GM-3511", preco: 178.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p7", empresaId: "sin", marca: "S.I.N. Implantes", conexao: "HE", nome: "Implante Strong SW HE 4.0 x 10mm", sku: "SIN-SW-4010", preco: 145.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
-      { id: "p8", empresaId: "titanium", marca: "Titanium Fix", conexao: "HI", nome: "Munhão Reto HI 3.5mm Cinta 1.5mm", sku: "TF-MN-HI-35", preco: 78.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" },
-      { id: "p9", empresaId: "dsp", marca: "DSP Biomedical", conexao: "HE", nome: "Implante Hexágono Externo Master 3.75", sku: "DSP-HE-3710", preco: 110.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" }
+      { id: "p1", empresaId: "conexao", marca: "Conexão Implantes", categoria: "implantes", conexao: "CM", nome: "Implante Flash CM 3.5 x 10mm", sku: "CX-FL-3510", preco: 185.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p2", empresaId: "conexao", marca: "Conexão Implantes", categoria: "componentes", conexao: "CM", nome: "Munhão Angulado 17° CM 3.5 Cinta 2.5mm", sku: "CX-MN-17-3525", preco: 92.50, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p3", empresaId: "conexao", marca: "Conexão Implantes", categoria: "componentes", conexao: "HI", nome: "Scan Body In-Lego Intraoral CM", sku: "CX-IN-LEGO-01", preco: 120.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p10", empresaId: "conexao", marca: "Conexão Implantes", categoria: "kits", conexao: "Universal", nome: "Kit Cirúrgico Compacto Cone Morse", sku: "CX-KIT-CM-01", preco: 1890.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p11", empresaId: "conexao", marca: "Conexão Implantes", categoria: "biomateriais", conexao: "N/A", nome: "Enxerto Ósseo Particulado Cortical 0.5g", sku: "CX-BIO-05", preco: 215.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p4", empresaId: "straumann", marca: "Straumann", categoria: "implantes", conexao: "CM", nome: "Implante BLX Roxolid SLActive 3.75 x 10mm", sku: "STR-BLX-3710", preco: 420.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p5", empresaId: "straumann", marca: "Straumann", categoria: "componentes", conexao: "CM", nome: "Base de Titânio Variobase para Coroa", sku: "STR-VB-35", preco: 195.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p12", empresaId: "straumann", marca: "Straumann", categoria: "kits", conexao: "Universal", nome: "Kit Protético Cirúrgico Straumann Modular", sku: "STR-KIT-01", preco: 3450.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p6", empresaId: "neodent", marca: "Neodent", categoria: "implantes", conexao: "CM", nome: "Implante Grand Morse Helix 3.5 x 11.5mm", sku: "NEO-GM-3511", preco: 178.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p13", empresaId: "neodent", marca: "Neodent", categoria: "componentes", conexao: "CM", nome: "Mini Pilar Cônico Angulado 17° GM", sku: "NEO-MP-17", preco: 115.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p7", empresaId: "sin", marca: "S.I.N. Implantes", categoria: "implantes", conexao: "HE", nome: "Implante Strong SW HE 4.0 x 10mm", sku: "SIN-SW-4010", preco: 145.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p14", empresaId: "sin", marca: "S.I.N. Implantes", categoria: "kits", conexao: "Universal", nome: "Kit Cirúrgico Completo Start Unit", sku: "SIN-KIT-START", preco: 1490.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p8", empresaId: "titanium", marca: "Titanium Fix", categoria: "componentes", conexao: "HI", nome: "Munhão Reto HI 3.5mm Cinta 1.5mm", sku: "TF-MN-HI-35", preco: 78.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" },
+      { id: "p9", empresaId: "dsp", marca: "DSP Biomedical", categoria: "implantes", conexao: "HE", nome: "Implante Hexágono Externo Master 3.75", sku: "DSP-HE-3710", preco: 110.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" }
     ];
 
     const NOTICIAS = [
@@ -1481,6 +1527,8 @@
 
     let empresaSelecionadaId = null;
     let filtroSlaAtual = "";
+    let buscaProdutoAtual = "";
+    let filtroCategoriaAtual = "todas";
     let carrinho = [];
     let flashAtivo = false;
     let cupomAplicado = null; // { codigo: 'DENTGO10', percentual: 0.10 }
@@ -1563,6 +1611,16 @@
 
     function abrirEmpresa(empresaId) {
       empresaSelecionadaId = empresaId;
+      buscaProdutoAtual = "";
+      filtroCategoriaAtual = "todas";
+      const inputBusca = document.getElementById("input-busca-produto");
+      if (inputBusca) inputBusca.value = "";
+      const btnLimpar = document.getElementById("btn-limpar-busca-prod");
+      if (btnLimpar) btnLimpar.style.display = "none";
+      document.querySelectorAll(".cat-pill").forEach(p => {
+        p.classList.toggle("active", p.getAttribute("data-cat") === "todas");
+      });
+
       const empresa = EMPRESAS.find(e => e.id === empresaId);
       document.getElementById("nome-empresa-selecionada").innerText = empresa.nome;
       document.getElementById("secao-empresas").style.display = "none";
@@ -1572,9 +1630,37 @@
 
     function voltarParaEmpresas() {
       empresaSelecionadaId = null;
+      buscaProdutoAtual = "";
+      filtroCategoriaAtual = "todas";
       document.getElementById("secao-produtos-empresa").style.display = "none";
       document.getElementById("secao-empresas").style.display = "block";
       renderizarEmpresas();
+    }
+
+    function filtrarPorTexto(valor) {
+      buscaProdutoAtual = valor.trim().toLowerCase();
+      const btnLimpar = document.getElementById("btn-limpar-busca-prod");
+      if (btnLimpar) btnLimpar.style.display = buscaProdutoAtual ? "block" : "none";
+      renderizarProdutosEmpresa();
+    }
+
+    function limparBuscaProduto() {
+      buscaProdutoAtual = "";
+      const input = document.getElementById("input-busca-produto");
+      if (input) {
+        input.value = "";
+        input.focus();
+      }
+      const btnLimpar = document.getElementById("btn-limpar-busca-prod");
+      if (btnLimpar) btnLimpar.style.display = "none";
+      renderizarProdutosEmpresa();
+    }
+
+    function selecionarCategoriaProduto(btn, cat) {
+      document.querySelectorAll(".cat-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      filtroCategoriaAtual = cat;
+      renderizarProdutosEmpresa();
     }
 
     function renderizarProdutosEmpresa() {
@@ -1584,11 +1670,23 @@
       const prods = PRODUTOS.filter(p => {
         const bateEmpresa = p.empresaId === empresaSelecionadaId;
         const bateSla = !filtroSlaAtual || p.prazo === filtroSlaAtual;
-        return bateEmpresa && bateSla;
+        const bateCat = filtroCategoriaAtual === "todas" || p.categoria === filtroCategoriaAtual;
+        const bateBusca = !buscaProdutoAtual || 
+          p.nome.toLowerCase().includes(buscaProdutoAtual) || 
+          p.sku.toLowerCase().includes(buscaProdutoAtual) ||
+          p.conexao.toLowerCase().includes(buscaProdutoAtual);
+
+        return bateEmpresa && bateSla && bateCat && bateBusca;
       });
 
       if (prods.length === 0) {
-        lista.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:12px;">Nenhum produto encontrado para este prazo de entrega.</div>';
+        lista.innerHTML = `
+          <div style="text-align:center; padding:32px 16px; background:var(--surface); border:1px dashed var(--border); border-radius:12px; margin-top:10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted); margin-bottom:8px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">Nenhum produto encontrado</div>
+            <div style="font-size:11px; color:var(--text-muted);">Tente outro termo na busca ou selecione outra categoria.</div>
+          </div>
+        `;
         return;
       }
 
