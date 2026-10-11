@@ -5,7 +5,7 @@ Domínio: Checkout com trava sanitária, split (4.5% + R$ 9,90) e PIN de entrega
 
 import random
 import uuid
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from src.core.database import get_connection
 from src.modules.autenticacao_cro.service import verificar_habilitacao_cirurgica
 

@@ -878,6 +878,15 @@
         </div>
       </div>
 
+      <!-- Histórico de Pedidos / Repetir Pedido -->
+      <div class="wallet-section">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text);">Histórico & Reposição Rápida</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">1-Click Reorder</span>
+        </div>
+        <div id="historico-pedidos-lista" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+
       <div class="wallet-section">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 15px; font-weight: 700; color: var(--text);">Locais de Entrega Cirúrgica</h3>
@@ -1045,11 +1054,30 @@
         <div id="checkout-lista-pagamentos" style="display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
 
+      <!-- Resumo dos Itens do Pedido -->
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom:8px; display:block;">3. Itens Cirúrgicos</label>
+        <div id="checkout-resumo-itens" style="display:flex; flex-direction:column; gap:6px; max-height:140px; overflow-y:auto;"></div>
+      </div>
+
+      <!-- Cupom de Desconto -->
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="chk-cupom-input" class="clean-input mono" placeholder="Cupom (ex: DENTGO10)" style="text-transform:uppercase;">
+          <button class="btn-action" style="padding:0 14px; font-size:12px; font-weight:700;" onclick="aplicarCupomDesconto()">Aplicar</button>
+        </div>
+        <div id="chk-cupom-msg" style="font-size:10px; margin-top:4px; font-weight:700; display:none;"></div>
+      </div>
+
       <!-- Resumo Financeiro & Regras do Fabricante -->
       <div style="background: var(--surface-subtle); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 16px;">
         <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
           <span style="color:var(--text-muted);">Itens Cirúrgicos</span>
           <span id="chk-subtotal" class="mono" style="font-weight:700;">R$ 0,00</span>
+        </div>
+        <div id="chk-linha-desconto" style="display:none; justify-content:space-between; font-size:12px; margin-bottom:6px; color:#16A34A;">
+          <span>Desconto (<span id="chk-cupom-nome"></span>)</span>
+          <span id="chk-desconto-valor" class="mono" style="font-weight:700;">- R$ 0,00</span>
         </div>
         <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
           <span style="color:var(--text-muted);" id="chk-label-frete">Frete Padrão</span>
@@ -1303,6 +1331,21 @@
     let filtroSlaAtual = "";
     let carrinho = [];
     let flashAtivo = false;
+    let cupomAplicado = null; // { codigo: 'DENTGO10', percentual: 0.10 }
+    let historicoPedidos = [
+      {
+        id: "PED-84920",
+        data: "Ontem às 14:15",
+        empresaId: "conexao",
+        empresaNome: "Conexão Implantes",
+        total: 540.00,
+        status: "Entregue",
+        itens: [
+          { nome: "Implante Flash CM 3.5 x 10mm", sku: "CX-FL-3510", preco: 210.00, qtd: 2 },
+          { nome: "Cicatrizador CM 3.5 x 2.5mm", sku: "CX-CIC-3525", preco: 60.00, qtd: 2 }
+        ]
+      }
+    ];
     let mapInstance = null;
 
     const ROTA_REAL_COORDS = [
@@ -1637,6 +1680,7 @@
         tabPer.classList.add("active");
         renderizarEnderecos();
         renderizarCarteira();
+        renderizarHistoricoPedidos();
       }
     }
 
@@ -1726,17 +1770,94 @@
     function abrirCheckoutModal() {
       if (carrinho.length === 0) return;
 
-      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
-      const taxaFrete = flashAtivo ? 29.00 : 0.00;
-      const total = subtotal + taxaFrete;
-
-      document.getElementById("chk-subtotal").innerText = "R$ " + subtotal.toFixed(2).replace('.', ',');
-      document.getElementById("chk-frete").innerText = flashAtivo ? "R$ 29,00" : "Grátis (Normal)";
-      document.getElementById("chk-label-frete").innerText = flashAtivo ? "Taxa Expressa Flash (2h)" : "Frete Padrão";
-      document.getElementById("chk-total").innerText = "R$ " + total.toFixed(2).replace('.', ',');
-
+      atualizarTotaisCheckout();
+      renderizarItensCheckout();
       renderizarOpcoesCheckout();
       document.getElementById("modal-checkout-flow").classList.add("open");
+    }
+
+    function renderizarItensCheckout() {
+      const container = document.getElementById("checkout-resumo-itens");
+      if (!container) return;
+
+      container.innerHTML = carrinho.map((p, idx) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 10px;">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--text);">${p.nome}</div>
+            <div style="font-size:9px; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.sku} • Conexão ${p.conexao}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+            <span style="font-size:9px; color:#DC2626; cursor:pointer;" onclick="removerItemDoCheckout(${idx})">Remover</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function removerItemDoCheckout(idx) {
+      carrinho.splice(idx, 1);
+      atualizarCarrinho();
+      if (carrinho.length === 0) {
+        fecharCheckoutModal();
+      } else {
+        renderizarItensCheckout();
+        atualizarTotaisCheckout();
+      }
+    }
+
+    function aplicarCupomDesconto() {
+      const input = document.getElementById("chk-cupom-input");
+      const msg = document.getElementById("chk-cupom-msg");
+      const codigo = input.value.trim().toUpperCase();
+
+      if (codigo === "DENTGO10") {
+        cupomAplicado = { codigo: "DENTGO10", percentual: 0.10 };
+        msg.style.display = "block";
+        msg.style.color = "#16A34A";
+        msg.innerText = "✓ Cupom DENTGO10 aplicado: 10% de desconto!";
+      } else if (codigo === "FLASHFREE") {
+        cupomAplicado = { codigo: "FLASHFREE", freteGratis: true };
+        msg.style.display = "block";
+        msg.style.color = "#16A34A";
+        msg.innerText = "✓ Cupom FLASHFREE aplicado: Frete Flash Isento!";
+      } else {
+        cupomAplicado = null;
+        msg.style.display = "block";
+        msg.style.color = "#DC2626";
+        msg.innerText = "✕ Cupom inválido. Use DENTGO10 ou FLASHFREE.";
+      }
+      atualizarTotaisCheckout();
+    }
+
+    function atualizarTotaisCheckout() {
+      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
+      let taxaFrete = flashAtivo ? 29.00 : 0.00;
+      let desconto = 0;
+
+      if (cupomAplicado) {
+        if (cupomAplicado.percentual) {
+          desconto = subtotal * cupomAplicado.percentual;
+        } else if (cupomAplicado.freteGratis) {
+          taxaFrete = 0.00;
+        }
+      }
+
+      const total = Math.max(0, subtotal - desconto + taxaFrete);
+
+      document.getElementById("chk-subtotal").innerText = "R$ " + subtotal.toFixed(2).replace('.', ',');
+      document.getElementById("chk-frete").innerText = taxaFrete > 0 ? "R$ " + taxaFrete.toFixed(2).replace('.', ',') : "Grátis";
+      document.getElementById("chk-label-frete").innerText = flashAtivo ? "Taxa Expressa Flash (2h)" : "Frete Padrão";
+
+      const linhaDesc = document.getElementById("chk-linha-desconto");
+      if (desconto > 0) {
+        linhaDesc.style.display = "flex";
+        document.getElementById("chk-cupom-nome").innerText = cupomAplicado.codigo;
+        document.getElementById("chk-desconto-valor").innerText = "- R$ " + desconto.toFixed(2).replace('.', ',');
+      } else {
+        linhaDesc.style.display = "none";
+      }
+
+      document.getElementById("chk-total").innerText = "R$ " + total.toFixed(2).replace('.', ',');
     }
 
     function fecharCheckoutModal() {
@@ -1813,9 +1934,107 @@
     }
 
     function confirmarPedidoEIniciarTracking() {
+      if (carrinho.length === 0) return;
+
+      const empId = carrinho[0].empresaId;
+      const empresa = EMPRESAS.find(em => em.id === empId);
+      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
+      let frete = flashAtivo ? 29.00 : 0.00;
+      let desc = cupomAplicado && cupomAplicado.percentual ? subtotal * cupomAplicado.percentual : 0;
+      if (cupomAplicado && cupomAplicado.freteGratis) frete = 0;
+      const totalFinal = Math.max(0, subtotal - desc + frete);
+
+      // 1. Registra no histórico de reposição rápida
+      const novoPedidoHist = {
+        id: "PED-" + Math.floor(10000 + Math.random() * 90000),
+        data: "Hoje às " + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        empresaId: empId,
+        empresaNome: empresa ? empresa.nome : empId,
+        total: totalFinal,
+        status: flashAtivo ? "Em Rota Flash (2h)" : "Em Preparação",
+        itens: carrinho.map(p => ({
+          nome: p.nome,
+          sku: p.sku,
+          preco: p.preco,
+          qtd: 1,
+          idOriginal: p.id
+        }))
+      };
+      historicoPedidos.unshift(novoPedidoHist);
+
+      // 2. Esvazia o carrinho e fecha o modal de checkout
+      carrinho = [];
+      flashAtivo = false;
+      cupomAplicado = null;
+      atualizarCarrinho();
       fecharCheckoutModal();
+
+      // 3. Atualiza tela de perfil com o novo pedido registrado
+      renderizarHistoricoPedidos();
+
+      // 4. Abre rastreamento ao vivo
       document.getElementById("modal-tracking").classList.add("open");
       initMap();
+    }
+
+    function renderizarHistoricoPedidos() {
+      const container = document.getElementById("historico-pedidos-lista");
+      if (!container) return;
+
+      if (historicoPedidos.length === 0) {
+        container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); padding:10px; text-align:center;">Nenhum pedido anterior registrado.</div>`;
+        return;
+      }
+
+      container.innerHTML = historicoPedidos.map(p => `
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-size:10px; font-weight:800; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.id}</span>
+              <div style="font-size:12px; font-weight:700; color:var(--text);">${p.empresaNome}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${p.total.toFixed(2).replace('.', ',')}</div>
+              <span class="sla-badge badge-hoje" style="font-size:9px;">${p.status}</span>
+            </div>
+          </div>
+
+          <div style="font-size:10px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:6px;">
+            ${p.itens.map(it => `${it.qtd}x ${it.nome}`).join(' • ')}
+          </div>
+
+          <button class="btn-action" style="padding:7px 10px; font-size:11px; justify-content:center; background:var(--surface-subtle); color:var(--text); border:1px solid var(--border);" onclick="repetirPedido1Click('${p.id}')">
+            Repetir Pedido (1-Click Reorder)
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function repetirPedido1Click(pedidoId) {
+      const ped = historicoPedidos.find(h => h.id === pedidoId);
+      if (!ped) return;
+
+      // Carrega os produtos do pedido no carrinho
+      carrinho = [];
+      ped.itens.forEach(it => {
+        const prod = PRODUTOS.find(pr => pr.sku === it.sku) || {
+          id: it.idOriginal || "prod_" + Date.now(),
+          empresaId: ped.empresaId,
+          nome: it.nome,
+          sku: it.sku,
+          preco: it.preco,
+          conexao: "CM",
+          prazo: "hoje",
+          categoria: "implante"
+        };
+        for (let i = 0; i < it.qtd; i++) {
+          carrinho.push(prod);
+        }
+      });
+
+      atualizarCarrinho();
+      alternarAba("catalogo");
+      abrirCheckoutModal();
     }
 
     function abrirModalTrackingDireto() {
