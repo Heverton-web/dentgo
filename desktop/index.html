@@ -101,6 +101,30 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* Scrollbars Cirúrgicas DentGo (Max 4px) */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(24, 24, 27, 0.25) transparent;
+    }
+
+    *::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(24, 24, 27, 0.25);
+      border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: var(--text);
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
@@ -867,9 +891,20 @@
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 500;">Pronta-Entrega Cirúrgica • SP</div>
         </div>
       </div>
-      <div class="cro-pill" onclick="alternarAba('perfil')">
-        <div class="cro-status-dot"></div>
-        <span>CRO: SP-123456</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="cro-pill" onclick="alternarAba('perfil')">
+          <div class="cro-status-dot"></div>
+          <span>CRO: SP-123456</span>
+        </div>
+        <!-- Sacola de Compras no Cabeçalho -->
+        <div id="btn-sacola-header" onclick="abrirCheckoutModal()" title="Sacola de Compras" style="position:relative; width:38px; height:38px; border-radius:11px; background:var(--surface); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s ease;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text);">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+            <path d="M3 6h18"></path>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="header-bag-count" class="mono" style="display:none; position:absolute; top:-5px; right:-5px; background:var(--text); color:var(--bg); font-size:10px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--surface); box-shadow:0 2px 4px rgba(0,0,0,0.15);">0</span>
+        </div>
       </div>
     </div>
 
@@ -1226,10 +1261,16 @@
         <button onclick="fecharCheckoutModal()" style="background:none; border:none; color:var(--text-muted); font-size:18px; cursor:pointer;">✕</button>
       </div>
 
+      <!-- Escolha de Modalidade de Frete / Prazo -->
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom:8px; display:block;">1. Modalidade de Frete</label>
+        <div id="checkout-opcoes-frete" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
       <!-- Escolha de Endereço -->
       <div style="margin-bottom: 16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">1. Local de Entrega</label>
+          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">2. Local de Entrega</label>
           <span style="font-size: 11px; color: var(--text-muted); cursor:pointer;" onclick="fecharCheckoutModal(); alternarAba('perfil');">+ Novo</span>
         </div>
         <div id="checkout-lista-enderecos" style="display: flex; flex-direction: column; gap: 8px;"></div>
@@ -1238,7 +1279,7 @@
       <!-- Escolha de Pagamento -->
       <div style="margin-bottom: 16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">2. Forma de Pagamento</label>
+          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">3. Forma de Pagamento</label>
           <span style="font-size: 11px; color: var(--text-muted); cursor:pointer;" onclick="fecharCheckoutModal(); alternarAba('perfil');">+ Novo</span>
         </div>
         <div id="checkout-lista-pagamentos" style="display: flex; flex-direction: column; gap: 8px;"></div>
@@ -1246,7 +1287,7 @@
 
       <!-- Resumo dos Itens do Pedido -->
       <div style="margin-bottom: 16px;">
-        <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom:8px; display:block;">3. Itens Cirúrgicos</label>
+        <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom:8px; display:block;">4. Itens Cirúrgicos</label>
         <div id="checkout-resumo-itens" style="display:flex; flex-direction:column; gap:6px; max-height:140px; overflow-y:auto;"></div>
       </div>
 
@@ -2255,12 +2296,31 @@
       }
 
       return `
-        <div style="display:flex; align-items:center; background:var(--surface); border:1.5px solid var(--text); border-radius:10px; overflow:hidden;">
-          <button onclick="alterarQtdItem('${id}', -1)" style="border:none; background:none; padding:4px 10px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">-</button>
-          <span class="mono" style="font-size:12px; font-weight:800; padding:0 4px; min-width:20px; text-align:center;">${qtd}</span>
-          <button onclick="alterarQtdItem('${id}', 1)" style="border:none; background:none; padding:4px 10px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">+</button>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div style="display:flex; align-items:center; background:var(--surface); border:1.5px solid var(--text); border-radius:10px; overflow:hidden;">
+            <button onclick="alterarQtdItem('${id}', -1)" style="border:none; background:none; padding:4px 9px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">-</button>
+            <span class="mono" style="font-size:12px; font-weight:800; padding:0 3px; min-width:18px; text-align:center;">${qtd}</span>
+            <button onclick="alterarQtdItem('${id}', 1)" style="border:none; background:none; padding:4px 9px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">+</button>
+          </div>
+          <button onclick="removerItemCompleto('${id}')" title="Remover do carrinho" style="border:1px solid var(--border); background:var(--surface); width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#DC2626; cursor:pointer; transition:all 0.15s ease;"
+            onmouseover="this.style.background='#FEE2E2'; this.style.borderColor='#FCA5A5';"
+            onmouseout="this.style.background='var(--surface)'; this.style.borderColor='var(--border)';">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
       `;
+    }
+
+    function removerItemCompleto(id) {
+      const idx = carrinho.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        carrinho.splice(idx, 1);
+        atualizarCarrinho();
+        mostrarToast("Item removido do carrinho.");
+      }
     }
 
     function adicionarAoCarrinho(id) {
@@ -2292,6 +2352,7 @@
       }
 
       atualizarCarrinho();
+      mostrarToast(`"${prod.nome}" adicionado à sacola!`);
     }
 
     function alterarQtdItem(id, delta) {
@@ -2340,8 +2401,19 @@
       const totalEl = document.getElementById("cart-total");
       const descEl = document.getElementById("cart-delivery-desc");
       const btnFlash = document.getElementById("btn-toggle-flash");
+      const headerBagCount = document.getElementById("header-bag-count");
 
       const totalQtd = carrinho.reduce((acc, p) => acc + p.qtd, 0);
+
+      // Atualiza badge da sacola no cabeçalho
+      if (headerBagCount) {
+        if (totalQtd > 0) {
+          headerBagCount.innerText = totalQtd;
+          headerBagCount.style.display = "flex";
+        } else {
+          headerBagCount.style.display = "none";
+        }
+      }
 
       if (totalQtd > 0) {
         drawer.classList.add("visible");
@@ -2389,7 +2461,10 @@
     }
 
     function abrirCheckoutModal() {
-      if (carrinho.length === 0) return;
+      if (carrinho.length === 0) {
+        mostrarToast("Sua sacola está vazia. Adicione itens para finalizar.");
+        return;
+      }
 
       atualizarTotaisCheckout();
       renderizarItensCheckout();
@@ -2493,6 +2568,64 @@
     }
 
     function renderizarOpcoesCheckout() {
+      // 1. Modalidades de Frete
+      const containerFrete = document.getElementById("checkout-opcoes-frete");
+      if (containerFrete) {
+        containerFrete.innerHTML = "";
+        const empId = carrinho[0]?.empresaId;
+        const empresa = EMPRESAS.find(em => em.id === empId);
+        const permiteFlash = empresa ? empresa.ofereceFlash : false;
+
+        const opcoes = [
+          {
+            id: "normal",
+            titulo: "Entrega Normal (" + (empresa && empresa.prazoPadrao === 'hoje' ? 'Mesmo Dia' : 'D+1') + ")",
+            subtitulo: "Rota padrão consolidada do fabricante",
+            valor: 0.00,
+            ativo: !flashAtivo
+          }
+        ];
+
+        if (permiteFlash) {
+          opcoes.push({
+            id: "flash",
+            titulo: "Entrega Expressa Flash (2 Horas)",
+            subtitulo: "Despacho prioritário direto via motoboy dedicado",
+            valor: 29.00,
+            ativo: flashAtivo
+          });
+        }
+
+        opcoes.forEach(opt => {
+          const item = document.createElement("div");
+          item.style.padding = "10px 12px";
+          item.style.border = opt.ativo ? "2px solid var(--text)" : "1px solid var(--border)";
+          item.style.borderRadius = "10px";
+          item.style.background = opt.ativo ? "var(--surface)" : "var(--surface-subtle)";
+          item.style.cursor = "pointer";
+          item.onclick = () => {
+            flashAtivo = (opt.id === "flash");
+            renderizarOpcoesCheckout();
+            atualizarTotaisCheckout();
+            atualizarCarrinho();
+          };
+          item.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight:700; font-size:12px; color:var(--text);">${opt.titulo}</div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${opt.subtitulo}</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="mono" style="font-size:12px; font-weight:800; color:var(--text);">${opt.valor === 0 ? 'GRÁTIS' : '+ R$ ' + opt.valor.toFixed(2).replace('.', ',')}</div>
+                <div style="font-size:9px; font-weight:700; color:var(--text-muted);">${opt.ativo ? '✓ SELECIONADO' : 'SELECIONAR'}</div>
+              </div>
+            </div>
+          `;
+          containerFrete.appendChild(item);
+        });
+      }
+
+      // 2. Endereços
       const containerEnd = document.getElementById("checkout-lista-enderecos");
       containerEnd.innerHTML = "";
 
@@ -2518,10 +2651,11 @@
         containerEnd.appendChild(item);
       });
 
+      // 3. Pagamentos
       const containerPag = document.getElementById("checkout-lista-pagamentos");
       containerPag.innerHTML = "";
 
-      const empId = carrinho[0].empresaId;
+      const empId = carrinho[0]?.empresaId;
       const empresa = EMPRESAS.find(em => em.id === empId);
 
       cartoesSalvos.forEach(c => {
