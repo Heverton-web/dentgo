@@ -1188,6 +1188,65 @@
     </div>
   </div>
 
+  <!-- Modal de Detalhes do Pedido -->
+  <div id="modal-detalhes-pedido" class="tracking-modal" style="z-index: 10001;">
+    <div class="modal-sheet">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px;">
+        <div>
+          <span id="det-ped-id" class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);"></span>
+          <h3 id="det-ped-empresa" style="font-size:16px; font-weight:800; color:var(--text);"></h3>
+        </div>
+        <button onclick="fecharModalDetalhesPedido()" style="background:none; border:none; color:var(--text-muted); font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Barra de Progresso com Pin de Evolução das Fases -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:14px; padding:14px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="font-size:11px; font-weight:800; color:var(--text); text-transform:uppercase; letter-spacing:0.04em;">Evolução Cirúrgica</span>
+          <span id="det-ped-status-tag" class="sla-badge badge-hoje" style="font-size:10px;"></span>
+        </div>
+
+        <div style="position:relative; margin:16px 8px 12px 8px;">
+          <!-- Linha cinza de fundo -->
+          <div style="width:100%; height:4px; background:var(--border); border-radius:2px;"></div>
+          <!-- Linha ativa com progresso -->
+          <div id="det-ped-progress-bar" style="position:absolute; top:0; left:0; height:4px; background:var(--text); border-radius:2px; transition:width 0.4s ease;"></div>
+          <!-- Pin Flutuante indicador de evolução -->
+          <div id="det-ped-progress-pin" style="position:absolute; top:-10px; transform:translateX(-50%); width:24px; height:24px; border-radius:50%; background:#FFFFFF; border:2px solid var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.18); display:flex; align-items:center; justify-content:center; transition:left 0.4s ease;">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--text);"></div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:9px; font-weight:700; color:var(--text-muted); margin-top:6px;">
+          <span>1. Aprovado</span>
+          <span>2. Lote</span>
+          <span>3. Em Rota</span>
+          <span>4. Entregue</span>
+        </div>
+      </div>
+
+      <!-- Itens do Pedido -->
+      <div>
+        <label style="font-size:11px; font-weight:800; color:var(--text); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:block;">Itens Solicitados</label>
+        <div id="det-ped-itens-lista" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <!-- Resumo Financeiro -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:12px; padding:12px; font-size:12px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="color:var(--text-muted);">Data/Hora</span>
+          <span id="det-ped-data" style="font-weight:600;"></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1px dashed var(--border); padding-top:6px; margin-top:6px;">
+          <span>Total</span>
+          <span id="det-ped-total" class="mono"></span>
+        </div>
+      </div>
+
+      <div id="det-ped-acoes" style="display:flex; gap:8px;"></div>
+    </div>
+  </div>
+
   <div id="modal-tracking" class="tracking-modal">
     <div class="modal-sheet">
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1426,6 +1485,17 @@
     let flashAtivo = false;
     let cupomAplicado = null; // { codigo: 'DENTGO10', percentual: 0.10 }
     let historicoPedidos = [
+      {
+        id: "PED-91042",
+        data: "Hoje às 16:30",
+        empresaId: "conexao",
+        empresaNome: "Conexão Implantes",
+        total: 420.00,
+        status: "Em Rota Flash (2h)",
+        itens: [
+          { nome: "Implante Torq CM 3.75 x 11.5mm", sku: "CX-TQ-3711", preco: 210.00, qtd: 2 }
+        ]
+      },
       {
         id: "PED-84920",
         data: "Ontem às 14:15",
@@ -2098,8 +2168,10 @@
         return;
       }
 
-      container.innerHTML = historicoPedidos.map(p => `
-        <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px;">
+      container.innerHTML = historicoPedidos.map(p => {
+        const isPendente = p.status !== "Entregue";
+        return `
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:8px; cursor:pointer;" onclick="abrirModalDetalhesPedido('${p.id}')">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
               <span style="font-size:10px; font-weight:800; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.id}</span>
@@ -2107,19 +2179,102 @@
             </div>
             <div style="text-align:right;">
               <div style="font-size:12px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${p.total.toFixed(2).replace('.', ',')}</div>
-              <span class="sla-badge badge-hoje" style="font-size:9px;">${p.status}</span>
+              <span class="sla-badge ${isPendente ? 'badge-hoje' : 'badge-amanha'}" style="font-size:9px;">
+                ${isPendente ? '● ' + p.status : '✓ ' + p.status}
+              </span>
             </div>
+          </div>
+
+          <!-- Barra de evolução rápida no card -->
+          <div style="background:var(--surface-subtle); border-radius:6px; height:4px; width:100%; overflow:hidden; position:relative;">
+            <div style="background:${isPendente ? 'var(--text)' : '#16A34A'}; height:100%; width:${obterProgressoPercentual(p.status)}%;"></div>
           </div>
 
           <div style="font-size:10px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:6px;">
             ${p.itens.map(it => `${it.qtd}x ${it.nome}`).join(' • ')}
           </div>
 
-          <button class="btn-action" style="padding:7px 10px; font-size:11px; justify-content:center; background:var(--surface-subtle); color:var(--text); border:1px solid var(--border);" onclick="repetirPedido1Click('${p.id}')">
-            Repetir Pedido (1-Click Reorder)
-          </button>
+          <div style="display:flex; gap:6px; margin-top:2px;" onclick="event.stopPropagation()">
+            ${isPendente ? `
+              <button class="btn-action" style="flex:1; padding:7px 10px; font-size:11px; justify-content:center; background:var(--text); color:#FFFFFF;" onclick="abrirModalTrackingComPedido('${p.id}')">
+                Acompanhar Rota (Ao Vivo)
+              </button>
+            ` : ''}
+            <button class="btn-action" style="flex:1; padding:7px 10px; font-size:11px; justify-content:center; background:var(--surface-subtle); color:var(--text); border:1px solid var(--border);" onclick="repetirPedido1Click('${p.id}')">
+              Repetir (1-Click)
+            </button>
+          </div>
+        </div>
+      `;
+      }).join("");
+    }
+
+    function obterProgressoPercentual(status) {
+      if (status === "Aprovado") return 25;
+      if (status === "Em Preparação" || status === "Lote Sanitário") return 50;
+      if (status.includes("Rota") || status === "Em Rota Flash (2h)") return 75;
+      if (status === "Entregue") return 100;
+      return 60;
+    }
+
+    function abrirModalDetalhesPedido(pedidoId) {
+      const p = historicoPedidos.find(h => h.id === pedidoId);
+      if (!p) return;
+
+      document.getElementById("det-ped-id").innerText = p.id;
+      document.getElementById("det-ped-empresa").innerText = p.empresaNome;
+      document.getElementById("det-ped-status-tag").innerText = p.status;
+      document.getElementById("det-ped-data").innerText = p.data;
+      document.getElementById("det-ped-total").innerText = "R$ " + p.total.toFixed(2).replace('.', ',');
+
+      const perc = obterProgressoPercentual(p.status);
+      document.getElementById("det-ped-progress-bar").style.width = perc + "%";
+      document.getElementById("det-ped-progress-pin").style.left = perc + "%";
+
+      const containerItens = document.getElementById("det-ped-itens-lista");
+      containerItens.innerHTML = p.itens.map(it => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 10px;">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--text);">${it.nome}</div>
+            <div style="font-size:9px; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${it.sku} • Qtd: ${it.qtd}</div>
+          </div>
+          <div style="font-size:11px; font-weight:800; font-family:'JetBrains Mono', monospace;">
+            R$ ${(it.preco * it.qtd).toFixed(2).replace('.', ',')}
+          </div>
         </div>
       `).join("");
+
+      const containerAcoes = document.getElementById("det-ped-acoes");
+      const isPendente = p.status !== "Entregue";
+      containerAcoes.innerHTML = `
+        ${isPendente ? `
+          <button class="btn-action" style="flex:1; justify-content:center; padding:10px; font-size:12px; background:var(--text); color:#FFFFFF;" onclick="fecharModalDetalhesPedido(); abrirModalTrackingComPedido('${p.id}')">
+            Abrir Rastreamento ao Vivo
+          </button>
+        ` : ''}
+        <button class="btn-action" style="flex:1; justify-content:center; padding:10px; font-size:12px; background:var(--surface-subtle); color:var(--text); border:1px solid var(--border);" onclick="fecharModalDetalhesPedido(); repetirPedido1Click('${p.id}')">
+          Repetir Este Pedido
+        </button>
+      `;
+
+      document.getElementById("modal-detalhes-pedido").classList.add("open");
+    }
+
+    function fecharModalDetalhesPedido() {
+      document.getElementById("modal-detalhes-pedido").classList.remove("open");
+    }
+
+    function abrirModalTrackingComPedido(pedidoId) {
+      const p = historicoPedidos.find(h => h.id === pedidoId);
+      if (p) {
+        // Se houver empresa cadastrada, foca nela
+        if (mapInstance) {
+          mapInstance.remove();
+          mapInstance = null;
+        }
+      }
+      document.getElementById("modal-tracking").classList.add("open");
+      initMap();
     }
 
     function repetirPedido1Click(pedidoId) {
