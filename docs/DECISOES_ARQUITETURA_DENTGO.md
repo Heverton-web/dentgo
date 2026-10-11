@@ -87,3 +87,16 @@
 * As empresas parceiras (Conexão, Straumann, Neodent, S.I.N.) possuem acessos estritamente segregados via login e senha.
 * Nenhuma empresa tem visibilidade dos pedidos, faturamento, clientes ou estoque de outras marcas.
 * Dropdown de troca de marca restrito unicamente a perfil interno de Super Admin de auditoria da DentGo.
+
+---
+
+## 7. Módulo do Entregador Express (DentGo Driver PWA)
+
+* **Documento Detalhado**: `/opt/data/projetos/dentgo/docs/PRD_DRIVER_ENTREGADOR.md`
+* **Rota Web Dedicada**: `/driver` ou `/entregador` (PWA Mobile de 1 toque).
+* **Entidades no Banco SQLite**:
+  - `entregadores`: Cadastro, veículo, status (online/em_rota), bateria e saldo em carteira.
+  - `corridas_entrega`: Máquina de estados (aguardando ➔ aceito ➔ coletado ➔ entregue), origens/destinos com geolocalização e conciliação do repasse líquido do motorista.
+* **Segurança na Ponta Final**:
+  - Teclado numérico gigante integrado na tela para digitação do **PIN de 4 dígitos** fornecido pelo dentista para encerrar a corrida e liberar o repasse.
+
