@@ -16,34 +16,61 @@
   <style>
     @keyframes rotaAntPath {
       from {
-        stroke-dashoffset: 40;
+        stroke-dashoffset: 16;
       }
       to {
         stroke-dashoffset: 0;
       }
     }
     .rota-animada {
-      animation: rotaAntPath 1.2s linear infinite;
+      animation: rotaAntPath 1s linear infinite;
     }
     .map-custom-pin {
       background: #FFFFFF;
-      border: 2px solid #18181B;
+      border: 1.5px solid rgba(24, 24, 27, 0.15);
       border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 3px;
       overflow: hidden;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .map-custom-pin:hover {
+      transform: scale(1.08);
     }
     .map-custom-pin.destino {
-      border: 2px solid #16A34A;
+      border: 1.5px solid #16A34A;
       background: #FFFFFF;
     }
     .map-custom-pin svg {
       width: 100%;
       height: 100%;
       display: block;
+    }
+    .toast-notification {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #09090B;
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      z-index: 99999;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast-notification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
     :root {
       --bg: #FAFAFA;
@@ -1056,6 +1083,41 @@
     </div>
   </div>
 
+  <!-- Modal de Troca de Fabricante (Substituição Segura do Carrinho) -->
+  <div id="modal-troca-fabricante" class="tracking-modal" style="z-index: 10000;">
+    <div class="modal-sheet" style="border-radius: 20px 20px 0 0; padding: 24px 20px calc(var(--safe-bottom) + 24px) 20px;">
+      <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:8px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:#FEF3C7; border:1px solid #FDE68A; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-size: 16px; font-weight: 800; color: var(--text); margin-bottom:4px;">Trocar de Fabricante?</h3>
+          <p style="font-size: 12px; color: var(--text-muted); line-height:1.5;">
+            Seu pedido atual contém itens da <strong id="modal-troca-marca-atual" style="color:var(--text);"></strong>.
+          </p>
+        </div>
+      </div>
+
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:12px; padding:12px; font-size:11px; color:var(--text-muted); line-height:1.5;">
+        Por conformidade sanitária e regras de expedição cirúrgica, cada fabricante fatura e despacha seus produtos de forma independente. 
+        Ao confirmar, seu carrinho atual será esvaziado para iniciar o pedido com a <strong id="modal-troca-marca-nova" style="color:var(--text);"></strong>.
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button onclick="fecharModalTrocaFabricante()" style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-size:13px; font-weight:700; color:var(--text); cursor:pointer;">
+          Manter Atual
+        </button>
+        <button onclick="confirmarTrocaFabricante()" style="flex:1; padding:12px; border-radius:12px; border:none; background:var(--text); font-size:13px; font-weight:700; color:#FFFFFF; cursor:pointer;">
+          Trocar e Esvaziar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal de Fechamento de Pedido / Checkout -->
   <div id="modal-checkout-flow" class="tracking-modal">
     <div class="modal-sheet">
@@ -1550,7 +1612,7 @@
       const cep = document.getElementById("cad-end-cep").value.trim();
 
       if (!tit || !log) {
-        alert("Preencha ao menos o nome do local e o endereço.");
+        mostrarToast("Preencha ao menos o nome do local e o endereço.");
         return;
       }
 
@@ -1570,7 +1632,7 @@
       document.getElementById("cad-end-cep").value = "";
 
       renderizarEnderecos();
-      alert("Local de entrega cirúrgica registrado com sucesso!");
+      mostrarToast("Local de entrega cirúrgica registrado!");
     }
 
     function removerEndereco(id) {
@@ -1608,7 +1670,7 @@
       const val = document.getElementById("cad-validade").value.trim();
 
       if (!tit || num.length < 13 || !val) {
-        alert("Preencha todos os dados do cartão.");
+        mostrarToast("Preencha todos os dados do cartão.");
         return;
       }
 
@@ -1628,7 +1690,7 @@
       document.getElementById("cad-cvv").value = "";
 
       renderizarCarteira();
-      alert("Cartão cadastrado na Carteira com sucesso!");
+      mostrarToast("Cartão cadastrado na Carteira!");
     }
 
     function removerCartao(id) {
@@ -1715,6 +1777,18 @@
       }
     }
 
+    let toastTimeout = null;
+    function mostrarToast(msg) {
+      const el = document.getElementById("app-toast");
+      if (!el) return;
+      el.innerText = msg;
+      el.classList.add("show");
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        el.classList.remove("show");
+      }, 3000);
+    }
+
     function adicionarAoCarrinho(id) {
       const prod = PRODUTOS.find(p => p.id === id);
       if (!prod) return;
@@ -1728,23 +1802,30 @@
           const nomeAtual = empAtual ? empAtual.nome : empresaAtualId;
           const nomeNova = empNova ? empNova.nome : prod.empresaId;
 
-          const desejaTrocar = confirm(
-            `Atenção: Seu pedido atual contém itens da ${nomeAtual}.\n\n` +
-            `Por regras logísticas e sanitárias, pedidos expressos são faturados e despachados diretamente por cada fabricante.\n\n` +
-            `Deseja esvaziar o carrinho da ${nomeAtual} para iniciar um novo pedido com a ${nomeNova}?`
-          );
-
-          if (desejaTrocar) {
-            carrinho = [prod];
-            flashAtivo = false;
-            atualizarCarrinho();
-          }
+          produtoPendenteTroca = prod;
+          document.getElementById("modal-troca-marca-atual").innerText = nomeAtual;
+          document.getElementById("modal-troca-marca-nova").innerText = nomeNova;
+          document.getElementById("modal-troca-fabricante").classList.add("open");
           return;
         }
       }
 
       carrinho.push(prod);
       atualizarCarrinho();
+    }
+
+    function fecharModalTrocaFabricante() {
+      produtoPendenteTroca = null;
+      document.getElementById("modal-troca-fabricante").classList.remove("open");
+    }
+
+    function confirmarTrocaFabricante() {
+      if (produtoPendenteTroca) {
+        carrinho = [produtoPendenteTroca];
+        flashAtivo = false;
+        atualizarCarrinho();
+      }
+      fecharModalTrocaFabricante();
     }
 
     function alternarOpcaoFlash() {
@@ -2094,22 +2175,22 @@
           // Pin Remetente (Origem com Logo Oficial Colorido da Marca)
           const iconRemetente = L.divIcon({
             className: 'map-custom-pin',
-            html: `<div style="width:28px; height:28px; display:flex; align-items:center; justify-content:center;">${empresa.logoSvg}</div>`,
-            iconSize: [38, 38],
-            iconAnchor: [19, 19]
+            html: `<div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;">${empresa.logoSvg}</div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
           });
 
           // Pin Destino (Consultório / Clínico com Estetoscópio/Cruz Odonto)
           const iconDestino = L.divIcon({
             className: 'map-custom-pin destino',
-            html: `<div style="width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+            html: `<div style="width:18px; height:18px; display:flex; align-items:center; justify-content:center;">
               <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>`,
-            iconSize: [38, 38],
-            iconAnchor: [19, 19]
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
           });
 
           L.marker([-23.5670, -46.6900], { icon: iconRemetente }).addTo(mapInstance)
@@ -2120,18 +2201,18 @@
 
           // Linha de base estática (corredor rodoviário cinza suave)
           L.polyline(ROTA_REAL_COORDS, {
-            color: '#CBD5E1',
-            weight: 6,
-            opacity: 0.7,
+            color: '#E4E4E7',
+            weight: 3.5,
+            opacity: 0.85,
             lineJoin: 'round'
           }).addTo(mapInstance);
 
-          // Traçado dinâmico animado (Ant Path em preto/escuro clínico)
+          // Traçado dinâmico animado (delicado, pontilhado sutil e elegante)
           const polylineAnimada = L.polyline(ROTA_REAL_COORDS, {
             color: '#18181B',
-            weight: 4,
+            weight: 2.5,
             opacity: 0.95,
-            dashArray: '8, 12',
+            dashArray: '3, 5',
             className: 'rota-animada',
             lineJoin: 'round'
           }).addTo(mapInstance);
@@ -2188,7 +2269,7 @@
       const prazo = document.getElementById("cad-prod-prazo").value;
 
       if (!nome || !sku || isNaN(preco) || preco <= 0) {
-        alert("Preencha nome, SKU e valor unitário válido para cadastrar.");
+        mostrarToast("Preencha nome, SKU e valor unitário válido.");
         return;
       }
 
@@ -2213,11 +2294,12 @@
 
       trocarEmpresaB2B(marcaId);
       renderizarProdutos();
-      alert(`Produto "${nome}" publicado com sucesso no catálogo oficial da marca!`);
+      mostrarToast(`Produto "${nome}" publicado no catálogo da marca!`);
     }
 
     renderizarEmpresas();
     renderizarRadar();
   </script>
+  <div id="app-toast" class="toast-notification"></div>
 </body>
 </html>
