@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>DentGo — Pronta-Entrega Cirúrgica & Radar Odonto</title>
   
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%230F172A'/%3E%3Cpath d='M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z' fill='%230F766E'/%3E%3Ccircle cx='18' cy='16' r='2.2' fill='%2314B8A6'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%2309090B'/%3E%3Cpath d='M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z' fill='%23FFFFFF'/%3E%3Ccircle cx='18' cy='16' r='2.2' fill='%23A1A1AA'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,21 +15,21 @@
   
   <style>
     :root {
-      --bg: #F8FAFC;
+      --bg: #FAFAFA;
       --surface: #FFFFFF;
-      --surface-subtle: #F1F5F9;
-      --border: #E2E8F0;
-      --border-strong: #CBD5E1;
-      --text: #0F172A;
-      --text-muted: #64748B;
-      --teal-primary: #0F766E;
-      --teal-dark: #115E59;
-      --teal-light: #CCFBF1;
-      --teal-accent: #0D9488;
-      --emerald: #059669;
-      --emerald-light: #D1FAE5;
-      --amber: #D97706;
-      --amber-light: #FEF3C7;
+      --surface-subtle: #F4F4F5;
+      --border: #E4E4E7;
+      --border-strong: #A1A1AA;
+      --text: #09090B;
+      --text-muted: #71717A;
+      --teal-primary: #18181B;
+      --teal-dark: #09090B;
+      --teal-light: #F4F4F5;
+      --teal-accent: #27272A;
+      --emerald: #18181B;
+      --emerald-light: #F4F4F5;
+      --amber: #71717A;
+      --amber-light: #F4F4F5;
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --safe-top: env(safe-area-inset-top, 16px);
@@ -239,17 +239,20 @@
       box-shadow: 0 6px 16px rgba(15, 118, 110, 0.08);
     }
     .company-badge-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--surface-subtle);
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: #FFFFFF;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 13px;
-      color: var(--teal-primary);
+      overflow: hidden;
+      padding: 4px;
+    }
+    .company-badge-box svg {
+      width: 100%;
+      height: 100%;
     }
     .company-name {
       font-size: 14px;
@@ -314,16 +317,19 @@
       gap: 10px;
     }
     .card-brand-icon {
-      width: 38px;
-      height: 24px;
-      background: #0F172A;
-      color: #FFFFFF;
-      border-radius: 4px;
+      width: 44px;
+      height: 28px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      font-weight: 800;
+      padding: 3px;
+    }
+    .card-brand-icon svg {
+      width: 100%;
+      height: 100%;
     }
     .card-input-group {
       display: flex;
@@ -772,9 +778,9 @@
     <div class="header-top">
       <div class="brand-group" onclick="voltarParaEmpresas()">
         <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="9" fill="#0F172A"/>
-          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#0F766E"/>
-          <circle cx="18" cy="16" r="2.2" fill="#14B8A6"/>
+          <rect width="32" height="32" rx="9" fill="#09090B"/>
+          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#FFFFFF"/>
+          <circle cx="18" cy="16" r="2.2" fill="#A1A1AA"/>
         </svg>
         <div>
           <div class="brand-title">Dent<span>Go</span></div>
@@ -874,8 +880,30 @@
 
       <div class="wallet-section">
         <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text);">Locais de Entrega Cirúrgica</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Endereços Salvos</span>
+        </div>
+
+        <div id="lista-enderecos" style="display: flex; flex-direction: column; gap: 8px;"></div>
+
+        <div class="card-input-group">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Cadastrar Novo Endereço</span>
+          <input type="text" id="cad-end-titulo" class="clean-input" placeholder="Identificação (Ex: Clínica Jardins, Hospital Sírio)">
+          <input type="text" id="cad-end-logradouro" class="clean-input" placeholder="Logradouro e número (Ex: Rua Oscar Freire, 1400)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <input type="text" id="cad-end-comp" class="clean-input" placeholder="Complemento / Andar / Sala">
+            <input type="text" id="cad-end-cep" class="clean-input mono" placeholder="CEP" maxlength="9">
+          </div>
+          <button class="btn-action" style="justify-content: center;" onclick="salvarEndereco()">
+            Salvar Endereço
+          </button>
+        </div>
+      </div>
+
+      <div class="wallet-section">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 15px; font-weight: 700; color: var(--text);">Formas de Pagamento</h3>
-          <span style="font-size: 11px; color: var(--teal-primary); font-weight: 700;">Carteira Salva</span>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Carteira Salva</span>
         </div>
 
         <div id="lista-cartoes" style="display: flex; flex-direction: column; gap: 8px;"></div>
@@ -911,6 +939,57 @@
       </button>
       <button class="cart-checkout-btn" onclick="abrirCheckoutModal()">
         Finalizar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de Fechamento de Pedido / Checkout -->
+  <div id="modal-checkout-flow" class="tracking-modal">
+    <div class="modal-sheet">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 14px;">
+        <div>
+          <h3 style="font-size: 16px; font-weight: 800; color: var(--text);">Revisão & Fechamento</h3>
+          <div style="font-size: 11px; color: var(--text-muted);">Confirme os dados antes de despachar a rota</div>
+        </div>
+        <button onclick="fecharCheckoutModal()" style="background:none; border:none; color:var(--text-muted); font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Escolha de Endereço -->
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">1. Local de Entrega</label>
+          <span style="font-size: 11px; color: var(--text-muted); cursor:pointer;" onclick="fecharCheckoutModal(); alternarAba('perfil');">+ Novo</span>
+        </div>
+        <div id="checkout-lista-enderecos" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+
+      <!-- Escolha de Pagamento -->
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label style="font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em;">2. Forma de Pagamento</label>
+          <span style="font-size: 11px; color: var(--text-muted); cursor:pointer;" onclick="fecharCheckoutModal(); alternarAba('perfil');">+ Novo</span>
+        </div>
+        <div id="checkout-lista-pagamentos" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+
+      <!-- Resumo Financeiro & Regras do Fabricante -->
+      <div style="background: var(--surface-subtle); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">Itens Cirúrgicos</span>
+          <span id="chk-subtotal" class="mono" style="font-weight:700;">R$ 0,00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+          <span style="color:var(--text-muted);" id="chk-label-frete">Frete Padrão</span>
+          <span id="chk-frete" class="mono" style="font-weight:700;">R$ 0,00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:800; border-top:1px dashed var(--border); padding-top:8px;">
+          <span>Total Autorizado</span>
+          <span id="chk-total" class="mono">R$ 0,00</span>
+        </div>
+      </div>
+
+      <button class="btn-action" style="width:100%; justify-content:center; padding:14px; font-size:14px; font-weight:800;" onclick="confirmarPedidoEIniciarTracking()">
+        Confirmar Pedido & Acompanhar Entrega
       </button>
     </div>
   </div>
@@ -1001,12 +1080,94 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     const EMPRESAS = [
-      { id: "conexao", nome: "Conexão Implantes", sigla: "CX", produtosQtd: 14, selo: "Hub Principal SP", prazoPadrao: "hoje", ofereceFlash: true },
-      { id: "straumann", nome: "Straumann", sigla: "ST", produtosQtd: 9, selo: "Distribuidor Oficial", prazoPadrao: "hoje", ofereceFlash: true },
-      { id: "neodent", nome: "Neodent", sigla: "ND", produtosQtd: 12, selo: "Pronta-Entrega", prazoPadrao: "hoje", ofereceFlash: true },
-      { id: "sin", nome: "S.I.N. Implantes", sigla: "SN", produtosQtd: 8, selo: "Centro de Distribuição", prazoPadrao: "hoje", ofereceFlash: false },
-      { id: "titanium", nome: "Titanium Fix", sigla: "TF", produtosQtd: 6, selo: "Parceiro Homologado", prazoPadrao: "amanha", ofereceFlash: true },
-      { id: "dsp", nome: "DSP Biomedical", sigla: "DP", produtosQtd: 5, selo: "Envio Programado", prazoPadrao: "amanha", ofereceFlash: false }
+      { 
+        id: "conexao", 
+        nome: "Conexão Implantes", 
+        sigla: "CX", 
+        produtosQtd: 14, 
+        selo: "Hub Principal SP", 
+        prazoPadrao: "hoje", 
+        ofereceFlash: true,
+        regrasPagamento: ["Cartão de Crédito (até 6x)", "PIX Direto", "Boleto Faturado 28D"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <path d="M50 20C33.431 20 20 33.431 20 50C20 66.569 33.431 80 50 80C62.5 80 73.2 72.4 77.8 61.5H64.2C60.9 67.2 55.8 70 50 70C39 70 30 61 30 50C30 39 39 30 50 30C55.8 30 60.9 32.8 64.2 38.5H77.8C73.2 27.6 62.5 20 50 20Z" fill="#FFFFFF"/>
+          <circle cx="50" cy="50" r="7.5" fill="#FFFFFF"/>
+        </svg>`
+      },
+      { 
+        id: "straumann", 
+        nome: "Straumann", 
+        sigla: "ST", 
+        produtosQtd: 9, 
+        selo: "Distribuidor Oficial", 
+        prazoPadrao: "hoje", 
+        ofereceFlash: true,
+        regrasPagamento: ["Cartão de Crédito (1x)", "PIX Cirúrgico Antecipado"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <path d="M22 66L42 26H58L38 66H22Z" fill="#FFFFFF"/>
+          <path d="M48 66L68 26H78L58 66H48Z" fill="#71717A"/>
+        </svg>`
+      },
+      { 
+        id: "neodent", 
+        nome: "Neodent", 
+        sigla: "ND", 
+        produtosQtd: 12, 
+        selo: "Pronta-Entrega", 
+        prazoPadrao: "hoje", 
+        ofereceFlash: true,
+        regrasPagamento: ["Cartão de Crédito (até 3x)", "PIX"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <circle cx="50" cy="50" r="28" stroke="#FFFFFF" stroke-width="7"/>
+          <path d="M38 34V66L62 34V66" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`
+      },
+      { 
+        id: "sin", 
+        nome: "S.I.N. Implantes", 
+        sigla: "SN", 
+        produtosQtd: 8, 
+        selo: "Centro de Distribuição", 
+        prazoPadrao: "hoje", 
+        ofereceFlash: false,
+        regrasPagamento: ["Cartão de Crédito", "PIX"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">S.I.N.</text>
+        </svg>`
+      },
+      { 
+        id: "titanium", 
+        nome: "Titanium Fix", 
+        sigla: "TF", 
+        produtosQtd: 6, 
+        selo: "Parceiro Homologado", 
+        prazoPadrao: "amanha", 
+        ofereceFlash: true,
+        regrasPagamento: ["Cartão de Crédito", "PIX"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <path d="M26 34H74V44H56V72H44V44H26V34Z" fill="#FFFFFF"/>
+          <rect x="62" y="56" width="12" height="16" fill="#71717A"/>
+        </svg>`
+      },
+      { 
+        id: "dsp", 
+        nome: "DSP Biomedical", 
+        sigla: "DP", 
+        produtosQtd: 5, 
+        selo: "Envio Programado", 
+        prazoPadrao: "amanha", 
+        ofereceFlash: false,
+        regrasPagamento: ["PIX Antecipado", "Cartão de Crédito"],
+        logoSvg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="20" fill="#09090B"/>
+          <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="26" fill="#FFFFFF" text-anchor="middle">DSP</text>
+        </svg>`
+      }
     ];
 
     const PRODUTOS = [
@@ -1053,6 +1214,14 @@
       { id: "c2", titular: "CONSULTORIO ODONTO", final: "8891", bandeira: "MASTERCARD", validade: "12/28", padrao: false }
     ];
 
+    let enderecosSalvos = [
+      { id: "e1", titulo: "Consultório Principal", logradouro: "Av. Paulista, 1000", comp: "Cj. 42 - Bela Vista", cep: "01310-100", padrao: true },
+      { id: "e2", titulo: "Unidade Cirúrgica Jardins", logradouro: "Rua Oscar Freire, 1400", comp: "3º Andar - Sala 302", cep: "01426-001", padrao: false }
+    ];
+
+    let enderecoSelecionadoCheckoutId = "e1";
+    let cartaoSelecionadoCheckoutId = "c1";
+
     let empresaSelecionadaId = null;
     let filtroSlaAtual = "";
     let carrinho = [];
@@ -1091,11 +1260,11 @@
         card.className = "company-card";
         card.onclick = () => abrirEmpresa(e.id);
         const prazoLabel = e.prazoPadrao === 'hoje' ? 'Mesmo Dia' : 'D+1';
-        const flashTag = e.ofereceFlash ? '<span style="font-size:9px; font-weight:700; color:#0F766E; background:#CCFBF1; padding:2px 6px; border-radius:4px; margin-left:6px;">Flash Disponível</span>' : '';
+        const flashTag = e.ofereceFlash ? '<span style="font-size:9px; font-weight:700; color:#18181B; background:#F4F4F5; border:1px solid #E4E4E7; padding:2px 6px; border-radius:4px; margin-left:6px;">Flash Disponível</span>' : '';
         card.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div class="company-badge-box">${e.sigla}</div>
-            <span style="font-size:10px; font-weight:700; color:var(--teal-primary);">${e.selo}</span>
+            <div class="company-badge-box">${e.logoSvg}</div>
+            <span style="font-size:10px; font-weight:700; color:var(--text-muted);">${e.selo}</span>
           </div>
           <div class="company-name">${e.nome}</div>
           <div class="company-meta">
@@ -1182,7 +1351,83 @@
       }
     }
 
+    function obterIconeBandeira(bandeira) {
+      if (bandeira === "VISA") {
+        return `<svg viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="32" rx="4" fill="#09090B"/>
+          <path d="M19.5 21L21.8 7H25.4L23.1 21H19.5ZM34.2 7.3C33.5 7 32.3 6.8 30.8 6.8C27 6.8 24.3 8.8 24.3 11.6C24.3 13.7 26.2 14.8 27.7 15.5C29.2 16.2 29.7 16.7 29.7 17.4C29.7 18.5 28.4 19 27.2 19C25.5 19 24.5 18.7 23.6 18.3L23.1 20.7C24.1 21.2 25.8 21.5 27.5 21.5C31.5 21.5 34.1 19.5 34.1 16.4C34.1 14.7 33 13.4 30.6 12.2C29.3 11.5 28.5 11 28.5 10.2C28.5 9.4 29.4 8.7 30.7 8.7C31.8 8.7 32.8 8.9 33.6 9.3L34.2 7.3ZM41.8 7H39C38.1 7 37.4 7.5 37.1 8.3L31.6 21H35.4L36.2 18.8H40.8L41.2 21H44.6L41.8 7ZM37.2 16.2C37.5 15.3 38.8 11.8 38.8 11.8C38.8 11.8 39.2 10.7 39.4 10.1L39.7 11.7C39.7 11.7 40.5 15.5 40.6 16.2H37.2ZM15.4 7L11.8 16.8L11.4 14.8C10.7 12.3 8.3 9.6 5.8 8.2L9.2 21H13.1L19.2 7H15.4Z" fill="#FFFFFF"/>
+        </svg>`;
+      } else {
+        return `<svg viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="32" rx="4" fill="#09090B"/>
+          <circle cx="19" cy="16" r="9" fill="#FFFFFF"/>
+          <circle cx="29" cy="16" r="9" fill="#71717A" fill-opacity="0.8"/>
+        </svg>`;
+      }
+    }
+
+    function renderizarEnderecos() {
+      const container = document.getElementById("lista-enderecos");
+      if (!container) return;
+      container.innerHTML = "";
+
+      enderecosSalvos.forEach(e => {
+        const item = document.createElement("div");
+        item.className = "credit-card-item";
+        const padraoTag = e.padrao ? '<span style="font-size:10px; color:var(--text); font-weight:700; margin-left:4px;">(Principal)</span>' : '';
+        item.innerHTML = `
+          <div class="card-meta">
+            <div class="card-brand-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:13px;">${e.titulo} ${padraoTag}</div>
+              <div style="font-size:11px; color:var(--text-muted);">${e.logradouro} • ${e.comp} • CEP ${e.cep}</div>
+            </div>
+          </div>
+          <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px;" onclick="removerEndereco('${e.id}')">Excluir</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function salvarEndereco() {
+      const tit = document.getElementById("cad-end-titulo").value.trim();
+      const log = document.getElementById("cad-end-logradouro").value.trim();
+      const comp = document.getElementById("cad-end-comp").value.trim();
+      const cep = document.getElementById("cad-end-cep").value.trim();
+
+      if (!tit || !log) {
+        alert("Preencha ao menos o nome do local e o endereço.");
+        return;
+      }
+
+      const novo = {
+        id: "e_" + Date.now(),
+        titulo: tit,
+        logradouro: log,
+        comp: comp || "Consultório",
+        cep: cep || "01000-000",
+        padrao: enderecosSalvos.length === 0
+      };
+
+      enderecosSalvos.push(novo);
+      document.getElementById("cad-end-titulo").value = "";
+      document.getElementById("cad-end-logradouro").value = "";
+      document.getElementById("cad-end-comp").value = "";
+      document.getElementById("cad-end-cep").value = "";
+
+      renderizarEnderecos();
+      alert("Local de entrega cirúrgica registrado com sucesso!");
+    }
+
+    function removerEndereco(id) {
+      enderecosSalvos = enderecosSalvos.filter(e => e.id !== id);
+      renderizarEnderecos();
+    }
+
     function renderizarCarteira() {
+      renderizarEnderecos();
       const container = document.getElementById("lista-cartoes");
       if (!container) return;
       container.innerHTML = "";
@@ -1190,10 +1435,10 @@
       cartoesSalvos.forEach(c => {
         const item = document.createElement("div");
         item.className = "credit-card-item";
-        const padraoTag = c.padrao ? '<span style="font-size:10px; color:var(--teal-primary); margin-left:4px;">(Padrão)</span>' : '';
+        const padraoTag = c.padrao ? '<span style="font-size:10px; color:var(--text); font-weight:700; margin-left:4px;">(Padrão)</span>' : '';
         item.innerHTML = `
           <div class="card-meta">
-            <div class="card-brand-icon">${c.bandeira}</div>
+            <div class="card-brand-icon">${obterIconeBandeira(c.bandeira)}</div>
             <div>
               <div style="font-weight:700; font-size:13px;">•••• ${c.final} ${padraoTag}</div>
               <div style="font-size:11px; color:var(--text-muted);">${c.titular} • Expira ${c.validade}</div>
@@ -1304,6 +1549,7 @@
       } else if (aba === "perfil") {
         vPer.style.display = "block";
         tabPer.classList.add("active");
+        renderizarEnderecos();
         renderizarCarteira();
       }
     }
@@ -1368,6 +1614,96 @@
     }
 
     function abrirCheckoutModal() {
+      if (carrinho.length === 0) return;
+
+      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
+      const taxaFrete = flashAtivo ? 29.00 : 0.00;
+      const total = subtotal + taxaFrete;
+
+      document.getElementById("chk-subtotal").innerText = "R$ " + subtotal.toFixed(2).replace('.', ',');
+      document.getElementById("chk-frete").innerText = flashAtivo ? "R$ 29,00" : "Grátis (Normal)";
+      document.getElementById("chk-label-frete").innerText = flashAtivo ? "Taxa Expressa Flash (2h)" : "Frete Padrão";
+      document.getElementById("chk-total").innerText = "R$ " + total.toFixed(2).replace('.', ',');
+
+      renderizarOpcoesCheckout();
+      document.getElementById("modal-checkout-flow").classList.add("open");
+    }
+
+    function fecharCheckoutModal() {
+      document.getElementById("modal-checkout-flow").classList.remove("open");
+    }
+
+    function renderizarOpcoesCheckout() {
+      const containerEnd = document.getElementById("checkout-lista-enderecos");
+      containerEnd.innerHTML = "";
+
+      enderecosSalvos.forEach(e => {
+        const sel = e.id === enderecoSelecionadoCheckoutId;
+        const item = document.createElement("div");
+        item.style.padding = "10px 12px";
+        item.style.border = sel ? "2px solid var(--text)" : "1px solid var(--border)";
+        item.style.borderRadius = "10px";
+        item.style.background = sel ? "var(--surface)" : "var(--surface-subtle)";
+        item.style.cursor = "pointer";
+        item.onclick = () => {
+          enderecoSelecionadoCheckoutId = e.id;
+          renderizarOpcoesCheckout();
+        };
+        item.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:700; font-size:12px; color:var(--text);">${e.titulo}</div>
+            <div style="font-size:10px; font-weight:700; color:var(--text-muted);">${sel ? '✓ SELECIONADO' : 'SELECIONAR'}</div>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${e.logradouro}, ${e.comp}</div>
+        `;
+        containerEnd.appendChild(item);
+      });
+
+      const containerPag = document.getElementById("checkout-lista-pagamentos");
+      containerPag.innerHTML = "";
+
+      const empId = carrinho[0].empresaId;
+      const empresa = EMPRESAS.find(em => em.id === empId);
+
+      cartoesSalvos.forEach(c => {
+        const sel = c.id === cartaoSelecionadoCheckoutId;
+        const item = document.createElement("div");
+        item.style.padding = "10px 12px";
+        item.style.border = sel ? "2px solid var(--text)" : "1px solid var(--border)";
+        item.style.borderRadius = "10px";
+        item.style.background = sel ? "var(--surface)" : "var(--surface-subtle)";
+        item.style.cursor = "pointer";
+        item.onclick = () => {
+          cartaoSelecionadoCheckoutId = c.id;
+          renderizarOpcoesCheckout();
+        };
+        item.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:34px; height:20px;">${obterIconeBandeira(c.bandeira)}</div>
+              <div style="font-weight:700; font-size:12px; color:var(--text);">•••• ${c.final} (${c.bandeira})</div>
+            </div>
+            <div style="font-size:10px; font-weight:700; color:var(--text-muted);">${sel ? '✓ SELECIONADO' : 'SELECIONAR'}</div>
+          </div>
+        `;
+        containerPag.appendChild(item);
+      });
+
+      if (empresa && empresa.regrasPagamento) {
+        const avisoRegra = document.createElement("div");
+        avisoRegra.style.fontSize = "10px";
+        avisoRegra.style.color = "var(--text-muted)";
+        avisoRegra.style.padding = "6px 8px";
+        avisoRegra.style.background = "var(--surface-subtle)";
+        avisoRegra.style.borderRadius = "6px";
+        avisoRegra.style.border = "1px dashed var(--border)";
+        avisoRegra.innerHTML = `<strong>Regra ${empresa.nome}:</strong> ${empresa.regrasPagamento.join(" • ")}`;
+        containerPag.appendChild(avisoRegra);
+      }
+    }
+
+    function confirmarPedidoEIniciarTracking() {
+      fecharCheckoutModal();
       document.getElementById("modal-tracking").classList.add("open");
       initMap();
     }
@@ -1397,7 +1733,7 @@
             .bindPopup('<b>Seu Consultório</b><br>Av. Paulista, 1000');
 
           const polyline = L.polyline(ROTA_REAL_COORDS, {
-            color: '#0F766E',
+            color: '#18181B',
             weight: 5,
             opacity: 0.9,
             lineJoin: 'round'
