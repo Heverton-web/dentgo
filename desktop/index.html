@@ -806,13 +806,9 @@
         <button class="sla-btn selected" data-sla="" onclick="selecionarSLA(this, '')">
           Todos os Prazos
         </button>
-        <button class="sla-btn" data-sla="flash" onclick="selecionarSLA(this, 'flash')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Entrega Flash (2h SP)
-        </button>
         <button class="sla-btn" data-sla="hoje" onclick="selecionarSLA(this, 'hoje')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Entrega Mesmo Dia
+          Entrega Mesmo Dia (Corte 14h)
         </button>
         <button class="sla-btn" data-sla="amanha" onclick="selecionarSLA(this, 'amanha')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -905,13 +901,18 @@
     <div class="cart-left">
       <div class="cart-badge" id="cart-count">0</div>
       <div class="cart-summary">
-        <span>Entrega Flash 2h SP</span>
+        <span id="cart-delivery-desc">Entrega Normal</span>
         <strong id="cart-total">R$ 0,00</strong>
       </div>
     </div>
-    <button class="cart-checkout-btn" onclick="abrirCheckoutModal()">
-      Finalizar Pedido
-    </button>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button id="btn-toggle-flash" onclick="alternarOpcaoFlash()" style="display:none; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); color:#fff; border-radius:8px; padding:6px 10px; font-size:10px; font-weight:700; cursor:pointer;">
+        + Flash 2h (+R$ 29)
+      </button>
+      <button class="cart-checkout-btn" onclick="abrirCheckoutModal()">
+        Finalizar Pedido
+      </button>
+    </div>
   </div>
 
   <div id="modal-tracking" class="tracking-modal">
@@ -1000,23 +1001,23 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     const EMPRESAS = [
-      { id: "conexao", nome: "Conexão Implantes", sigla: "CX", produtosQtd: 14, selo: "Hub Principal SP", prazo: "flash" },
-      { id: "straumann", nome: "Straumann", sigla: "ST", produtosQtd: 9, selo: "Distribuidor Oficial", prazo: "flash" },
-      { id: "neodent", nome: "Neodent", sigla: "ND", produtosQtd: 12, selo: "Pronta-Entrega", prazo: "flash" },
-      { id: "sin", nome: "S.I.N. Implantes", sigla: "SN", produtosQtd: 8, selo: "Centro de Distribuição", prazo: "hoje" },
-      { id: "titanium", nome: "Titanium Fix", sigla: "TF", produtosQtd: 6, selo: "Parceiro Homologado", prazo: "flash" },
-      { id: "dsp", nome: "DSP Biomedical", sigla: "DP", produtosQtd: 5, selo: "Envio Programado", prazo: "amanha" }
+      { id: "conexao", nome: "Conexão Implantes", sigla: "CX", produtosQtd: 14, selo: "Hub Principal SP", prazoPadrao: "hoje", ofereceFlash: true },
+      { id: "straumann", nome: "Straumann", sigla: "ST", produtosQtd: 9, selo: "Distribuidor Oficial", prazoPadrao: "hoje", ofereceFlash: true },
+      { id: "neodent", nome: "Neodent", sigla: "ND", produtosQtd: 12, selo: "Pronta-Entrega", prazoPadrao: "hoje", ofereceFlash: true },
+      { id: "sin", nome: "S.I.N. Implantes", sigla: "SN", produtosQtd: 8, selo: "Centro de Distribuição", prazoPadrao: "hoje", ofereceFlash: false },
+      { id: "titanium", nome: "Titanium Fix", sigla: "TF", produtosQtd: 6, selo: "Parceiro Homologado", prazoPadrao: "amanha", ofereceFlash: true },
+      { id: "dsp", nome: "DSP Biomedical", sigla: "DP", produtosQtd: 5, selo: "Envio Programado", prazoPadrao: "amanha", ofereceFlash: false }
     ];
 
     const PRODUTOS = [
-      { id: "p1", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Implante Flash CM 3.5 x 10mm", sku: "CX-FL-3510", preco: 185.00, prazo: "flash", sla: "Entrega Flash 2h SP" },
-      { id: "p2", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Munhão Angulado 17° CM 3.5 Cinta 2.5mm", sku: "CX-MN-17-3525", preco: 92.50, prazo: "flash", sla: "Entrega Flash 2h SP" },
-      { id: "p3", empresaId: "conexao", marca: "Conexão Implantes", conexao: "HI", nome: "Scan Body In-Lego Intraoral CM", sku: "CX-IN-LEGO-01", preco: 120.00, prazo: "flash", sla: "Entrega Flash 2h SP" },
-      { id: "p4", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Implante BLX Roxolid SLActive 3.75 x 10mm", sku: "STR-BLX-3710", preco: 420.00, prazo: "flash", sla: "Entrega Flash 2h SP" },
-      { id: "p5", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Base de Titânio Variobase para Coroa", sku: "STR-VB-35", preco: 195.00, prazo: "hoje", sla: "Entrega Mesmo Dia" },
-      { id: "p6", empresaId: "neodent", marca: "Neodent", conexao: "CM", nome: "Implante Grand Morse Helix 3.5 x 11.5mm", sku: "NEO-GM-3511", preco: 178.00, prazo: "flash", sla: "Entrega Flash 2h SP" },
-      { id: "p7", empresaId: "sin", marca: "S.I.N. Implantes", conexao: "HE", nome: "Implante Strong SW HE 4.0 x 10mm", sku: "SIN-SW-4010", preco: 145.00, prazo: "hoje", sla: "Entrega Mesmo Dia" },
-      { id: "p8", empresaId: "titanium", marca: "Titanium Fix", conexao: "HI", nome: "Munhão Reto HI 3.5mm Cinta 1.5mm", sku: "TF-MN-HI-35", preco: 78.00, prazo: "flash", sla: "Entrega Flash 2h SP" },
+      { id: "p1", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Implante Flash CM 3.5 x 10mm", sku: "CX-FL-3510", preco: 185.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p2", empresaId: "conexao", marca: "Conexão Implantes", conexao: "CM", nome: "Munhão Angulado 17° CM 3.5 Cinta 2.5mm", sku: "CX-MN-17-3525", preco: 92.50, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p3", empresaId: "conexao", marca: "Conexão Implantes", conexao: "HI", nome: "Scan Body In-Lego Intraoral CM", sku: "CX-IN-LEGO-01", preco: 120.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p4", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Implante BLX Roxolid SLActive 3.75 x 10mm", sku: "STR-BLX-3710", preco: 420.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p5", empresaId: "straumann", marca: "Straumann", conexao: "CM", nome: "Base de Titânio Variobase para Coroa", sku: "STR-VB-35", preco: 195.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p6", empresaId: "neodent", marca: "Neodent", conexao: "CM", nome: "Implante Grand Morse Helix 3.5 x 11.5mm", sku: "NEO-GM-3511", preco: 178.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p7", empresaId: "sin", marca: "S.I.N. Implantes", conexao: "HE", nome: "Implante Strong SW HE 4.0 x 10mm", sku: "SIN-SW-4010", preco: 145.00, prazo: "hoje", sla: "Entrega Hoje (Corte 14h)" },
+      { id: "p8", empresaId: "titanium", marca: "Titanium Fix", conexao: "HI", nome: "Munhão Reto HI 3.5mm Cinta 1.5mm", sku: "TF-MN-HI-35", preco: 78.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" },
       { id: "p9", empresaId: "dsp", marca: "DSP Biomedical", conexao: "HE", nome: "Implante Hexágono Externo Master 3.75", sku: "DSP-HE-3710", preco: 110.00, prazo: "amanha", sla: "Entrega D+1 (Amanhã)" }
     ];
 
@@ -1055,6 +1056,7 @@
     let empresaSelecionadaId = null;
     let filtroSlaAtual = "";
     let carrinho = [];
+    let flashAtivo = false;
     let mapInstance = null;
 
     const ROTA_REAL_COORDS = [
@@ -1076,7 +1078,7 @@
       grid.innerHTML = "";
 
       const filtradas = EMPRESAS.filter(e => {
-        return !filtroSlaAtual || e.prazo === filtroSlaAtual;
+        return !filtroSlaAtual || e.prazoPadrao === filtroSlaAtual;
       });
 
       if (filtradas.length === 0) {
@@ -1088,8 +1090,8 @@
         const card = document.createElement("div");
         card.className = "company-card";
         card.onclick = () => abrirEmpresa(e.id);
-        const prazoLabel = e.prazo === 'flash' ? 'Flash 2h' : (e.prazo === 'hoje' ? 'Mesmo Dia' : 'D+1');
-        const prazoCor = e.prazo === 'flash' ? 'var(--emerald)' : 'var(--text-muted)';
+        const prazoLabel = e.prazoPadrao === 'hoje' ? 'Mesmo Dia' : 'D+1';
+        const flashTag = e.ofereceFlash ? '<span style="font-size:9px; font-weight:700; color:#0F766E; background:#CCFBF1; padding:2px 6px; border-radius:4px; margin-left:6px;">Flash Disponível</span>' : '';
         card.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:flex-start;">
             <div class="company-badge-box">${e.sigla}</div>
@@ -1099,7 +1101,8 @@
           <div class="company-meta">
             <span>${e.produtosQtd} componentes</span>
             <span>•</span>
-            <span style="font-weight:600; color:${prazoCor};">${prazoLabel}</span>
+            <span style="font-weight:600; color:var(--text);">${prazoLabel}</span>
+            ${flashTag}
           </div>
         `;
         grid.appendChild(card);
@@ -1313,18 +1316,54 @@
       }
     }
 
+    function alternarOpcaoFlash() {
+      flashAtivo = !flashAtivo;
+      atualizarCarrinho();
+    }
+
     function atualizarCarrinho() {
       const drawer = document.getElementById("cart-drawer");
       const count = document.getElementById("cart-count");
       const totalEl = document.getElementById("cart-total");
+      const descEl = document.getElementById("cart-delivery-desc");
+      const btnFlash = document.getElementById("btn-toggle-flash");
 
       if (carrinho.length > 0) {
         drawer.classList.add("visible");
         count.innerText = carrinho.length;
-        const total = carrinho.reduce((acc, p) => acc + p.preco, 0);
+
+        const empresaIdDoCarrinho = carrinho[0].empresaId;
+        const empresa = EMPRESAS.find(e => e.id === empresaIdDoCarrinho);
+        const permiteFlash = empresa ? empresa.ofereceFlash : false;
+
+        if (permiteFlash) {
+          btnFlash.style.display = "block";
+          if (flashAtivo) {
+            btnFlash.style.background = "#FFFFFF";
+            btnFlash.style.color = "var(--teal-primary)";
+            btnFlash.innerText = "✓ Flash 2h Ativo (+R$ 29)";
+          } else {
+            btnFlash.style.background = "rgba(255,255,255,0.18)";
+            btnFlash.style.color = "#FFFFFF";
+            btnFlash.innerText = "+ Flash 2h (+R$ 29)";
+          }
+        } else {
+          btnFlash.style.display = "none";
+          flashAtivo = false;
+        }
+
+        let total = carrinho.reduce((acc, p) => acc + p.preco, 0);
+        if (flashAtivo) {
+          total += 29.00;
+          descEl.innerText = "Entrega Flash 2h (Taxa Expressa R$ 29)";
+        } else {
+          descEl.innerText = "Entrega Normal (" + (empresa && empresa.prazoPadrao === 'hoje' ? 'Mesmo Dia' : 'D+1') + ")";
+        }
+
         totalEl.innerText = "R$ " + total.toFixed(2).replace('.', ',');
       } else {
         drawer.classList.remove("visible");
+        flashAtivo = false;
       }
     }
 
