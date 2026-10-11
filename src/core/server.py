@@ -6,6 +6,7 @@ Lei Inviolável #11 do Ecossistema AIDD.
 """
 
 import json
+import pathlib
 import urllib.parse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Any, Dict
@@ -221,6 +222,13 @@ class DentGoRequestHandler(BaseHTTPRequestHandler):
             noticias = listar_radar_noticias(categoria=categoria, marca=marca)
             self._send_json(200, {"total": len(noticias), "noticias": noticias})
             return
+
+        if path == "/" or path == "/index.html" or path == "/app":
+            caminho_app = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "index.html"
+            if caminho_app.exists():
+                conteudo = caminho_app.read_text(encoding="utf-8")
+                self._send_html(200, conteudo)
+                return
 
         self._send_json(404, {"erro": "Rota nao encontrada"})
 
