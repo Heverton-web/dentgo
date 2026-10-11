@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>DentGo — Pronta-Entrega Cirúrgica & Radar Odonto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0F766E;
+      --primary-hover: #0B5D57;
+      --safe-top: env(safe-area-inset-top, 16px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    body {
+      background-color: #0b0f17;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .touch-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen pb-24 select-none">
+
+  <!-- Header Mobile-First -->
+  <header class="sticky top-0 z-30 bg-[#111827]/90 backdrop-blur-md border-b border-white/10 px-4 pt-4 pb-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-teal-500/20">
+          D
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-white">Dent<span class="text-teal-400">Go</span></span>
+          <div class="flex items-center text-[10px] text-teal-300 space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>São Paulo • Pronta-Entrega</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button id="btn-cro-status" class="text-xs bg-teal-500/10 border border-teal-500/30 text-teal-300 px-2.5 py-1.5 rounded-full flex items-center space-x-1">
+          <i class="fa-solid fa-user-doctor text-[10px]"></i>
+          <span>CRO: Ativo (SP)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de Busca Facetada (Estilo Mobbin Shop/Glovo) -->
+    <div class="mt-3 relative">
+      <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+      <input type="text" id="input-busca" placeholder="Buscar implante, munhão, diâmetro..." 
+        class="w-full bg-slate-900/90 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-500 transition-colors">
+    </div>
+
+    <!-- Pílulas de Conexão Protética (1 Toque) -->
+    <div class="flex space-x-2 mt-3 overflow-x-auto hide-scrollbar">
+      <button class="filtro-conexao touch-target px-4 rounded-xl text-xs font-semibold bg-teal-600 text-white flex items-center whitespace-nowrap" data-conexao="">
+        Todas
+      </button>
+      <button class="filtro-conexao touch-target px-4 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-white/5 flex items-center whitespace-nowrap" data-conexao="CM">
+        Cone Morse (CM)
+      </button>
+      <button class="filtro-conexao touch-target px-4 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-white/5 flex items-center whitespace-nowrap" data-conexao="HE">
+        Hexágono Externo (HE)
+      </button>
+      <button class="filtro-conexao touch-target px-4 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-white/5 flex items-center whitespace-nowrap" data-conexao="HI">
+        Hexágono Interno (HI)
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo Dinâmico -->
+  <main class="flex-1 px-4 py-4 space-y-6">
+
+    <!-- Banner Cirúrgico Flash 2h -->
+    <div class="rounded-2xl bg-gradient-to-r from-teal-950/80 to-slate-900 border border-teal-500/20 p-4 relative overflow-hidden">
+      <div class="flex items-start justify-between relative z-10">
+        <div>
+          <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+            ⚡ Emergência Cirúrgica
+          </span>
+          <h2 class="text-base font-bold text-white mt-1.5">DentGo Flash — Chega em até 2h</h2>
+          <p class="text-xs text-slate-300 mt-0.5 max-w-[240px]">
+            Componentes e implantes despachados via motoboy direto para o seu consultório em SP.
+          </p>
+        </div>
+        <div class="text-teal-400 text-3xl opacity-80 pt-1">
+          <i class="fa-solid fa-motorcycle"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Produtos / Catálogo -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-slate-200">Catálogo de Precisão</h3>
+        <span class="text-[11px] text-teal-400 font-medium">10 Marcas Homologadas</span>
+      </div>
+
+      <div id="grid-produtos" class="space-y-3">
+        <!-- Card Produto 1 -->
+        <div class="bg-[#111827] border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-teal-500/30 transition-all">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] font-semibold text-teal-400 uppercase tracking-wider">Conexão Implantes • CM</span>
+              <h4 class="text-sm font-bold text-white mt-0.5">Implante Flash CM 3.5 x 10mm</h4>
+              <p class="text-xs text-slate-400 mt-0.5">SKU: CX-FL-3510 • Titânio Grau 4</p>
+            </div>
+            <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/20">
+              ⚡ 2h SP
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
+            <div>
+              <span class="text-[10px] text-slate-400">A partir de</span>
+              <div class="text-base font-extrabold text-white">R$ 185,00</div>
+            </div>
+            <button onclick="adicionarAoCarrinho('prod-1', 'Implante Flash CM 3.5x10', 185.00)" class="touch-target bg-teal-600 hover:bg-teal-500 text-white px-4 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-colors">
+              <i class="fa-solid fa-cart-plus"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card Produto 2 -->
+        <div class="bg-[#111827] border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-teal-500/30 transition-all">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] font-semibold text-teal-400 uppercase tracking-wider">Conexão Implantes • CM</span>
+              <h4 class="text-sm font-bold text-white mt-0.5">Munhão Angulado 17° CM 3.5 (Cinta 2.5mm)</h4>
+              <p class="text-xs text-slate-400 mt-0.5">SKU: CX-MN-17-3525 • Prótese Cimentada</p>
+            </div>
+            <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/20">
+              ⚡ 2h SP
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
+            <div>
+              <span class="text-[10px] text-slate-400">A partir de</span>
+              <div class="text-base font-extrabold text-white">R$ 92,50</div>
+            </div>
+            <button onclick="adicionarAoCarrinho('prod-2', 'Munhão Angulado 17° CM 3.5', 92.50)" class="touch-target bg-teal-600 hover:bg-teal-500 text-white px-4 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-colors">
+              <i class="fa-solid fa-cart-plus"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Radar Odonto ("Jornal Vivo" Interativo) -->
+    <section class="mt-8">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-1.5">
+          <i class="fa-solid fa-newspaper text-teal-400 text-sm"></i>
+          <h3 class="text-sm font-bold text-slate-200">Radar Odonto • Edição Diária</h3>
+        </div>
+        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-white/5">Fontes em 1 clique</span>
+      </div>
+
+      <div class="space-y-3">
+        <article class="bg-[#111827] border border-white/10 rounded-2xl p-4 hover:border-teal-500/30 transition-all">
+          <div class="flex items-center space-x-2 text-[10px] text-teal-400 font-semibold mb-1">
+            <span class="px-1.5 py-0.5 bg-teal-500/10 rounded border border-teal-500/20">LANÇAMENTO</span>
+            <span>• Conexão Implantes</span>
+          </div>
+          <h4 class="text-sm font-bold text-white leading-snug">
+            Nova Linha de Scan Bodies Conexão In-Lego Homologada para Exocad
+          </h4>
+          <p class="text-xs text-slate-300 mt-1 line-clamp-2">
+            Biblioteca digital oficial liberada com precisão de 5 microns para escaneamento intraoral e fresagem laboratorial.
+          </p>
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between">
+            <span class="text-[10px] text-slate-500">Fonte: Portal Dental Press</span>
+            <a href="https://dentalpress.com.br/noticias/conexao-in-lego" target="_blank" class="text-xs text-teal-400 font-semibold flex items-center space-x-1 hover:underline">
+              <span>Ler na Fonte</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="bg-[#111827] border border-white/10 rounded-2xl p-4 hover:border-teal-500/30 transition-all">
+          <div class="flex items-center space-x-2 text-[10px] text-teal-400 font-semibold mb-1">
+            <span class="px-1.5 py-0.5 bg-teal-500/10 rounded border border-teal-500/20">ESTUDO CLÍNICO</span>
+            <span>• Straumann</span>
+          </div>
+          <h4 class="text-sm font-bold text-white leading-snug">
+            Estudo de 10 Anos Comprova Alta Estabilidade em Implantes Cone Morse
+          </h4>
+          <p class="text-xs text-slate-300 mt-1 line-clamp-2">
+            Artigo publicado no JOMI demonstra 98.7% de taxa de sobrevivência em reabilitações unitárias com carga imediata.
+          </p>
+          <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between">
+            <span class="text-[10px] text-slate-500">Fonte: PubMed / JOMI</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/3829102" target="_blank" class="text-xs text-teal-400 font-semibold flex items-center space-x-1 hover:underline">
+              <span>Ler Artigo</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mini-Carrinho Flutuante Persistente (Estilo Mobbin/Glovo/iFood) -->
+  <div id="carrinho-flutuante" class="fixed bottom-20 left-4 right-4 z-40 bg-teal-600 rounded-2xl shadow-2xl p-3.5 flex items-center justify-between text-white transition-all transform translate-y-32">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-teal-700/80 flex items-center justify-center font-bold text-sm">
+        <span id="carrinho-qtd">0</span>
+      </div>
+      <div>
+        <div class="text-[10px] text-teal-200">Entrega Flash 2h SP</div>
+        <div class="text-sm font-extrabold" id="carrinho-total">R$ 0,00</div>
+      </div>
+    </div>
+    <button onclick="finalizarPedidoModal()" class="touch-target bg-white text-teal-950 font-bold px-4 rounded-xl text-xs flex items-center space-x-1.5 shadow-md">
+      <span>Ver Carrinho</span>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+    </button>
+  </div>
+
+  <!-- Bottom Navigation Bar (64px com Safe Area) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#111827]/95 backdrop-blur-md border-t border-white/10 px-6 py-2 flex items-center justify-between text-slate-400">
+    <button class="flex flex-col items-center text-teal-400 py-1">
+      <i class="fa-solid fa-tooth text-base"></i>
+      <span class="text-[10px] mt-1 font-medium">Catálogo</span>
+    </button>
+    <button class="flex flex-col items-center hover:text-white py-1">
+      <i class="fa-solid fa-newspaper text-base"></i>
+      <span class="text-[10px] mt-1 font-medium">Radar</span>
+    </button>
+    <button class="flex flex-col items-center hover:text-white py-1">
+      <i class="fa-solid fa-location-dot text-base"></i>
+      <span class="text-[10px] mt-1 font-medium">Pedidos</span>
+    </button>
+    <button class="flex flex-col items-center hover:text-white py-1">
+      <i class="fa-solid fa-circle-user text-base"></i>
+      <span class="text-[10px] mt-1 font-medium">Perfil</span>
+    </button>
+  </nav>
+
+  <script>
+    let carrinho = [];
+
+    function adicionarAoCarrinho(id, nome, preco) {
+      carrinho.push({ id, nome, preco });
+      atualizarBarraCarrinho();
+    }
+
+    function atualizarBarraCarrinho() {
+      const barra = document.getElementById("carrinho-flutuante");
+      const qtdEl = document.getElementById("carrinho-qtd");
+      const totEl = document.getElementById("carrinho-total");
+
+      if (carrinho.length > 0) {
+        barra.classList.remove("translate-y-32");
+        qtdEl.innerText = carrinho.length;
+        const total = carrinho.reduce((acc, i) => acc + i.preco, 0);
+        totEl.innerText = "R$ " + total.toFixed(2).replace(".", ",");
+      } else {
+        barra.classList.add("translate-y-32");
+      }
+    }
+
+    function finalizarPedidoModal() {
+      alert("Trava Sanitária DentGo: Validação do CRO SP-123456 aprovada! Simulando fechamento com entrega Flash 2h.");
+    }
+  </script>
+</body>
+</html>

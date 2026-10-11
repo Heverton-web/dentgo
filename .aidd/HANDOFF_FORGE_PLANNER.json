@@ -1,0 +1,224 @@
+{
+  "versao_schema": "1.0.0",
+  "projeto_dir": "/opt/data/projetos/dentgo",
+  "git": {
+    "inicializado": true,
+    "commit_inicial": "0ce56b32fb4c10af2a1ec76e06e842fc504bddbc"
+  },
+  "dependencias": [
+    {
+      "pacote": "click",
+      "versao": "8.5.0"
+    },
+    {
+      "pacote": "jsonschema",
+      "versao": "4.26.0"
+    }
+  ],
+  "leis_e_guardas": [
+    {
+      "gate": "G_BLOQUEAR_SEGREDOS.py",
+      "sha256": "88bb28ff99788bc0170699d2d6f51c22ed735d81936e9b647eca61b4ba2f398f"
+    },
+    {
+      "gate": "G_CONTRACTS.py",
+      "sha256": "1043df201a833f56214d4f1cc22b44b9cccdc858702fddbbb4aab5a69e7261f1"
+    },
+    {
+      "gate": "G_CYBERSECURITY_OWASP.py",
+      "sha256": "b3ca4d159fd58d830ecbe0f6a40f6434a47998e819cd2888bfc8f3b064456015"
+    },
+    {
+      "gate": "G_DETERMINISMO_LEI_1.py",
+      "sha256": "56f74ba45291b3c3a5e07944b2c732a2f4c53146d34c73ed33e2868ed736533e"
+    },
+    {
+      "gate": "G_ESTRUTURA_AST.py",
+      "sha256": "b308ff02d288c18f60bf7582ee1034cdb9f1926aff3893ff64c205fc0bbcf315"
+    },
+    {
+      "gate": "G_HARNESS_COMPAT.py",
+      "sha256": "794772bbb6a25acee118a50d94d82d6dbed3c42b96e27b878ad431a12c83b061"
+    },
+    {
+      "gate": "G_INJECT.py",
+      "sha256": "f935273241cebaeb48ed10868b4e6d3b4ab9850a7def81c9f68c16458cbf2109"
+    },
+    {
+      "gate": "G_PERFORMANCE.py",
+      "sha256": "b45d3f961307b1751a84ccd62d0457974ce0b61041d8e9e4e78786d7faf08d91"
+    },
+    {
+      "gate": "G_QUARTETO_SINE_QUA_NON.py",
+      "sha256": "b26b0ac8121173402c76c9ef42140d3b9d1c3f1a0e9b2114c4eb6b3b176d126b"
+    },
+    {
+      "gate": "G_SAIDA_BINARIA.py",
+      "sha256": "d40ae962ec582a44fb2127a6b772b406d34288d3836d6f0569e16615ae3fd768"
+    },
+    {
+      "gate": "G_STACK_PADRAO_OURO.py",
+      "sha256": "a4044f99c0d0b60c3f4ab9667568af99aeb6e68c2b3cf8076e3565254442eb18"
+    },
+    {
+      "gate": "G_TESTES_REAIS.py",
+      "sha256": "2dd72c25a2852ffc1105f0e43e1b933ee9a3e470e3ebf6e895d6d3bbba8a1920"
+    }
+  ],
+  "harnesses": [
+    ".claude/skills",
+    ".agents/skills",
+    ".opencode/skills",
+    ".mimocode/skills",
+    ".cursor/skills",
+    ".codebuddy/skills"
+  ],
+  "almoxarifado": {
+    "catalogo_sha256": "8a5eb57a8b87c9448fafee4781222f5b29d58514ee49357250f620b23b420a7e",
+    "pecas_disponiveis": [
+      "gates/G_ARQUITETURA.py",
+      "gates/G_BLOQUEAR_SEGREDOS.py",
+      "gates/G_CHAOS.py",
+      "gates/G_CONTRACTS.py",
+      "gates/G_CYBERSECURITY_OWASP.py",
+      "gates/G_DETERMINISMO_LEI_1.py",
+      "gates/G_ESTRUTURA.py",
+      "gates/G_ESTRUTURA_AST.py",
+      "gates/G_HARNESS_COMPAT.py",
+      "gates/G_PERFORMANCE.py",
+      "gates/G_QUALIDADE.py",
+      "gates/G_QUARTETO_SINE_QUA_NON.py",
+      "gates/G_SAIDA_BINARIA.py",
+      "gates/G_SEGREDOS.py",
+      "gates/G_SEGURANCA.py",
+      "gates/G_STACK_PADRAO_OURO.py",
+      "gates/G_TESTES.py",
+      "gates/G_TESTES_REAIS.py",
+      "gates/variantes/aidd-forge/G_BLOQUEAR_SEGREDOS.py",
+      "gates/variantes/aidd-forge/G_CONTRACTS.py",
+      "gates/variantes/aidd-forge/G_CYBERSECURITY_OWASP.py",
+      "gates/variantes/aidd-forge/G_HARNESS_COMPAT.py",
+      "gates/variantes/aidd-forge/G_PERFORMANCE.py",
+      "gates/variantes/aidd-pure/G_HARNESS_COMPAT.py",
+      "injetor/G_INJECT.py",
+      "injetor/__init__.py",
+      "injetor/detector_camada.py",
+      "injetor/inject.py",
+      "injetor/profiles_registry.py",
+      "injetor/schema/component_manifest.schema.json",
+      "injetor/schema_injector_request.json",
+      "injetor/variantes/aidd-enterprise/profiles_registry.py",
+      "injetor/variantes/aidd-forge/G_INJECT.py",
+      "injetor/variantes/aidd-forge/core/injection_schema.py",
+      "injetor/variantes/aidd-forge/core/injector.py",
+      "injetor/variantes/aidd-forge/core/injector_profiles.py",
+      "injetor/variantes/aidd-forge/core/materializador.py",
+      "injetor/variantes/aidd-forge/core/universal_injector.py",
+      "injetor/variantes/aidd-forge/schemas/injection_request.schema.json",
+      "injetor/variantes/aidd-master/G_INJECT.py",
+      "injetor/variantes/aidd-master/inject.py",
+      "injetor/variantes/aidd-master/schema_injector_request.json",
+      "injetor/variantes/aidd-pure/G_INJECT.py",
+      "injetor/variantes/aidd-pure/aidd_inject.py",
+      "injetor/variantes/aidd-pure/core/injector/__init__.py",
+      "injetor/variantes/aidd-pure/core/injector/contrato.py",
+      "injetor/variantes/aidd-pure/core/injector/detector_camada.py",
+      "injetor/variantes/aidd-pure/core/injector/injetor.py",
+      "injetor/variantes/aidd-pure/core/injector/materializador.py",
+      "injetor/variantes/aidd-pure/core/injector/profiles_registry.py",
+      "injetor/variantes/aidd-pure/core/injector/scaffolds.py",
+      "injetor/variantes/aidd-pure/core/injector/schema_injector_request.json",
+      "injetor/variantes/aidd-pure/core/injector/sincronizador_harness.py",
+      "moldes/infra/Dockerfile",
+      "moldes/infra/deploy.sh",
+      "moldes/infra/docker-compose.yml",
+      "moldes/infra/nginx/nginx.conf",
+      "moldes/infra/nginx/ssl/generate_ssl.py",
+      "moldes/infra/variantes/aidd-open/docker-compose.yml",
+      "moldes/quarteto/docs.html",
+      "moldes/quarteto/mcp_server.py",
+      "moldes/quarteto/mcp_studio.html",
+      "moldes/quarteto/openapi.json.j2",
+      "moldes/quarteto/openapi.py",
+      "moldes/quarteto/swagger.html",
+      "moldes/quarteto/variantes/aidd-open/mcp_server.py",
+      "moldes/quarteto/variantes/aidd-open/mcp_studio.html",
+      "moldes/quarteto/variantes/aidd-open/openapi.py",
+      "moldes/quarteto/variantes/aidd-open/swagger.html",
+      "moldes/quarteto/variantes/aidd-open/webhook_studio.html",
+      "moldes/quarteto/variantes/aidd-open/webhooks.py",
+      "moldes/quarteto/variantes/renderizado/docs.html",
+      "moldes/quarteto/variantes/templates/mcp_studio.html",
+      "moldes/quarteto/variantes/templates/swagger.html",
+      "moldes/quarteto/variantes/templates/webhook_studio.html",
+      "moldes/quarteto/webhook_studio.html",
+      "moldes/quarteto/webhooks.py",
+      "specs/MAPA-DONOS-FERRAMENTAS.json",
+      "specs/NOMES-ANTIGOS.json",
+      "specs/handoff-engine-to-master.schema.json",
+      "specs/handoff-enterprise-to-ops.schema.json",
+      "specs/handoff-execucao.schema.json",
+      "specs/handoff-forge-to-planner.schema.json",
+      "specs/handoff-master-to-enterprise.schema.json",
+      "specs/handoff-melhoria.schema.json",
+      "specs/handoff-planner-to-engine.schema.json",
+      "specs/plano-infraestrutura.schema.json",
+      "specs/vsa-topological-dispatch.schema.json",
+      "src-core/MANIFEST.json",
+      "src-core/__init__.py",
+      "src-core/assinatura_manifesto.py",
+      "src-core/caveman_protocol.py",
+      "src-core/circuit_breaker.py",
+      "src-core/cqrs.py",
+      "src-core/database.py",
+      "src-core/database_adapter.py",
+      "src-core/design_catalog.py",
+      "src-core/escritor_atomico.py",
+      "src-core/events.py",
+      "src-core/external_adapter.py",
+      "src-core/fleet_discovery.py",
+      "src-core/fuzzing.py",
+      "src-core/intent_router.py",
+      "src-core/jobs.py",
+      "src-core/local_first.py",
+      "src-core/logs.py",
+      "src-core/materializador.py",
+      "src-core/mcp_gatekeeper.py",
+      "src-core/mcp_gatekeeper_backends.json",
+      "src-core/mcp_server.py",
+      "src-core/mcp_studio.html",
+      "src-core/metrics.py",
+      "src-core/nextjs_exporter.py",
+      "src-core/openapi.py",
+      "src-core/opentelemetry.py",
+      "src-core/outbox_worker.py",
+      "src-core/package_verifier.py",
+      "src-core/result.py",
+      "src-core/sandbox_runner.py",
+      "src-core/security.py",
+      "src-core/sincronizador_harness.py",
+      "src-core/subagent_engine.py",
+      "src-core/swagger.html",
+      "src-core/sync.py",
+      "src-core/token_revocation.py",
+      "src-core/transaction_log.py",
+      "src-core/webhook_studio.html",
+      "src-core/webhooks.py"
+    ]
+  },
+  "capacidade_llm": "nenhuma",
+  "estrutura_projeto": {
+    "pastas_criadas": [
+      "gates",
+      "skills",
+      "governance",
+      ".claude/skills",
+      ".agents/skills",
+      ".opencode/skills",
+      ".mimocode/skills",
+      ".cursor/skills",
+      ".codebuddy/skills",
+      ".aidd"
+    ]
+  }
+}

@@ -249,6 +249,7 @@
     }
   ],
   "camadas": [
+    "governanca",
     "dominio",
     "aplicacao",
     "infraestrutura",
@@ -285,7 +286,20 @@
         ],
         "fatia_esperada": "src/modules/nucleo/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `nucleo` gerada em `src/modules/nucleo/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -309,7 +323,20 @@
         ],
         "fatia_esperada": "src/modules/catalogo-compatibilidade/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `catalogo-compatibilidade` gerada em `src/modules/catalogo-compatibilidade/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -333,7 +360,20 @@
         ],
         "fatia_esperada": "src/modules/autenticacao-cro/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `autenticacao-cro` gerada em `src/modules/autenticacao-cro/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -357,7 +397,20 @@
         ],
         "fatia_esperada": "src/modules/checkout-split/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `checkout-split` gerada em `src/modules/checkout-split/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -381,7 +434,20 @@
         ],
         "fatia_esperada": "src/modules/telemetria-logistica/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `telemetria-logistica` gerada em `src/modules/telemetria-logistica/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -405,7 +471,20 @@
         ],
         "fatia_esperada": "src/modules/radar-noticias/",
         "hoteis_do_c1": {
-          "leis_e_guardas": []
+          "leis_e_guardas": [
+            "G_BLOQUEAR_SEGREDOS.py",
+            "G_CONTRACTS.py",
+            "G_CYBERSECURITY_OWASP.py",
+            "G_DETERMINISMO_LEI_1.py",
+            "G_ESTRUTURA_AST.py",
+            "G_HARNESS_COMPAT.py",
+            "G_INJECT.py",
+            "G_PERFORMANCE.py",
+            "G_QUARTETO_SINE_QUA_NON.py",
+            "G_SAIDA_BINARIA.py",
+            "G_STACK_PADRAO_OURO.py",
+            "G_TESTES_REAIS.py"
+          ]
         }
       },
       "saida_esperada": "Fatia vertical `radar-noticias` gerada em `src/modules/radar-noticias/` com testes Red-Green passando e nenhum arquivo fora da zona do construtor",
@@ -446,7 +525,13 @@
         ]
       },
       "saida_esperada": "Monolito modular VSA com as 4 rotas do Quarteto subindo (/api, /docs, /webhook, /mcp, /docs/guia) e `HANDOFF_MASTER_ENTERPRISE.json` gravado",
-      "pecas_do_almoxarifado": [],
+      "pecas_do_almoxarifado": [
+        "moldes/quarteto/openapi.json.j2",
+        "moldes/quarteto/swagger.html",
+        "moldes/quarteto/webhook_studio.html",
+        "moldes/quarteto/mcp_server.py",
+        "moldes/quarteto/docs.html"
+      ],
       "criterio_de_aceite": "As 4 rotas do Quarteto respondem 2xx/3xx medido e nenhum slice ficou fora de src/core, src/shared ou frontend"
     },
     {
@@ -467,7 +552,11 @@
         ]
       },
       "saida_esperada": "Componentes de missao critica blindados com SHA-256 e `HANDOFF_ENTERPRISE_OPS.json` gravado com selo e drift medido",
-      "pecas_do_almoxarifado": [],
+      "pecas_do_almoxarifado": [
+        "injetor/G_INJECT.py",
+        "injetor/inject.py",
+        "gates/G_ARQUITETURA.py"
+      ],
       "criterio_de_aceite": "`COMPONENT-REGISTRY.json` confere com o sha256 de cada componente e o verificar-drift devolve exit 0"
     },
     {
@@ -740,7 +829,12 @@
         ]
       },
       "saida_esperada": "Infra gerada a partir do perfil do app (Dockerfile, docker-compose.yml, deploy.sh e nginx) com os servicos que a planta pediu — nada de nicho adivinhado",
-      "pecas_do_almoxarifado": [],
+      "pecas_do_almoxarifado": [
+        "moldes/infra/Dockerfile",
+        "moldes/infra/docker-compose.yml",
+        "moldes/infra/deploy.sh",
+        "moldes/infra/nginx/nginx.conf"
+      ],
       "criterio_de_aceite": "`docker-compose.yml` lista exatamente os servicos de `perfil_app` (modulos, banco, filas, integracoes e portas) e o build sobe sem nicho fixo"
     }
   ],
@@ -782,8 +876,5 @@
     "portas": [
       8000
     ]
-  },
-  "avisos": [
-    "C1 ausente (.aidd/HANDOFF_FORGE_PLANNER.json): a planta foi desenhada sem evidencia de almoxarifado e sem ancoragem de governanca — nenhum ticket cita peca"
-  ]
+  }
 }

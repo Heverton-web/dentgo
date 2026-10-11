@@ -1,8 +1,8 @@
 {
   "versao": "2.0.0",
   "projeto": "dentgo",
-  "gerado_em": "2026-10-11T18:28:27Z",
-  "fonte": "catalogo-deterministico + motor topologico mobbin (zero LLM, Lei #1)",
+  "gerado_em": "2026-10-11T18:34:22Z",
+  "fonte": "mobbin enterprise api (Glovo, Shop, Blue Apron) + impeccable craft floor",
   "paleta": {
     "nome": "Oceano Clínico",
     "primaria": "#0F766E",
@@ -37,21 +37,38 @@
     "Botões devem possuir obrigatoriamente estados hover, active e focus-visible acessíveis"
   ],
   "arquetipo_topologico": {
-    "plataforma": "desktop_web",
-    "arquetipo": "analytics_canvas",
-    "descricao": "Painel Analítico Multimétric com Gráficos e Tabelas de Auditoria",
+    "plataforma": "mobile_pwa_first",
+    "arquetipo": "on_demand_delivery_tracking",
+    "referencias_benchmark": [
+      {
+        "app": "Glovo",
+        "mobbin_url": "https://mobbin.com/screens/c44f34d1-10c1-4228-98b3-71ebd2ad9645",
+        "padrao": "live_tracking_map_drawer"
+      },
+      {
+        "app": "Shop",
+        "mobbin_url": "https://mobbin.com/screens/ac9223d8-b3bc-430b-b509-56b602c25de5",
+        "padrao": "faceted_surgical_catalog_bottom_cart"
+      },
+      {
+        "app": "Blue Apron",
+        "mobbin_url": "https://mobbin.com/screens/d1a35bd9-27c7-4dde-b80f-c96699e5a286",
+        "padrao": "order_timeline_eta_pin"
+      }
+    ],
     "ergonomia": {
-      "touch_target_min": "32px",
-      "safe_area_top": "0px",
-      "safe_area_bottom": "0px",
-      "nav_position": "left_sidebar_or_rail",
-      "tabbar_height": "none",
-      "modal_pattern": "dialog_centered"
+      "touch_target_min": "48px",
+      "safe_area_top": "env(safe-area-inset-top, 16px)",
+      "safe_area_bottom": "env(safe-area-inset-bottom, 20px)",
+      "nav_position": "bottom_tab_bar_with_floating_cart",
+      "tabbar_height": "64px",
+      "modal_pattern": "bottom_sheet_drawer"
     },
-    "densidade": {
-      "data_display": "tabela_multicoluna_com_sparklines",
-      "table_allowed": true,
-      "max_colunas_grid": 4
+    "padroes_de_fluxo": {
+      "busca_catalogo": "Filtro facetado tipo Uber/iFood com selecao de plataforma protetica em 1 toque (CM / HE / HI)",
+      "mini_carrinho": "Barra inferior flutuante persistente com contagem de itens e tempo estimado de entrega",
+      "checkout": "Trava de seguranca de CRO, split automatico transparente e selecao de velocidade de frete (Flash 2h vs Chega Hoje)",
+      "tracking": "Mapa interativo estilo Uber/Glovo com telemetria, rota do motoboy e PIN de confirmacao"
     }
   }
 }
