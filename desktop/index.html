@@ -1613,9 +1613,9 @@
               <span class="price-label">Preço Unitário</span>
               <span class="price-value mono">R$ ${p.preco.toFixed(2).replace('.', ',')}</span>
             </div>
-            <button class="btn-action" onclick="adicionarAoCarrinho('${p.id}')">
-              Adicionar
-            </button>
+            <div id="btn-container-${p.id}" style="display:flex; align-items:center;">
+              ${obterControleItemCatalogo(p.id)}
+            </div>
           </div>
         `;
         lista.appendChild(item);
@@ -1859,6 +1859,27 @@
       }, 3000);
     }
 
+    function obterControleItemCatalogo(id) {
+      const itemCarrinho = carrinho.find(p => p.id === id);
+      const qtd = itemCarrinho ? itemCarrinho.qtd : 0;
+
+      if (qtd === 0) {
+        return `
+          <button class="btn-action" onclick="adicionarAoCarrinho('${id}')" style="padding:6px 14px; font-size:12px;">
+            Adicionar
+          </button>
+        `;
+      }
+
+      return `
+        <div style="display:flex; align-items:center; background:var(--surface); border:1.5px solid var(--text); border-radius:10px; overflow:hidden;">
+          <button onclick="alterarQtdItem('${id}', -1)" style="border:none; background:none; padding:4px 10px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">-</button>
+          <span class="mono" style="font-size:12px; font-weight:800; padding:0 4px; min-width:20px; text-align:center;">${qtd}</span>
+          <button onclick="alterarQtdItem('${id}', 1)" style="border:none; background:none; padding:4px 10px; font-size:14px; font-weight:800; color:var(--text); cursor:pointer;">+</button>
+        </div>
+      `;
+    }
+
     function adicionarAoCarrinho(id) {
       const prod = PRODUTOS.find(p => p.id === id);
       if (!prod) return;
@@ -1880,8 +1901,34 @@
         }
       }
 
-      carrinho.push(prod);
+      const itemExistente = carrinho.find(p => p.id === id);
+      if (itemExistente) {
+        itemExistente.qtd += 1;
+      } else {
+        carrinho.push({ ...prod, qtd: 1 });
+      }
+
       atualizarCarrinho();
+    }
+
+    function alterarQtdItem(id, delta) {
+      const idx = carrinho.findIndex(p => p.id === id);
+      if (idx === -1) return;
+
+      carrinho[idx].qtd += delta;
+      if (carrinho[idx].qtd <= 0) {
+        carrinho.splice(idx, 1);
+      }
+
+      atualizarCarrinho();
+      if (document.getElementById("modal-checkout-flow").classList.contains("open")) {
+        if (carrinho.length === 0) {
+          fecharCheckoutModal();
+        } else {
+          renderizarItensCheckout();
+          atualizarTotaisCheckout();
+        }
+      }
     }
 
     function fecharModalTrocaFabricante() {
@@ -1891,7 +1938,7 @@
 
     function confirmarTrocaFabricante() {
       if (produtoPendenteTroca) {
-        carrinho = [produtoPendenteTroca];
+        carrinho = [{ ...produtoPendenteTroca, qtd: 1 }];
         flashAtivo = false;
         atualizarCarrinho();
       }
@@ -1910,9 +1957,11 @@
       const descEl = document.getElementById("cart-delivery-desc");
       const btnFlash = document.getElementById("btn-toggle-flash");
 
-      if (carrinho.length > 0) {
+      const totalQtd = carrinho.reduce((acc, p) => acc + p.qtd, 0);
+
+      if (totalQtd > 0) {
         drawer.classList.add("visible");
-        count.innerText = carrinho.length;
+        count.innerText = totalQtd;
 
         const empresaIdDoCarrinho = carrinho[0].empresaId;
         const empresa = EMPRESAS.find(e => e.id === empresaIdDoCarrinho);
@@ -1934,7 +1983,7 @@
           flashAtivo = false;
         }
 
-        let total = carrinho.reduce((acc, p) => acc + p.preco, 0);
+        let total = carrinho.reduce((acc, p) => acc + (p.preco * p.qtd), 0);
         if (flashAtivo) {
           total += 29.00;
           descEl.innerText = "Entrega Flash 2h (Taxa Expressa R$ 29)";
@@ -1947,6 +1996,12 @@
         drawer.classList.remove("visible");
         flashAtivo = false;
       }
+
+      // Atualiza os seletores de quantidade na tela de produtos caso esteja aberta
+      PRODUTOS.forEach(p => {
+        const c = document.getElementById(`btn-container-${p.id}`);
+        if (c) c.innerHTML = obterControleItemCatalogo(p.id);
+      });
     }
 
     function abrirCheckoutModal() {
@@ -1963,14 +2018,21 @@
       if (!container) return;
 
       container.innerHTML = carrinho.map((p, idx) => `
-        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 10px;">
-          <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:8px 10px;">
+          <div style="flex:1;">
             <div style="font-size:11px; font-weight:700; color:var(--text);">${p.nome}</div>
-            <div style="font-size:9px; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.sku} • Conexão ${p.conexao}</div>
+            <div style="font-size:9px; color:var(--text-muted); font-family:'JetBrains Mono', monospace;">${p.sku} • R$ ${p.preco.toFixed(2).replace('.', ',')}/un</div>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-            <span style="font-size:9px; color:#DC2626; cursor:pointer;" onclick="removerItemDoCheckout(${idx})">Remover</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; align-items:center; background:var(--surface-subtle); border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+              <button onclick="alterarQtdItem('${p.id}', -1)" style="border:none; background:none; padding:2px 8px; font-size:13px; font-weight:800; color:var(--text); cursor:pointer;">-</button>
+              <span class="mono" style="font-size:11px; font-weight:800; padding:0 2px; min-width:16px; text-align:center;">${p.qtd}</span>
+              <button onclick="alterarQtdItem('${p.id}', 1)" style="border:none; background:none; padding:2px 8px; font-size:13px; font-weight:800; color:var(--text); cursor:pointer;">+</button>
+            </div>
+            <div style="text-align:right; min-width:70px;">
+              <div style="font-size:11px; font-weight:800; color:var(--text); font-family:'JetBrains Mono', monospace;">R$ ${(p.preco * p.qtd).toFixed(2).replace('.', ',')}</div>
+              <span style="font-size:9px; color:#DC2626; cursor:pointer;" onclick="removerItemDoCheckout(${idx})">Remover</span>
+            </div>
           </div>
         </div>
       `).join("");
@@ -2012,7 +2074,7 @@
     }
 
     function atualizarTotaisCheckout() {
-      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
+      const subtotal = carrinho.reduce((acc, p) => acc + (p.preco * p.qtd), 0);
       let taxaFrete = flashAtivo ? 29.00 : 0.00;
       let desconto = 0;
 
@@ -2120,7 +2182,7 @@
 
       const empId = carrinho[0].empresaId;
       const empresa = EMPRESAS.find(em => em.id === empId);
-      const subtotal = carrinho.reduce((acc, p) => acc + p.preco, 0);
+      const subtotal = carrinho.reduce((acc, p) => acc + (p.preco * p.qtd), 0);
       let frete = flashAtivo ? 29.00 : 0.00;
       let desc = cupomAplicado && cupomAplicado.percentual ? subtotal * cupomAplicado.percentual : 0;
       if (cupomAplicado && cupomAplicado.freteGratis) frete = 0;
@@ -2138,7 +2200,7 @@
           nome: p.nome,
           sku: p.sku,
           preco: p.preco,
-          qtd: 1,
+          qtd: p.qtd,
           idOriginal: p.id
         }))
       };
@@ -2294,9 +2356,7 @@
           prazo: "hoje",
           categoria: "implante"
         };
-        for (let i = 0; i < it.qtd; i++) {
-          carrinho.push(prod);
-        }
+        carrinho.push({ ...prod, qtd: it.qtd || 1 });
       });
 
       atualizarCarrinho();
