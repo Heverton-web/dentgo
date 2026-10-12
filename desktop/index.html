@@ -98,7 +98,23 @@
     }
 
     .splash-pulse-ring {
-      display: none;
+      animation: splashRingExpand 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+      transform-origin: 70px 70px;
+    }
+
+    @keyframes splashRingExpand {
+      0% { r: 52px; opacity: 0.8; stroke-width: 2px; }
+      50% { opacity: 0.2; }
+      100% { r: 68px; opacity: 0; stroke-width: 0.5px; }
+    }
+
+    .splash-trace-beam {
+      animation: splashBeamOrbit 2.4s linear infinite;
+    }
+
+    @keyframes splashBeamOrbit {
+      from { stroke-dashoffset: 400; }
+      to { stroke-dashoffset: 0; }
     }
 
     .splash-card-bg {
@@ -1414,8 +1430,11 @@
           <!-- Halo Pulsante Cirúrgico -->
           <circle cx="70" cy="70" r="62" stroke="rgba(45, 212, 191, 0.2)" stroke-width="2" class="splash-pulse-ring"/>
 
-          <!-- Moldura Base Squircle Oficial (Sem borda colorida estranha) -->
-          <rect x="18" y="18" width="104" height="104" rx="26" fill="#09090B" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" class="splash-card-bg"/>
+          <!-- Moldura Base Squircle Oficial -->
+          <rect x="18" y="18" width="104" height="104" rx="26" fill="#09090B" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" class="splash-card-bg"/>
+
+          <!-- Trilha de Luz Orbital Laser Cirúrgico -->
+          <rect x="18" y="18" width="104" height="104" rx="26" fill="none" stroke="url(#splashBorderGrad)" stroke-width="2.5" stroke-dasharray="80 320" stroke-linecap="round" class="splash-trace-beam"/>
 
           <!-- Glifo Original DentGo D em Alta Fidelidade (32x32 escalado x3.25) -->
           <g transform="translate(18, 18) scale(3.25)">
