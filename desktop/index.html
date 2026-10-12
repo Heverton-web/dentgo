@@ -1350,14 +1350,17 @@
         </div>
 
         <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:14px; text-align:left;">
-          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Chave Copia e Cola (EMV Standard):</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Código Copia e Cola:</div>
+            <div style="font-size:10px; font-weight:800; color:var(--teal);" id="pix-countdown-timer">Expira em 14:59</div>
+          </div>
           <div class="mono" style="font-size:10px; word-break:break-all; color:var(--text); background:var(--background); padding:8px; border-radius:6px; border:1px solid var(--border);" id="pix-copia-cola-txt">
             00020126580014br.gov.bcb.pix0136dgo-pix-key5204000053039865802BR5916DENTGO LOGISTICA6009SAO PAULO62070503***6304
           </div>
           <button type="button" class="cart-checkout-btn" style="margin-top:8px; padding:10px; font-size:11px; background:var(--surface-elevated); color:var(--text); border:1px solid var(--border);" onclick="copiarPixClipboard()">Copiar Código PIX</button>
         </div>
 
-        <button class="cart-checkout-btn" onclick="confirmarPagamentoPixSimulado()">Já Realizei o Pagamento</button>
+        <button class="cart-checkout-btn" style="background:var(--teal); color:#09090B; font-weight:800;" onclick="confirmarPagamentoPixSimulado()">Já Realizei o Pagamento</button>
       </div>
     </div>
   </div>

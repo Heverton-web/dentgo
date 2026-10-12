@@ -1,0 +1,34 @@
+{
+  "dentista": {
+    "home": {
+      "titulo": "DentGo \u2014 Pronta-Entrega Cir\u00fargica & Radar Odonto",
+      "empresas_homologadas": 6,
+      "produtos_catalogo": 5,
+      "status": "PASS"
+    },
+    "motor_qrcode_pix": {
+      "renderizado": true,
+      "status": "PASS"
+    }
+  },
+  "b2b": {
+    "kanban": {
+      "cards_visiveis": 5,
+      "status": "PASS"
+    },
+    "motor_radar_leaflet": {
+      "mapa_renderizado": true,
+      "status": "PASS"
+    }
+  },
+  "driver": {
+    "motor_leaflet_rota": {
+      "mapa_renderizado": true,
+      "status": "PASS"
+    },
+    "motor_qrcode_custodia": {
+      "renderizado": true,
+      "status": "PASS"
+    }
+  }
+}
