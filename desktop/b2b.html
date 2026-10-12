@@ -905,36 +905,59 @@
 
   <!-- Modal Rastreio e Radar de Entregas GPS (B2B) -->
   <div class="b2b-modal-backdrop" id="modal-rastreio-b2b">
-    <div class="b2b-modal-dialog" style="max-width: 650px;">
+    <div class="b2b-modal-dialog" style="max-width: 780px;">
       <div class="b2b-modal-header">
         <div>
           <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);" id="rastreio-id">PED-91042</span>
-          <h3 class="b2b-modal-title" id="rastreio-cliente">Monitoramento em Tempo Real</h3>
+          <h3 class="b2b-modal-title" id="rastreio-cliente">Monitoramento em Tempo Real & Lista de Pilotos</h3>
         </div>
         <button class="btn-close-modal" onclick="fecharModalRastreio()">&times;</button>
       </div>
 
-      <div id="mapa-rastreio-b2b" style="width:100%; height:260px; border-radius:10px; border:1px solid var(--border); overflow:hidden; margin-bottom:14px;"></div>
+      <div style="display:grid; grid-template-columns: 240px 1fr; gap:12px; margin-bottom:14px;">
+        <!-- Lista de Motoboys em Rota -->
+        <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:8px;">
+          <div style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Pilotos em Operação (2)</div>
+          
+          <div onclick="selecionarPilotoRadar('carlos')" style="background:#FFFFFF; border:1.5px solid #09090B; border-radius:8px; padding:8px; cursor:pointer;" id="card-piloto-carlos">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:12px; color:#09090B;">Carlos Eduardo</strong>
+              <span style="font-size:9px; background:rgba(16,185,129,0.15); color:var(--emerald); font-weight:800; padding:1px 5px; border-radius:4px;">Em Rota</span>
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Honda CG • FKL-8821 (Bat: 84%)</div>
+            <div style="font-size:10px; color:var(--text-muted);">1 Pendente • 2 Entregues</div>
+          </div>
 
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:14px;">
-        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
-          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Piloto Credenciado</div>
-          <div style="font-size:12px; font-weight:800; color:#09090B; margin-top:2px;">Carlos Eduardo</div>
-          <div style="font-size:10px; color:var(--text-muted);">Honda CG 160 (DentGo Driver)</div>
+          <div onclick="selecionarPilotoRadar('rodrigo')" style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:8px; cursor:pointer;" id="card-piloto-rodrigo">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:12px; color:#09090B;">Rodrigo Mendes</strong>
+              <span style="font-size:9px; background:rgba(245,158,11,0.15); color:var(--warning); font-weight:800; padding:1px 5px; border-radius:4px;">Coletando</span>
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Yamaha Fazer • DXZ-4410 (Bat: 92%)</div>
+            <div style="font-size:10px; color:var(--text-muted);">Aguardando QR Custódia</div>
+          </div>
         </div>
-        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
-          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Velocidade / Telemetria</div>
-          <div class="mono" style="font-size:13px; font-weight:800; color:var(--emerald); margin-top:2px;">38 km/h</div>
-          <div style="font-size:10px; color:var(--text-muted);">GPS Atualizado há 4s</div>
-        </div>
-        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
-          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Previsão de Chegada</div>
-          <div class="mono" style="font-size:13px; font-weight:800; color:#09090B; margin-top:2px;">14 min (SLA OK)</div>
-          <div style="font-size:10px; color:var(--text-muted);">PIN de Destino: 7421</div>
+
+        <!-- Mapa de Telemetria -->
+        <div>
+          <div id="mapa-rastreio-b2b" style="width:100%; height:240px; border-radius:10px; border:1px solid var(--border); overflow:hidden; margin-bottom:10px;"></div>
+          
+          <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:11px;">
+            <div style="font-weight:800; text-transform:uppercase; font-size:9px; color:var(--text-muted); margin-bottom:4px;">Auditoria de Paradas do Piloto:</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span>[OK] PED-9755 • Concluído 10:24 (PIN 8812)</span>
+              <strong style="color:var(--emerald);">Entregue</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>[EM ROTA] PED-91042 • Dr. Lucas (Paulista)</span>
+              <strong style="color:var(--warning);">ETA 14 min</strong>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:11px; color:var(--text-muted);">Telemetria GPS transmitindo em tempo real via WebSockets/OSRM.</span>
         <button class="btn-b2b-action" onclick="fecharModalRastreio()" style="padding:10px 18px;">Fechar Radar</button>
       </div>
     </div>
@@ -1090,6 +1113,22 @@
 
     function fecharModalRastreio() {
       document.getElementById("modal-rastreio-b2b").classList.remove("open");
+    }
+
+    function selecionarPilotoRadar(piloto) {
+      if (piloto === 'carlos') {
+        document.getElementById("card-piloto-carlos").style.borderColor = "#09090B";
+        document.getElementById("card-piloto-rodrigo").style.borderColor = "var(--border)";
+        document.getElementById("rastreio-id").innerText = "PED-91042";
+        document.getElementById("rastreio-cliente").innerText = "Carlos Eduardo (Honda CG • FKL-8821)";
+        exibirToast("Focando telemetria do Piloto Carlos Eduardo.");
+      } else {
+        document.getElementById("card-piloto-rodrigo").style.borderColor = "#09090B";
+        document.getElementById("card-piloto-carlos").style.borderColor = "var(--border)";
+        document.getElementById("rastreio-id").innerText = "PED-9821";
+        document.getElementById("rastreio-cliente").innerText = "Rodrigo Mendes (Yamaha Fazer • DXZ-4410)";
+        exibirToast("Focando telemetria do Piloto Rodrigo Mendes.");
+      }
     }
   </script>
 </body>

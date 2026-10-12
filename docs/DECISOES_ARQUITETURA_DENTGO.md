@@ -100,3 +100,51 @@
 * **Segurança na Ponta Final**:
   - Teclado numérico gigante integrado na tela para digitação do **PIN de 4 dígitos** fornecido pelo dentista para encerrar a corrida e liberar o repasse.
 
+---
+
+## 8. Logística Avançada, Roteirização TSP e Custódia
+
+### 8.1. Agrupamento (Batching) e Limites de Entregas por Corrida
+* **Flash Cirúrgico 2h**: **Exclusivo (1 corrida = 1 pedido)**. Bloqueio automático de qualquer corrida simultânea até a conclusão da entrega via PIN do dentista.
+* **Same-Day (Mesmo Dia)**: Até 3 entregas agrupadas por bolsão geográfico (raio máximo de 4 km entre consultórios).
+* **Next-Day (D+1)**: Até 6 entregas consolidadas em rota sequencial.
+
+### 8.2. Motor de Roteirização Inteligente (DentGo Route Engine)
+* Cálculo determinístico da rota ótima resolvendo o Problema do Caixeiro Viajante (TSP) via OSRM / Valhalla.
+* Ordem de paradas sequencial inviolável no app do motorista: Coletas agrupadas seguidas por Entregas na ordem calculada para cumprimento de SLA.
+
+### 8.3. Handshake Criptográfico de Custódia (Retirada no Fabricante)
+* Token efêmero assinado no formato:
+  `DGO:CUSTODIA:{pedido_id}:{driver_id}:{timestamp_utc}:{hmac_hash}`
+* Exibição em QR Code no app do motorista e leitura pelo almoxarife/expedidor do fabricante via:
+  1. Leitor óptico de código de barras USB/Bluetooth conectado ao Portal B2B Desktop.
+  2. Câmera de smartphone/tablet em módulo web responsivo.
+* Registro atômico para auditoria anti-fraude: `timestamp`, `driver_id`, `geofence (<50m do CD)` e `lote_anvisa`.
+
+### 8.4. Regras Financeiras, Liquidação e Risco de Gateway
+* **Valores de Frete por Modalidade**:
+  - Flash Cirúrgico (Até 2h): Cliente R$ 25,00 a R$ 35,00 | Repasse Piloto R$ 20,00 a R$ 28,00.
+  - Same-Day: Cliente R$ 15,00 a R$ 18,00 | Repasse Piloto R$ 12,00 a R$ 14,00.
+  - Next-Day: Cliente R$ 9,90 a R$ 12,00 (transporte consolidado).
+* **Mitigação do Risco de Antecipação de Cartão de Crédito**:
+  - Pagamentos de frete via Cartão de Crédito entram no saldo como **Disponível em D+1 útil** ou liquidação semanal sem custo.
+  - Antecipação sob demanda imediata no mesmo dia desconta a taxa de intermediação/antecipação bancária (R$ 2,50).
+  - Pagamentos via PIX caem instantaneamente na conta escrow da DentGo e liberam saque no mesmo dia.
+* **Chave PIX e Titularidade**:
+  - Validação estrita: a chave PIX do piloto deve ter a mesma titularidade de CPF cadastrado na CNH, banindo intermediários e contas de terceiros.
+
+### 8.5. Onboarding Seguro & Blindagem Jurídica do Entregador
+* **Reconhecimento Facial e Prova de Vida (Liveness Detection)**: biometria facial obrigatória para prevenir contas alugadas.
+* **Documentação Obrigatória com OCR**:
+  - CNH com registro EAR (Exerce Atividade Remunerada).
+  - CRLV da motocicleta atualizado.
+  - Certidão Negativa de Antecedentes Criminais (Estadual e Federal).
+  - Comprovante de residência.
+* **Treinamento de Biossegurança Cirúrgica**:
+  - 3 módulos em vídeo (manuseio de caixas estéreis lacradas ANVISA, postura em clínicas e uso do app).
+  - Questionário com 100% de aproveitamento obrigatório.
+* **Contrato Digital Autônomo**:
+  - Termo de adesão sob a Lei 11.442/07 e Código Civil (sem vínculo CLT), com responsabilidade civil expressa pela custódia das caixas cirúrgicas.
+* **Elegibilidade**: Aceite de motofretistas autônomos credenciados e frotas empresariais homologadas.
+
+

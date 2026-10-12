@@ -619,7 +619,34 @@
           <div class="driver-card-title">Saldo Disponível para Saque</div>
           <div class="mono" style="font-size:28px; font-weight:800; color:#FFFFFF; margin-top:6px;" id="wallet-saldo-total">R$ 80,00</div>
           <div style="font-size:11px; color:var(--emerald); margin-top:4px;">Transferência diária automática via PIX</div>
-          <button class="btn-driver-cta" style="margin-top:14px;" onclick="solicitarSaquePix()">Antecipar PIX Imediato</button>
+          
+          <div style="margin-top:14px; background:var(--surface-elevated); padding:10px; border-radius:8px; border:1px solid var(--border);">
+            <div style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Chave PIX Cadastrada (Mesmo CPF CNH):</div>
+            <div class="mono" style="font-size:12px; font-weight:800; color:#FFF; margin-top:2px;" id="txt-pix-cadastrado">388.192.408-11 (CPF Validado)</div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:12px;">
+            <button class="btn-driver-cta" style="font-size:11px; min-height:44px;" onclick="solicitarSaquePix()">Antecipar PIX</button>
+            <button class="btn-driver-secondary" style="font-size:11px; min-height:44px;" onclick="abrirModalEditarPix()">Editar PIX</button>
+          </div>
+        </div>
+
+        <div class="driver-card">
+          <div class="driver-card-title" style="margin-bottom:12px;">Tabela de Repasse por Modalidade</div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:11px;">
+            <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span>Flash Cirúrgico (Até 2h) • 1 Pedido Exclusivo</span>
+              <strong class="mono" style="color:var(--emerald);">R$ 20,00 a R$ 28,00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span>Same-Day (Mesmo Dia) • Até 3 Pedidos TSP</span>
+              <strong class="mono" style="color:var(--emerald);">R$ 12,00 a R$ 14,00/un</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>Next-Day (D+1) • Rota Consolidada</span>
+              <strong class="mono" style="color:#FFF;">R$ 9,90/un</strong>
+            </div>
+          </div>
         </div>
 
         <div class="driver-card">
@@ -648,20 +675,82 @@
           <div id="lista-historico"></div>
         </div>
       </div>
+
+      <!-- ABA 4: ONBOARDING, SEGURANÇA E DOCUMENTAÇÃO -->
+      <div id="view-perfil" class="tab-view" style="display:none;">
+        <div class="driver-card">
+          <div class="driver-card-title">Status do Credenciamento</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <div>
+              <div style="font-size:14px; font-weight:800; color:#FFF;">Carlos Eduardo Silva</div>
+              <div style="font-size:11px; color:var(--text-muted);">Honda CG 160 Cargo • Placa FKL-8821</div>
+            </div>
+            <span class="badge-history badge-concluido">100% Aprovado</span>
+          </div>
+        </div>
+
+        <div class="driver-card">
+          <div class="driver-card-title" style="margin-bottom:10px;">Checklist de Segurança & Documentação</div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:11px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span>1. Reconhecimento Facial (Liveness)</span>
+              <span style="color:var(--emerald); font-weight:800;">Validado</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span>2. CNH Categoria A com EAR</span>
+              <span style="color:var(--emerald); font-weight:800;">Aprovada DETRAN</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span>3. CRLV da Motocicleta 2026</span>
+              <span style="color:var(--emerald); font-weight:800;">Aprovado</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span>4. Antecedentes Criminais (PF/Estadual)</span>
+              <span style="color:var(--emerald); font-weight:800;">Nada Consta</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0;">
+              <span>5. Treinamento de Biossegurança Cirúrgica</span>
+              <span style="color:var(--emerald); font-weight:800;">Nota 10/10</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="driver-card">
+          <div class="driver-card-title" style="margin-bottom:10px;">Vídeos Instrutivos & Normas Cirúrgicas</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn-driver-secondary" onclick="abrirVideoTreinamento('Módulo 1: Biossegurança e Acondicionamento Térmico')">
+              Assistir Módulo 1: Biossegurança de Implantes (3 min)
+            </button>
+            <button class="btn-driver-secondary" onclick="abrirVideoTreinamento('Módulo 2: Handshake de Custódia e Bipagem de PIN')">
+              Assistir Módulo 2: Custódia e Validação PIN (2 min)
+            </button>
+            <button class="btn-driver-secondary" onclick="abrirVideoTreinamento('Módulo 3: Conduta em Recepção e Consultório')">
+              Assistir Módulo 3: Postura em Clínicas (2 min)
+            </button>
+          </div>
+          <div style="font-size:10px; color:var(--text-muted); margin-top:10px; line-height:1.4;">
+            Termo de Autônomo homologado conforme Lei 11.442/07. Responsabilidade civil integral sobre perdas de lotes cirúrgicos sob custódia.
+          </div>
+        </div>
+      </div>
     </main>
 
-    <nav class="driver-tabbar">
+    <nav class="driver-tabbar" style="grid-template-columns: repeat(4, 1fr);">
       <button class="tab-btn active" id="tab-btn-operacao" onclick="trocarAbaDriver('operacao')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Operação
       </button>
       <button class="tab-btn" id="tab-btn-carteira" onclick="trocarAbaDriver('carteira')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
         Carteira
       </button>
       <button class="tab-btn" id="tab-btn-historico" onclick="trocarAbaDriver('historico')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Histórico
+      </button>
+      <button class="tab-btn" id="tab-btn-perfil" onclick="trocarAbaDriver('perfil')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Onboarding
       </button>
     </nav>
 
@@ -1095,6 +1184,18 @@
 
     function solicitarSaquePix() {
       exibirToast("Solicitação enviada. PIX de R$ " + saldoCarteira.toFixed(2) + " em processamento.");
+    }
+
+    function abrirModalEditarPix() {
+      const novoPix = prompt("Digite sua nova chave PIX (deve ser do titular do CPF cadastrado):", "388.192.408-11");
+      if (novoPix) {
+        document.getElementById("txt-pix-cadastrado").innerText = novoPix + " (Validado)";
+        exibirToast("Chave PIX atualizada e validada contra CPF da CNH.");
+      }
+    }
+
+    function abrirVideoTreinamento(titulo) {
+      exibirToast("Abrindo player de treinamento: " + titulo);
     }
 
     window.addEventListener("DOMContentLoaded", () => {
