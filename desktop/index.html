@@ -2794,15 +2794,15 @@
     function copiarPixClipboard() {
       const code = document.getElementById("pix-copia-cola-txt").innerText.trim();
       navigator.clipboard.writeText(code).then(() => {
-        showToast("Código PIX copiado para a área de transferência!");
+        mostrarToast("Código PIX copiado para a área de transferência!");
       }).catch(() => {
-        showToast("Código PIX copiado!");
+        mostrarToast("Código PIX copiado!");
       });
     }
 
     function confirmarPagamentoPixSimulado() {
       fecharModalPixPagamento();
-      showToast("Pagamento PIX confirmado instantaneamente!");
+      mostrarToast("Pagamento PIX confirmado instantaneamente!");
       document.getElementById("modal-tracking").classList.add("open");
       initMap();
     }
@@ -3063,11 +3063,15 @@
             iconAnchor: [16, 16]
           });
 
-          L.marker([-23.5670, -46.6900], { icon: iconRemetente }).addTo(mapInstance)
-            .bindPopup(`<b>${empresa.nome}</b><br>Centro de Distribuição Expressa`).openPopup();
+          const mOrigem = L.marker([-23.5670, -46.6900], { icon: iconRemetente }).addTo(mapInstance)
+            .bindPopup(`<b>${empresa.nome}</b><br>CD Expressa`, { autoPanPadding: [20, 20] });
 
-          L.marker([-23.5630, -46.6545], { icon: iconDestino }).addTo(mapInstance)
-            .bindPopup('<b>Dr. Lucas Silveira</b><br>Av. Paulista, 1000 - Cj. 42');
+          const mDestino = L.marker([-23.5630, -46.6545], { icon: iconDestino }).addTo(mapInstance)
+            .bindPopup('<b>Dr. Lucas Silveira</b><br>Av. Paulista, 1000 - Cj. 42', { autoPanPadding: [20, 20] });
+
+          // Ajusta zoom e enquadramento automático com margem segura de respiro
+          const boundsRota = L.latLngBounds([[-23.5670, -46.6900], [-23.5630, -46.6545]]);
+          mapInstance.fitBounds(boundsRota, { padding: [50, 50], maxZoom: 14 });
 
           // Linha de base estática (corredor rodoviário cinza suave)
           L.polyline(ROTA_REAL_COORDS, {
