@@ -34,7 +34,6 @@
       user-select: none;
     }
 
-    /* Scrollbars Cirúrgicas Max 4px */
     * {
       scrollbar-width: thin;
       scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
@@ -46,6 +45,18 @@
     *::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.2);
       border-radius: 4px;
+    }
+
+    @keyframes rotaAntPath {
+      from {
+        stroke-dashoffset: 16;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    .rota-animada {
+      animation: rotaAntPath 1s linear infinite;
     }
 
     body {
@@ -75,7 +86,6 @@
       border-right: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    /* Top Bar */
     .driver-header {
       padding: 14px 18px;
       display: flex;
@@ -97,22 +107,26 @@
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .brand-title span {
       font-weight: 400;
-      color: #71717A;
+      color: #A1A1AA;
     }
 
-    .driver-tag {
+    .driver-badge-padrao {
       font-size: 9px;
       font-weight: 800;
-      background: #FFFFFF;
-      color: #09090B;
+      background: #27272A;
+      color: #F4F4F5;
       padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .btn-status-toggle {
@@ -137,7 +151,6 @@
       box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
     }
 
-    /* Navegação Inferior de Abas */
     .driver-tabbar {
       height: 60px;
       background: var(--surface);
@@ -170,7 +183,6 @@
       stroke: currentColor;
     }
 
-    /* Conteúdo Principal */
     .driver-main {
       flex: 1;
       overflow-y: auto;
@@ -180,24 +192,21 @@
       gap: 14px;
     }
 
-    /* Seções Alternáveis */
     .tab-view {
       display: flex;
       flex-direction: column;
       gap: 14px;
     }
 
-    /* Mapa Interativo de Rota */
     #mapa-driver {
       width: 100%;
-      height: 180px;
+      height: 190px;
       border-radius: 12px;
       border: 1px solid var(--border);
       overflow: hidden;
       position: relative;
     }
 
-    /* Cards e Métricas */
     .driver-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -220,7 +229,6 @@
       color: var(--text-muted);
     }
 
-    /* Grid de Estatísticas */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -249,7 +257,6 @@
       margin-top: 2px;
     }
 
-    /* Rota Visual */
     .route-flow {
       display: flex;
       flex-direction: column;
@@ -306,7 +313,6 @@
       margin-top: 2px;
     }
 
-    /* Botão CTA Principal (54px) */
     .btn-driver-cta {
       width: 100%;
       min-height: 52px;
@@ -342,16 +348,40 @@
       gap: 8px;
     }
 
-    /* Lista de Histórico de Entregas */
-    .history-item {
-      padding: 12px;
+    .btn-driver-reject {
+      width: 100%;
+      min-height: 44px;
       border-radius: 10px;
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+      font-size: 11px;
+      font-weight: 800;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .history-card-item {
+      padding: 14px;
+      border-radius: 12px;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .history-card-item:hover, .history-card-item:active {
+      border-color: #FFFFFF;
+      background: #2E2E33;
     }
 
     .badge-history {
@@ -372,7 +402,33 @@
       color: var(--danger);
     }
 
-    /* Teclado Numérico Gigante */
+    .modal-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 9, 11, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 600;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
     .pin-screen-overlay {
       display: none;
       position: absolute;
@@ -468,12 +524,12 @@
   <div class="app-viewport">
     <header class="driver-header">
       <div class="driver-brand">
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="8" fill="#FFFFFF"/>
-          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#09090B"/>
-          <circle cx="18" cy="16" r="2.2" fill="#71717A"/>
+        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#09090B" stroke="rgba(255,255,255,0.2)"/>
+          <path d="M8 7H16C21.523 7 26 11.029 26 16C26 20.971 21.523 25 16 25H8V7ZM12.5 11.2V20.8H15.8C18.9 20.8 21.4 18.7 21.4 16C21.4 13.3 18.9 11.2 15.8 11.2H12.5Z" fill="#FFFFFF"/>
+          <circle cx="18" cy="16" r="2.2" fill="#A1A1AA"/>
         </svg>
-        <div class="brand-title">Dent<span>Go</span> <span class="driver-tag">DRIVER</span></div>
+        <div class="brand-title">Dent<span>Go</span> <span class="driver-badge-padrao">DRIVER</span></div>
       </div>
 
       <button class="btn-status-toggle" id="btn-toggle-online" onclick="toggleOnline()">
@@ -485,7 +541,6 @@
     <main class="driver-main">
       <!-- ABA 1: OPERAÇÃO ATIVA / CORRIDA -->
       <div id="view-operacao" class="tab-view">
-        <!-- Mapa de Rota Integrado -->
         <div id="mapa-driver"></div>
 
         <!-- Estado A: Alerta de Nova Corrida Flash -->
@@ -500,15 +555,15 @@
             <div class="route-point">
               <div class="route-dot"></div>
               <div class="route-label">1. Retirada no Fabricante</div>
-              <div class="route-name">Conexão Implantes (CD Moema)</div>
-              <div class="route-address">Av. Bem-te-vi, 333 • Retirar com Expedição</div>
+              <div class="route-name" id="nome-origem-atual">Conexão Implantes (CD Moema)</div>
+              <div class="route-address" id="end-origem-atual">Av. Bem-te-vi, 333 • Retirar com Expedição</div>
             </div>
 
             <div class="route-point">
               <div class="route-dot dest"></div>
               <div class="route-label">2. Entrega no Consultório</div>
-              <div class="route-name">Dr. Roberto Fontes (Clínica Jardins)</div>
-              <div class="route-address">R. Haddock Lobo, 1307 • 4º Andar</div>
+              <div class="route-name" id="nome-destino-atual">Dr. Roberto Fontes (Clínica Jardins)</div>
+              <div class="route-address" id="end-destino-atual">R. Haddock Lobo, 1307 • 4º Andar</div>
             </div>
           </div>
 
@@ -517,28 +572,39 @@
             <span>Tempo Estimado: <strong class="mono" style="color:#FFF;">18 min</strong></span>
           </div>
 
-          <button class="btn-driver-cta" style="margin-top:12px;" onclick="aceitarCorrida()">
-            Aceitar Corrida Flash (45s)
-          </button>
+          <div style="display:grid; grid-template-columns: 2fr 1fr; gap:8px; margin-top:12px;">
+            <button class="btn-driver-cta" onclick="aceitarCorrida()">
+              Aceitar (45s)
+            </button>
+            <button class="btn-driver-reject" onclick="rejeitarCorrida()">
+              Recusar
+            </button>
+          </div>
         </div>
 
         <!-- Estado B: Em Andamento -->
         <div class="driver-card" id="card-em-andamento" style="display:none; border:2px solid #FFFFFF;">
           <div class="driver-card-header">
-            <span style="font-size:10px; font-weight:800; background:var(--emerald); color:#09090B; padding:3px 6px; border-radius:4px; text-transform:uppercase;" id="status-etapa-tag">Etapa 1: Indo Coletar</span>
+            <span style="font-size:10px; font-weight:800; background:var(--warning); color:#09090B; padding:3px 6px; border-radius:4px; text-transform:uppercase;" id="status-etapa-tag">Etapa 1: Indo Coletar</span>
             <span class="mono" style="font-size:12px; font-weight:800;" id="txt-pedido-id">PED-9821</span>
           </div>
 
           <div style="background:var(--surface-elevated); padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
             <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Instrução:</div>
             <div style="font-size:12px; font-weight:700; color:#FFF; margin-top:2px;" id="txt-instrucao-etapa">
-              Vá até o CD Moema e retire a caixa cirúrgica lacrada PED-9821.
+              Vá até o CD Moema e valide a retirada do PED-9821.
             </div>
           </div>
 
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
-            <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('Waze')">Abrir Waze</button>
-            <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('Google Maps')">Google Maps</button>
+            <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('waze')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5 8 12 8 12s8-7 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+              Abrir Waze
+            </button>
+            <button class="btn-driver-secondary" onclick="abrirNavegacaoGps('google')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              Google Maps
+            </button>
           </div>
 
           <button class="btn-driver-cta" id="btn-avancar-etapa" onclick="avancarEtapaCorrida()">
@@ -569,55 +635,21 @@
             </div>
             <div class="stat-item">
               <div class="stat-val mono" style="color:var(--emerald);">100%</div>
-              <div class="stat-lbl">Conformidade</div>
+              <div class="stat-lbl">SLA Pontual</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ABA 3: HISTÓRICO DE ENTREGAS & REJEIÇÕES -->
+      <!-- ABA 3: HISTÓRICO DE ENTREGAS -->
       <div id="view-historico" class="tab-view" style="display:none;">
         <div class="driver-card">
-          <div class="driver-card-title" style="margin-bottom:10px;">Últimas Missões de Hoje</div>
-          <div id="lista-historico">
-            <div class="history-item">
-              <div>
-                <div style="font-size:12px; font-weight:800; color:#FFF;">PED-9755 • Conexão ➔ Bela Vista</div>
-                <div style="font-size:10px; color:var(--text-muted);">10:24 • Concluído via PIN 8812</div>
-              </div>
-              <div style="text-align:right;">
-                <span class="badge-history badge-concluido">Entregue</span>
-                <div class="mono" style="font-size:12px; font-weight:800; color:var(--emerald); margin-top:2px;">+R$ 20,00</div>
-              </div>
-            </div>
-
-            <div class="history-item">
-              <div>
-                <div style="font-size:12px; font-weight:800; color:#FFF;">PED-9640 • Straumann ➔ Itaim Bibi</div>
-                <div style="font-size:10px; color:var(--text-muted);">09:12 • Não aceito a tempo (45s)</div>
-              </div>
-              <div style="text-align:right;">
-                <span class="badge-history badge-perdida">Recusada</span>
-                <div class="mono" style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:2px;">R$ 0,00</div>
-              </div>
-            </div>
-
-            <div class="history-item">
-              <div>
-                <div style="font-size:12px; font-weight:800; color:#FFF;">PED-9599 • Neodent ➔ Pinheiros</div>
-                <div style="font-size:10px; color:var(--text-muted);">08:30 • Concluído via PIN 4301</div>
-              </div>
-              <div style="text-align:right;">
-                <span class="badge-history badge-concluido">Entregue</span>
-                <div class="mono" style="font-size:12px; font-weight:800; color:var(--emerald); margin-top:2px;">+R$ 20,00</div>
-              </div>
-            </div>
-          </div>
+          <div class="driver-card-title" style="margin-bottom:10px;">Últimas Missões Realizadas</div>
+          <div id="lista-historico"></div>
         </div>
       </div>
     </main>
 
-    <!-- Barra Inferior de Abas -->
     <nav class="driver-tabbar">
       <button class="tab-btn active" id="tab-btn-operacao" onclick="trocarAbaDriver('operacao')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -632,6 +664,62 @@
         Histórico
       </button>
     </nav>
+
+    <!-- Modal de Detalhes da Corrida -->
+    <div class="modal-overlay" id="modal-detalhes-corrida">
+      <div class="modal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:14px; font-weight:800; color:#FFF;" id="modal-detalhe-id">PED-9755</div>
+          <button onclick="fecharModalDetalhes()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
+        </div>
+
+        <div style="background:var(--surface-elevated); padding:12px; border-radius:10px; border:1px solid var(--border);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Status da Entrega:</span>
+            <span id="modal-detalhe-badge" class="badge-history badge-concluido">Entregue</span>
+          </div>
+          <div style="font-size:20px; font-weight:800; color:var(--emerald); margin-top:4px;" id="modal-detalhe-valor">+R$ 20,00</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:11px;">
+          <div><strong style="color:var(--text-muted);">Origem (Fabricante):</strong> <div style="color:#FFF;" id="modal-detalhe-origem">Conexão Implantes (CD Moema)</div></div>
+          <div><strong style="color:var(--text-muted);">Destino (Cirurgião):</strong> <div style="color:#FFF;" id="modal-detalhe-destino">Dra. Fernanda Dias (Bela Vista)</div></div>
+          <div><strong style="color:var(--text-muted);">Horário Conclusão:</strong> <div style="color:#FFF;" id="modal-detalhe-hora">10:24 • Hoje</div></div>
+          <div><strong style="color:var(--text-muted);">Validação / Auditoria:</strong> <div class="mono" style="color:var(--emerald);" id="modal-detalhe-validacao">PIN 8812 Validado • GPS Match</div></div>
+        </div>
+
+        <button class="btn-driver-secondary" onclick="fecharModalDetalhes()">Fechar Detalhes</button>
+      </div>
+    </div>
+
+    <!-- Modal de Coleta / Bipagem de Custódia -->
+    <div class="modal-overlay" id="modal-coleta-fabricante">
+      <div class="modal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:14px; font-weight:800; color:#FFF;">Auditoria de Coleta</div>
+          <button onclick="fecharModalColeta()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
+        </div>
+
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.4;">
+          Apresente o QR Code ao expedidor do fabricante para validação e custódia:
+        </div>
+
+        <div style="display:flex; justify-content:center; padding:12px 0;">
+          <div style="width:130px; height:130px; background:#FFF; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#09090B; font-weight:800; font-size:11px; text-align:center; padding:8px;">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#09090B" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="4" height="4"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="21" x2="21" y2="21"/></svg>
+            <span class="mono" style="margin-top:4px;">PED-9821</span>
+          </div>
+        </div>
+
+        <div style="font-size:10px; color:var(--text-muted); text-align:center;">
+          Registro seguro: Data, Hora, Geofence e ID do Piloto vinculados no SQLite.
+        </div>
+
+        <button class="btn-driver-cta" onclick="confirmarCustodiaRegistrada()">
+          Confirmar Retirada
+        </button>
+      </div>
+    </div>
 
     <!-- Overlay Teclado PIN -->
     <div class="pin-screen-overlay" id="overlay-pin">
@@ -680,14 +768,101 @@
     const PIN_CORRETO = "7421";
     let saldoCarteira = 80.00;
     let mapInstance = null;
+    let polylineAnimada = null;
+
+    const ORIGEM_ATUAL = { lat: -23.6030, lng: -46.6630, label: "CD Moema (Conexão Implantes)" };
+    const DESTINO_ATUAL = { lat: -23.5630, lng: -46.6545, label: "Clínica Jardins (Dr. Roberto Fontes)" };
 
     const ROTA_DRIVER_COORDS = [
-      [-23.6030, -46.6630], // CD Moema (Conexão)
+      [-23.6030, -46.6630],
       [-23.5950, -46.6680],
       [-23.5850, -46.6740],
       [-23.5750, -46.6700],
-      [-23.5630, -46.6545]  // Jardins (Dr. Roberto)
+      [-23.5630, -46.6545]
     ];
+
+    const HISTORICO_DADOS = [
+      {
+        id: "PED-9755",
+        status: "concluido",
+        origem: "Conexão Implantes (CD Moema)",
+        destino: "Dra. Fernanda Dias (Bela Vista)",
+        hora: "10:24 • Hoje",
+        valor: "R$ 20,00",
+        validacao: "PIN 8812 Validado • Match GPS"
+      },
+      {
+        id: "PED-9640",
+        status: "recusada",
+        origem: "Straumann CD Morumbi",
+        destino: "Dr. Marcelo Paiva (Itaim Bibi)",
+        hora: "09:12 • Hoje",
+        valor: "R$ 0,00",
+        validacao: "Recusada manualmente pelo piloto"
+      },
+      {
+        id: "PED-9599",
+        status: "concluido",
+        origem: "Neodent CD Jardins",
+        destino: "Dr. André Villas (Pinheiros)",
+        hora: "08:30 • Hoje",
+        valor: "R$ 20,00",
+        validacao: "PIN 4301 Validado • Match GPS"
+      }
+    ];
+
+    function renderizarHistorico() {
+      const container = document.getElementById("lista-historico");
+      if (!container) return;
+      container.innerHTML = "";
+
+      HISTORICO_DADOS.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "history-card-item";
+        div.onclick = () => abrirModalDetalhes(index);
+
+        const badgeClass = item.status === "concluido" ? "badge-concluido" : "badge-perdida";
+        const badgeTxt = item.status === "concluido" ? "Entregue" : "Recusada";
+        const corValor = item.status === "concluido" ? "var(--emerald)" : "var(--text-muted)";
+
+        div.innerHTML = `
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#FFF;">${item.id} • ${item.origem.split(' ')[0]} ➔ ${item.destino.split('(')[0]}</div>
+            <div style="font-size:10px; color:var(--text-muted);">${item.hora}</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge-history ${badgeClass}">${badgeTxt}</span>
+            <div class="mono" style="font-size:12px; font-weight:800; color:${corValor}; margin-top:2px;">${item.valor}</div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function abrirModalDetalhes(index) {
+      const item = HISTORICO_DADOS[index];
+      document.getElementById("modal-detalhe-id").innerText = item.id;
+      document.getElementById("modal-detalhe-valor").innerText = item.valor;
+      document.getElementById("modal-detalhe-origem").innerText = item.origem;
+      document.getElementById("modal-detalhe-destino").innerText = item.destino;
+      document.getElementById("modal-detalhe-hora").innerText = item.hora;
+      document.getElementById("modal-detalhe-validacao").innerText = item.validacao;
+
+      const badge = document.getElementById("modal-detalhe-badge");
+      if (item.status === "concluido") {
+        badge.className = "badge-history badge-concluido";
+        badge.innerText = "Entregue";
+      } else {
+        badge.className = "badge-history badge-perdida";
+        badge.innerText = "Recusada";
+      }
+
+      document.getElementById("modal-detalhes-corrida").classList.add("open");
+    }
+
+    function fecharModalDetalhes() {
+      document.getElementById("modal-detalhes-corrida").classList.remove("open");
+    }
 
     function inicializarMapa() {
       if (mapInstance) return;
@@ -703,19 +878,28 @@
         maxZoom: 18
       }).addTo(mapInstance);
 
-      // Traçado da Rota OSRM
       L.polyline(ROTA_DRIVER_COORDS, {
-        color: '#FFFFFF',
-        weight: 4,
-        opacity: 0.9,
-        lineCap: 'round'
+        color: '#E4E4E7',
+        weight: 4.5,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
       }).addTo(mapInstance);
 
-      // Marcadores A e B
+      polylineAnimada = L.polyline(ROTA_DRIVER_COORDS, {
+        color: '#09090B',
+        weight: 3.5,
+        opacity: 0.95,
+        dashArray: '3, 5',
+        className: 'rota-animada',
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(mapInstance);
+
       L.circleMarker([-23.6030, -46.6630], { radius: 6, color: '#09090B', fillColor: '#FFFFFF', fillOpacity: 1 }).addTo(mapInstance);
       L.circleMarker([-23.5630, -46.6545], { radius: 6, color: '#09090B', fillColor: '#10B981', fillOpacity: 1 }).addTo(mapInstance);
 
-      mapInstance.fitBounds(L.polyline(ROTA_DRIVER_COORDS).getBounds(), { padding: [20, 20] });
+      mapInstance.fitBounds(polylineAnimada.getBounds(), { padding: [25, 25] });
     }
 
     function trocarAbaDriver(aba) {
@@ -761,6 +945,31 @@
       exibirToast("Corrida aceita. Rumo ao CD Moema.");
     }
 
+    function rejeitarCorrida() {
+      const cardNova = document.getElementById("card-nova-corrida");
+      cardNova.style.opacity = "0.4";
+      exibirToast("Corrida recusada. Reatribuindo para outro piloto.");
+      
+      const kpiP = document.getElementById("kpi-perdidas");
+      kpiP.innerText = parseInt(kpiP.innerText) + 1;
+
+      HISTORICO_DADOS.unshift({
+        id: "PED-9821",
+        status: "recusada",
+        origem: "Conexão Implantes (CD Moema)",
+        destino: "Dr. Roberto Fontes (Clínica Jardins)",
+        hora: "Agora • Recusada",
+        valor: "R$ 0,00",
+        validacao: "Recusada manualmente pelo piloto"
+      });
+      renderizarHistorico();
+
+      setTimeout(() => {
+        cardNova.style.opacity = "1";
+        exibirToast("Aguardando novas ofertas no seu raio...");
+      }, 4000);
+    }
+
     function atualizarInterfaceEtapa() {
       const tag = document.getElementById("status-etapa-tag");
       const instr = document.getElementById("txt-instrucao-etapa");
@@ -769,7 +978,7 @@
       if (etapaAtual === 1) {
         tag.innerText = "Etapa 1: Indo Coletar";
         tag.style.background = "var(--warning)";
-        instr.innerText = "Dirija-se ao CD Moema da Conexão Implantes e retire o pacote lacrado PED-9821.";
+        instr.innerText = "Dirija-se ao CD Moema da Conexão Implantes e valide a retirada do PED-9821.";
         btn.innerText = "Confirmar Coleta no Fabricante";
       } else if (etapaAtual === 2) {
         tag.innerText = "Etapa 2: Em Rota Para Consultório";
@@ -781,16 +990,34 @@
 
     function avancarEtapaCorrida() {
       if (etapaAtual === 1) {
-        etapaAtual = 2;
-        atualizarInterfaceEtapa();
-        exibirToast("Pacote coletado. Telemetria GPS transmitindo para o dentista.");
+        document.getElementById("modal-coleta-fabricante").classList.add("open");
       } else if (etapaAtual === 2) {
         abrirTecladoPin();
       }
     }
 
-    function abrirNavegacaoGps(app) {
-      exibirToast("Abrindo rota no " + app + "...");
+    function fecharModalColeta() {
+      document.getElementById("modal-coleta-fabricante").classList.remove("open");
+    }
+
+    function confirmarCustodiaRegistrada() {
+      fecharModalColeta();
+      etapaAtual = 2;
+      atualizarInterfaceEtapa();
+      exibirToast("Custódia confirmada! Telemetria GPS transmitindo ao dentista.");
+    }
+
+    function abrirNavegacaoGps(tipo) {
+      const lat = (etapaAtual === 1) ? ORIGEM_ATUAL.lat : DESTINO_ATUAL.lat;
+      const lng = (etapaAtual === 1) ? ORIGEM_ATUAL.lng : DESTINO_ATUAL.lng;
+
+      if (tipo === 'waze') {
+        const urlWaze = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+        window.open(urlWaze, '_blank');
+      } else {
+        const urlGoogle = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+        window.open(urlGoogle, '_blank');
+      }
     }
 
     function abrirTecladoPin() {
@@ -847,6 +1074,18 @@
         document.getElementById("wallet-saldo-total").innerText = "R$ " + saldoCarteira.toFixed(2).replace('.', ',');
         const kpiC = document.getElementById("kpi-concluidas");
         kpiC.innerText = parseInt(kpiC.innerText) + 1;
+
+        HISTORICO_DADOS.unshift({
+          id: "PED-9821",
+          status: "concluido",
+          origem: "Conexão Implantes (CD Moema)",
+          destino: "Dr. Roberto Fontes (Clínica Jardins)",
+          hora: "Agora • Concluído",
+          valor: "R$ 20,00",
+          validacao: "PIN " + pinDigitado + " Validado • Match GPS"
+        });
+        renderizarHistorico();
+
         exibirToast("Entrega Concluída com Sucesso! +R$ 20,00 creditados na carteira.");
       } else {
         exibirToast("PIN incorreto. Solicite ao dentista ou à recepção.");
@@ -860,6 +1099,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       inicializarMapa();
+      renderizarHistorico();
     });
   </script>
 </body>

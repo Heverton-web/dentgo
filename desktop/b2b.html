@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <style>
     :root {
       --bg: #FAFAFA;
@@ -694,6 +695,10 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Torre de Expedição
       </button>
+      <button class="menu-item" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira (Paulista)')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        Radar de Entregas GPS
+      </button>
       <button class="menu-item" onclick="trocarAbaB2B('estoque', this)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="8" height="8" x="13" y="13" rx="1"/></svg>
         Catálogo & Lotes
@@ -846,7 +851,7 @@
             <span class="kanban-count" id="count-rota">1</span>
           </div>
           <div class="kanban-cards-wrapper" id="col-rota">
-            <div class="kanban-card flash">
+            <div class="kanban-card flash" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira (Paulista)')" style="cursor:pointer;" title="Clique para rastrear piloto em tempo real">
               <div class="card-top">
                 <span class="card-id mono">PED-91042</span>
                 <span class="card-sla-badge badge-flash">Em Trânsito</span>
@@ -855,7 +860,7 @@
               <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
               <div class="card-bottom">
                 <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
-                <span style="font-size:10px; font-weight:700; color:var(--text-muted);">Telemetria Ativa</span>
+                <span style="font-size:10px; font-weight:800; color:var(--emerald); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">Radar GPS &nearr;</span>
               </div>
             </div>
           </div>
@@ -898,6 +903,44 @@
     <span id="b2b-toast-msg">Notificação</span>
   </div>
 
+  <!-- Modal Rastreio e Radar de Entregas GPS (B2B) -->
+  <div class="b2b-modal-backdrop" id="modal-rastreio-b2b">
+    <div class="b2b-modal-dialog" style="max-width: 650px;">
+      <div class="b2b-modal-header">
+        <div>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);" id="rastreio-id">PED-91042</span>
+          <h3 class="b2b-modal-title" id="rastreio-cliente">Monitoramento em Tempo Real</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharModalRastreio()">&times;</button>
+      </div>
+
+      <div id="mapa-rastreio-b2b" style="width:100%; height:260px; border-radius:10px; border:1px solid var(--border); overflow:hidden; margin-bottom:14px;"></div>
+
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:14px;">
+        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Piloto Credenciado</div>
+          <div style="font-size:12px; font-weight:800; color:#09090B; margin-top:2px;">Carlos Eduardo</div>
+          <div style="font-size:10px; color:var(--text-muted);">Honda CG 160 (DentGo Driver)</div>
+        </div>
+        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Velocidade / Telemetria</div>
+          <div class="mono" style="font-size:13px; font-weight:800; color:var(--emerald); margin-top:2px;">38 km/h</div>
+          <div style="font-size:10px; color:var(--text-muted);">GPS Atualizado há 4s</div>
+        </div>
+        <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Previsão de Chegada</div>
+          <div class="mono" style="font-size:13px; font-weight:800; color:#09090B; margin-top:2px;">14 min (SLA OK)</div>
+          <div style="font-size:10px; color:var(--text-muted);">PIN de Destino: 7421</div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end;">
+        <button class="btn-b2b-action" onclick="fecharModalRastreio()" style="padding:10px 18px;">Fechar Radar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     const USUARIOS_HOMOLOGADOS = {
       "conexao.expedicao": {
@@ -999,6 +1042,54 @@
 
     function moverPedidoKanban(id, destino) {
       exibirToast("Pedido " + id + " transferido para " + destino.toUpperCase());
+    }
+
+    let mapRastreioInstance = null;
+    function abrirRastreioLive(id, cliente) {
+      document.getElementById("rastreio-id").innerText = id;
+      document.getElementById("rastreio-cliente").innerText = cliente;
+      document.getElementById("modal-rastreio-b2b").classList.add("open");
+
+      setTimeout(() => {
+        if (!mapRastreioInstance) {
+          mapRastreioInstance = L.map('mapa-rastreio-b2b', {
+            zoomControl: false,
+            attributionControl: false
+          }).setView([-23.5700, -46.6600], 13);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18
+          }).addTo(mapRastreioInstance);
+
+          const rotaCoords = [
+            [-23.6030, -46.6630],
+            [-23.5900, -46.6680],
+            [-23.5780, -46.6650],
+            [-23.5650, -46.6540]
+          ];
+
+          L.polyline(rotaCoords, {
+            color: '#18181B',
+            weight: 3.5,
+            opacity: 0.9,
+            dashArray: '3, 5'
+          }).addTo(mapRastreioInstance);
+
+          L.circleMarker([-23.6030, -46.6630], { radius: 6, color: '#09090B', fillColor: '#FFFFFF', fillOpacity: 1 }).addTo(mapRastreioInstance);
+          L.circleMarker([-23.5650, -46.6540], { radius: 6, color: '#09090B', fillColor: '#10B981', fillOpacity: 1 }).addTo(mapRastreioInstance);
+          
+          // Marcador do Piloto em Movimento
+          L.circleMarker([-23.5780, -46.6650], { radius: 8, color: '#FFFFFF', fillColor: '#09090B', fillOpacity: 1 }).addTo(mapRastreioInstance).bindPopup("Piloto Carlos (38 km/h)").openPopup();
+          
+          mapRastreioInstance.fitBounds(L.polyline(rotaCoords).getBounds(), { padding: [25, 25] });
+        } else {
+          mapRastreioInstance.invalidateSize();
+        }
+      }, 150);
+    }
+
+    function fecharModalRastreio() {
+      document.getElementById("modal-rastreio-b2b").classList.remove("open");
     }
   </script>
 </body>
