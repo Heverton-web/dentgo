@@ -475,7 +475,11 @@
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 14px;
-      min-height: 146px;
+      height: 148px !important;
+      min-height: 148px !important;
+      max-height: 148px !important;
+      flex-shrink: 0;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -498,12 +502,16 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      height: 22px;
+      flex-shrink: 0;
     }
 
     .card-id {
       font-size: 11px;
       font-weight: 800;
       color: var(--text);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .card-sla-badge {
@@ -530,13 +538,24 @@
       font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
+      height: 16px;
+      line-height: 16px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .card-items-desc {
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 10px;
-      line-height: 1.35;
+      margin-bottom: 8px;
+      height: 16px;
+      line-height: 16px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .card-bottom {
@@ -545,6 +564,9 @@
       align-items: center;
       border-top: 1px dashed var(--border);
       padding-top: 8px;
+      height: 38px;
+      flex-shrink: 0;
+      box-sizing: border-box;
     }
 
     .btn-b2b-action {
@@ -932,6 +954,8 @@
 
       .kanban-card {
         padding: 14px;
+        height: auto;
+        min-height: 154px;
       }
 
       /* Barra de Navegação Inferior Nativa do Coletor Mobile (Tátil >= 48px) */
@@ -1215,7 +1239,10 @@
                 <div class="card-top">
                   <span class="card-id mono">PED-9821</span>
                   <div style="display:flex; gap:4px; align-items:center;">
-                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--rose); background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px;">⏱ 18 min</span>
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--rose); background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      18 min
+                    </span>
                     <span class="card-sla-badge badge-flash">Flash 2h</span>
                   </div>
                 </div>
@@ -1231,7 +1258,10 @@
                 <div class="card-top">
                   <span class="card-id mono">PED-9818</span>
                   <div style="display:flex; gap:4px; align-items:center;">
-                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--text-muted); background:var(--surface-subtle); padding:2px 6px; border-radius:4px;">⏱ 52 min</span>
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--text-muted); background:var(--surface-subtle); padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      52 min
+                    </span>
                     <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
                   </div>
                 </div>
@@ -1255,7 +1285,13 @@
               <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna (Itaim Bibi)', ['1x Kit Cirúrgico Compacto Cone Morse (SKU: CX-KIT-CM-COMP)'])">
                 <div class="card-top">
                   <span class="card-id mono">PED-9799</span>
-                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  <div style="display:flex; gap:4px; align-items:center;">
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--rose); background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      12 min
+                    </span>
+                    <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  </div>
                 </div>
                 <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
                 <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
@@ -1277,13 +1313,25 @@
               <div class="kanban-card flash">
                 <div class="card-top">
                   <span class="card-id mono">PED-9755</span>
-                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  <div style="display:flex; gap:4px; align-items:center;">
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--emerald); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      Pronto
+                    </span>
+                    <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  </div>
                 </div>
                 <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
                 <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
                 <div class="card-bottom">
-                  <button class="btn-b2b-action" style="font-size:11px;" onclick="abrirEtiquetaExpedicao('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista', 'LOT-CX-2026-884', '4829')">🖨️ Etiqueta ZPL/PDF</button>
-                  <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800;" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar &rarr;</button>
+                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.450,00</span>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-b2b-action" style="font-size:11px; display:inline-flex; align-items:center; gap:4px; padding:4px 8px;" onclick="abrirEtiquetaExpedicao('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista', 'LOT-CX-2026-884', '4829')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                      Etiqueta
+                    </button>
+                    <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800; padding:4px 10px;" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar &rarr;</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1299,13 +1347,22 @@
               <div class="kanban-card flash" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira (Paulista)')" style="cursor:pointer;" title="Clique para rastrear piloto em tempo real">
                 <div class="card-top">
                   <span class="card-id mono">PED-91042</span>
-                  <span class="card-sla-badge badge-flash">Em Trânsito</span>
+                  <div style="display:flex; gap:4px; align-items:center;">
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--text); background:var(--surface-subtle); padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      18 min
+                    </span>
+                    <span class="card-sla-badge badge-flash">Em Trânsito</span>
+                  </div>
                 </div>
                 <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
                 <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
                 <div class="card-bottom">
                   <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
-                  <span style="font-size:10px; font-weight:800; color:var(--emerald); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">Radar GPS &nearr;</span>
+                  <button class="btn-b2b-action" style="font-size:11px; color:var(--emerald); border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.06); font-weight:800; display:inline-flex; align-items:center; gap:4px; padding:4px 10px;" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira')">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                    Radar GPS &nearr;
+                  </button>
                 </div>
               </div>
             </div>
@@ -1580,7 +1637,10 @@
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:14px;">
-        <button class="btn-b2b-action" type="button" onclick="abrirEtiquetaExpedicao(pedidoDespachoAtual, document.getElementById('despacho-cliente').innerText, document.getElementById('despacho-endereco').innerText, 'LOT-CX-2026-884', '4829')">Visualizar Etiqueta 🖨️</button>
+        <button class="btn-b2b-action" type="button" style="display:inline-flex; align-items:center; gap:5px;" onclick="abrirEtiquetaExpedicao(pedidoDespachoAtual, document.getElementById('despacho-cliente').innerText, document.getElementById('despacho-endereco').innerText, 'LOT-CX-2026-884', '4829')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Visualizar Etiqueta
+        </button>
         <div style="display:flex; gap:10px;">
           <button class="btn-b2b-action" onclick="fecharModalDespachoHibrido()">Cancelar</button>
           <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="confirmarDespachoHibrido()">Confirmar e Notificar Dentista &rarr;</button>
@@ -1653,7 +1713,10 @@
         <span style="font-size:11px; color:#71717A;">Padrão Zebra ZPL / 100x150 mm</span>
         <div style="display:flex; gap:8px;">
           <button class="btn-b2b-action" type="button" onclick="fecharEtiquetaExpedicao()">Fechar</button>
-          <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800;" onclick="imprimirEtiquetaZPL()">Imprimir Etiqueta (Térmica) 🖨️</button>
+          <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800; display:inline-flex; align-items:center; gap:5px;" onclick="imprimirEtiquetaZPL()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir Etiqueta (Térmica)
+          </button>
         </div>
       </div>
     </div>
@@ -2239,7 +2302,7 @@
         if (temFlash43 && pedidoExigeFlash35) {
           // Disparo de bloqueio de segurança
           if (navigator.vibrate) navigator.vibrate([150, 100, 150, 100, 250]);
-          alert("⚠️ TRAVA DE SEGURANÇA CLÍNICA ATIVADA!\n\nVocê bipou um Implante de diâmetro 4.3mm, mas a prescrição cirúrgica do Dr. Roberto Fontes exige 3.5mm!\n\nBipagem rejeitada para evitar intercorrência cirúrgica.");
+          alert("TRAVA DE SEGURANCA CLINICA ATIVADA!\n\nVoce bipou um Implante de diametro 4.3mm, mas a prescricao cirurgica do Dr. Roberto Fontes exige 3.5mm!\n\nBipagem rejeitada para evitar intercorrencia cirurgica.");
           e.target.value = "";
           return;
         }
