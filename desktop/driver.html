@@ -852,6 +852,15 @@
         <div class="pin-box mono" id="pbox-3">_</div>
       </div>
 
+      <!-- Rubrica / Assinatura Digital Opcional do Recebedor -->
+      <div style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Assinatura / Rubrica do Recebedor:</span>
+          <button type="button" onclick="limparAssinatura()" style="background:none; border:none; color:var(--teal); font-size:10px; font-weight:800; cursor:pointer;">Limpar</button>
+        </div>
+        <canvas id="canvas-rubrica" width="320" height="70" style="width:100%; height:70px; background:#18181B; border-radius:6px; border:1px dashed var(--border); touch-action:none;"></canvas>
+      </div>
+
       <div class="keypad-grid">
         <button class="key-btn mono" onclick="pressionarTecla('1')">1</button>
         <button class="key-btn mono" onclick="pressionarTecla('2')">2</button>
@@ -1158,10 +1167,81 @@
       }
     }
 
+    // Motor de Som de Alerta Cirúrgico (Web Audio API nativo)
+    function emitirAlertaSonoroCirurgico() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota Lá (A5)
+        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch (e) {
+        console.log("AudioContext indisponível:", e);
+      }
+    }
+
+    // Canvas de Assinatura / Rubrica Digital do Recebedor
+    let canvasRubricaEl, ctxRubrica, desenhandoRubrica = false;
+
+    function inicializarCanvasRubrica() {
+      canvasRubricaEl = document.getElementById("canvas-rubrica");
+      if (!canvasRubricaEl) return;
+      ctxRubrica = canvasRubricaEl.getContext("2d");
+      ctxRubrica.strokeStyle = "#14B8A6";
+      ctxRubrica.lineWidth = 2.5;
+      ctxRubrica.lineCap = "round";
+
+      function getPos(e) {
+        const rect = canvasRubricaEl.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - rect.left) * (canvasRubricaEl.width / rect.width),
+          y: (clientY - rect.top) * (canvasRubricaEl.height / rect.height)
+        };
+      }
+
+      function startDraw(e) {
+        desenhandoRubrica = true;
+        const pos = getPos(e);
+        ctxRubrica.beginPath();
+        ctxRubrica.moveTo(pos.x, pos.y);
+      }
+      function draw(e) {
+        if (!desenhandoRubrica) return;
+        const pos = getPos(e);
+        ctxRubrica.lineTo(pos.x, pos.y);
+        ctxRubrica.stroke();
+      }
+      function stopDraw() { desenhandoRubrica = false; }
+
+      canvasRubricaEl.addEventListener("mousedown", startDraw);
+      canvasRubricaEl.addEventListener("mousemove", draw);
+      window.addEventListener("mouseup", stopDraw);
+      canvasRubricaEl.addEventListener("touchstart", startDraw, { passive: true });
+      canvasRubricaEl.addEventListener("touchmove", draw, { passive: true });
+      window.addEventListener("touchend", stopDraw);
+    }
+
+    function limparAssinatura() {
+      if (canvasRubricaEl && ctxRubrica) {
+        ctxRubrica.clearRect(0, 0, canvasRubricaEl.width, canvasRubricaEl.height);
+      }
+    }
+
     function abrirTecladoPin() {
       pinDigitado = "";
       atualizarCaixasPin();
       document.getElementById("overlay-pin").classList.add("open");
+      emitirAlertaSonoroCirurgico();
+      setTimeout(inicializarCanvasRubrica, 100);
     }
 
     function fecharTecladoPin() {

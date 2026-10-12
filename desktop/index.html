@@ -2765,8 +2765,29 @@
     }
 
     let pixPendentePedidoId = null;
+    let timerPixInterval = null;
+
+    function iniciarCountdownPix() {
+      if (timerPixInterval) clearInterval(timerPixInterval);
+      let segundosRestantes = 15 * 60;
+      const elTimer = document.getElementById("pix-countdown-timer");
+      
+      timerPixInterval = setInterval(() => {
+        segundosRestantes--;
+        if (segundosRestantes <= 0) {
+          clearInterval(timerPixInterval);
+          elTimer.innerText = "Expirado";
+          elTimer.style.color = "var(--danger)";
+          return;
+        }
+        const m = Math.floor(segundosRestantes / 60);
+        const s = segundosRestantes % 60;
+        elTimer.innerText = `Expira em ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
 
     function fecharModalPixPagamento() {
+      if (timerPixInterval) clearInterval(timerPixInterval);
       document.getElementById("modal-pix-pagamento").classList.remove("open");
     }
 
@@ -2845,6 +2866,7 @@
             correctLevel: QRCode.CorrectLevel.M
           });
         }
+        iniciarCountdownPix();
         document.getElementById("modal-pix-pagamento").classList.add("open");
         return;
       }

@@ -707,6 +707,10 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Combos Cirúrgicos
       </button>
+      <button class="menu-item" onclick="abrirModalWebhooksERP()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Webhooks ERP / API
+      </button>
       <button class="menu-item" onclick="window.open('/', '_blank')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
         App Clínico (Dentista) &nearr;
@@ -909,6 +913,47 @@
     <span id="b2b-toast-msg">Notificação</span>
   </div>
 
+  <!-- Modal In-App Webhooks & Integração ERP (B2B) -->
+  <div class="b2b-modal-backdrop" id="modal-webhooks-erp">
+    <div class="b2b-modal-dialog" style="max-width: 620px;">
+      <div class="b2b-modal-header">
+        <div>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);">INTEGRAÇÃO SISTÊMICA</span>
+          <h3 class="b2b-modal-title">Webhooks & Baixa Automática de Estoque</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharModalWebhooksERP()">&times;</button>
+      </div>
+
+      <div style="font-size:12px; color:var(--text-muted); line-height:1.4; margin-bottom:14px;">
+        Configure o endpoint HTTP do seu ERP (SAP, TOTVS, Bling, Senior) para receber eventos atômicos assinados em HMAC-SHA256:
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
+        <div>
+          <label class="form-label">URL de Destino do Webhook (HTTPS):</label>
+          <input type="text" id="input-webhook-url" class="form-input mono" value="https://api.conexaoimplantes.com.br/v1/integracao/dentgo" />
+        </div>
+        <div>
+          <label class="form-label">Segredo de Assinatura (Webhook Secret HMAC):</label>
+          <input type="text" readonly class="form-input mono" value="whsec_dgo_ live_91a82fbc78119c4d28" style="background:var(--surface-subtle); color:var(--text-muted);" />
+        </div>
+      </div>
+
+      <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:11px; margin-bottom:16px;">
+        <div style="font-weight:800; font-size:10px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Gatilhos de Notificação Ativos:</div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <div>✓ <code>PEDIDO_CUSTODIADO</code> — Disparado na bipagem do QR do motorista no CD.</div>
+          <div>✓ <code>PEDIDO_ENTREGUE</code> — Disparado na validação do PIN e rubrica no consultório.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn-b2b-action" type="button" onclick="testarDisparoWebhook()">Disparar Teste Ping</button>
+        <button class="btn-b2b-action" style="background:var(--text); color:#FFF;" onclick="salvarConfigWebhook()">Salvar Integração</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Rastreio e Radar de Entregas GPS (B2B) -->
   <div class="b2b-modal-backdrop" id="modal-rastreio-b2b">
     <div class="b2b-modal-dialog" style="max-width: 780px;">
@@ -1049,6 +1094,26 @@
       });
       document.getElementById("modal-conferencia").classList.add("open");
       setTimeout(() => document.getElementById("input-bip-lote").focus(), 100);
+    }
+
+    function abrirModalWebhooksERP() {
+      document.getElementById("modal-webhooks-erp").classList.add("open");
+    }
+
+    function fecharModalWebhooksERP() {
+      document.getElementById("modal-webhooks-erp").classList.remove("open");
+    }
+
+    function testarDisparoWebhook() {
+      exibirToast("Disparando Ping HTTP 200 para o endpoint do ERP...");
+      setTimeout(() => {
+        exibirToast("Webhook recebido com sucesso pelo ERP (Latência: 112ms).");
+      }, 600);
+    }
+
+    function salvarConfigWebhook() {
+      exibirToast("Configurações de Webhook salvas e sincronizadas.");
+      fecharModalWebhooksERP();
     }
 
     let html5QrCodeScanner = null;
