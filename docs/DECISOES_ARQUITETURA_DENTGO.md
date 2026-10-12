@@ -109,6 +109,18 @@
 
 ---
 
+## 9. Motores Reais Integrados e Arquitetura Open-Source
+
+### 9.1. Princípio Arquitetural: "Nada se cria, tudo se modela e se adapta"
+* A plataforma DentGo rejeita reinventar a roda ou criar motores proprietários do zero para componentes amplamente padronizados e testados pela comunidade global.
+* Todos os subsistemas adotam motores open-source de alta performance, maduros, auditados e integrados sem custos adicionais de licenciamento:
+  1. **Motor de Renderização e Geometria Cartográfica**: **Leaflet.js** (OpenStreetMap tiles, polylines determinísticas e marcação de waypoints).
+  2. **Motor de Roteirização TSP (Problema do Caixeiro Viajante)**: **OSRM / Valhalla** (roteirização real de tráfego, telemetria e projeção de ETA).
+  3. **Motor Gerador de Matriz Bidimensional (QR Code)**: **QRCode.js** (padrão ISO/IEC 18004 com correção de erros Reed-Solomon nível M para PIX EMV e Handshake de Custódia).
+  4. **Motor de Captura Óptica e Visão Computacional**: **Html5-Qrcode** (decodificação de códigos de barras GS1/DataMatrix ANVISA e QR codes por câmeras traseiras/frontais e leitores ópticos USB HID).
+  5. **Motor de Persistência e Integridade Transacional**: **SQLite 3 nativo via Python** (banco de dados ACID embutido, zero dependência externa de infraestrutura).
+
+
 ## 8. Logística Avançada, Roteirização TSP e Custódia
 
 ### 8.1. Agrupamento (Batching) e Limites de Entregas por Corrida

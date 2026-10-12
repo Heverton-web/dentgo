@@ -887,8 +887,14 @@
 
       <div style="margin-bottom:18px;">
         <label class="form-label">Leitura de Código de Barras / DataMatrix (Lote ANVISA):</label>
-        <input type="text" id="input-bip-lote" class="form-input mono" placeholder="Aproxime o leitor óptico USB ou digite..." onkeydown="processarBip(event)" />
-        <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Pressione Enter para vincular o lote esterilizado ao pedido.</span>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="input-bip-lote" class="form-input mono" placeholder="Aproxime o leitor óptico USB ou digite..." onkeydown="processarBip(event)" style="flex:1;" />
+          <button class="btn-b2b-action" type="button" onclick="alternarScannerCamera()" style="white-space:nowrap; padding:0 12px; font-size:11px;" id="btn-toggle-camera">Abrir Câmera</button>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Pressione Enter para vincular o lote esterilizado ou bipar o QR de custódia do motorista.</span>
+        
+        <!-- Viewport do Scanner de Câmera Real Open-Source (html5-qrcode) -->
+        <div id="reader-camera-b2b" style="display:none; width:100%; max-width:320px; margin:10px auto 0; border:1px solid var(--border); border-radius:8px; overflow:hidden;"></div>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
@@ -964,6 +970,8 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Motor Real Open-Source de Leitura Óptica e Câmera de QR/Barcodes (html5-qrcode) -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script>
     const USUARIOS_HOMOLOGADOS = {
       "conexao.expedicao": {
@@ -1043,7 +1051,51 @@
       setTimeout(() => document.getElementById("input-bip-lote").focus(), 100);
     }
 
+    let html5QrCodeScanner = null;
+    let cameraAtiva = false;
+
+    function alternarScannerCamera() {
+      const viewer = document.getElementById("reader-camera-b2b");
+      const btn = document.getElementById("btn-toggle-camera");
+
+      if (cameraAtiva) {
+        if (html5QrCodeScanner) {
+          html5QrCodeScanner.stop().then(() => {
+            viewer.style.display = "none";
+            btn.innerText = "Abrir Câmera";
+            cameraAtiva = false;
+          }).catch(err => console.error(err));
+        }
+      } else {
+        viewer.style.display = "block";
+        btn.innerText = "Parar Câmera";
+        cameraAtiva = true;
+
+        if (typeof Html5Qrcode !== "undefined") {
+          html5QrCodeScanner = new Html5Qrcode("reader-camera-b2b");
+          html5QrCodeScanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 220, height: 220 } },
+            (decodedText) => {
+              exibirToast("Código Bipado via Câmera: " + decodedText);
+              document.getElementById("input-bip-lote").value = decodedText;
+              alternarScannerCamera();
+            },
+            (errorMessage) => {
+              // leitura contínua de quadros
+            }
+          ).catch(err => {
+            exibirToast("Câmera indisponível: utilize o leitor USB ou digite.");
+            viewer.style.display = "none";
+            btn.innerText = "Abrir Câmera";
+            cameraAtiva = false;
+          });
+        }
+      }
+    }
+
     function fecharModalConferencia() {
+      if (cameraAtiva) alternarScannerCamera();
       document.getElementById("modal-conferencia").classList.remove("open");
     }
 

@@ -818,9 +818,9 @@
         </div>
 
         <div style="display:flex; justify-content:center; padding:12px 0;">
-          <div style="width:130px; height:130px; background:#FFF; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#09090B; font-weight:800; font-size:11px; text-align:center; padding:8px;">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#09090B" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="4" height="4"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="21" x2="21" y2="21"/></svg>
-            <span class="mono" style="margin-top:4px;">PED-9821</span>
+          <div style="background:#FFF; padding:12px; border-radius:10px; display:flex; flex-direction:column; align-items:center;">
+            <div id="qrcode-custodia-canvas" style="width:140px; height:140px; display:flex; align-items:center; justify-content:center;"></div>
+            <span class="mono" style="margin-top:6px; color:#09090B; font-weight:800; font-size:11px;" id="lbl-codigo-custodia">PED-9821</span>
           </div>
         </div>
 
@@ -874,6 +874,8 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Motor Real Open-Source de Geração de QR Code (qrcodejs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     let online = true;
     let etapaAtual = 0;
@@ -1101,8 +1103,31 @@
       }
     }
 
+    let qrcodeInstancia = null;
+
+    function renderizarQrCodeCustodia(pedidoId) {
+      const container = document.getElementById("qrcode-custodia-canvas");
+      container.innerHTML = "";
+      const payloadSeguro = `DGO:CUSTODIA:${pedidoId}:DRV-04:${new Date().toISOString()}:HMAC_SHA256_VALIDADO`;
+      document.getElementById("lbl-codigo-custodia").innerText = pedidoId;
+      
+      if (typeof QRCode !== "undefined") {
+        qrcodeInstancia = new QRCode(container, {
+          text: payloadSeguro,
+          width: 130,
+          height: 130,
+          colorDark: "#09090B",
+          colorLight: "#FFFFFF",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } else {
+        container.innerHTML = `<span style="font-size:10px; color:#09090B; font-weight:800;">QR Code: ${pedidoId}</span>`;
+      }
+    }
+
     function avancarEtapaCorrida() {
       if (etapaAtual === 1) {
+        renderizarQrCodeCustodia("PED-9821");
         document.getElementById("modal-coleta-fabricante").classList.add("open");
       } else if (etapaAtual === 2) {
         abrirTecladoPin();

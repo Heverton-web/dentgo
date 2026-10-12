@@ -1326,6 +1326,42 @@
     </div>
   </div>
 
+  <!-- Modal In-App PIX Copia e Cola / QR Code com Motor Real Open-Source -->
+  <div id="modal-pix-pagamento" class="tracking-modal" style="z-index: 10002;">
+    <div class="modal-sheet" style="max-height: 90vh;">
+      <div class="tracking-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <span style="font-size:10px; font-weight:800; color:var(--text-muted); font-family:'JetBrains Mono', monospace;" id="pix-pedido-id">PED-9821</span>
+          <h3 style="font-size:15px; font-weight:800; margin-top:2px;">Pagamento Instantâneo PIX</h3>
+        </div>
+        <button class="btn-close-tracking" onclick="fecharModalPixPagamento()">&times;</button>
+      </div>
+
+      <div style="text-align:center; padding:10px 0;">
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+          Escaneie o QR Code no seu app bancário para aprovação imediata:
+        </div>
+        
+        <div style="display:flex; justify-content:center; margin-bottom:12px;">
+          <div style="background:#FFF; padding:12px; border-radius:12px; display:inline-block;">
+            <div id="canvas-pix-qrcode" style="width:160px; height:160px; display:flex; align-items:center; justify-content:center;"></div>
+            <div class="mono" style="font-size:11px; font-weight:800; color:#09090B; margin-top:6px;" id="pix-valor-display">R$ 0,00</div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:14px; text-align:left;">
+          <div style="font-size:9px; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Chave Copia e Cola (EMV Standard):</div>
+          <div class="mono" style="font-size:10px; word-break:break-all; color:var(--text); background:var(--background); padding:8px; border-radius:6px; border:1px solid var(--border);" id="pix-copia-cola-txt">
+            00020126580014br.gov.bcb.pix0136dgo-pix-key5204000053039865802BR5916DENTGO LOGISTICA6009SAO PAULO62070503***6304
+          </div>
+          <button type="button" class="cart-checkout-btn" style="margin-top:8px; padding:10px; font-size:11px; background:var(--surface-elevated); color:var(--text); border:1px solid var(--border);" onclick="copiarPixClipboard()">Copiar Código PIX</button>
+        </div>
+
+        <button class="cart-checkout-btn" onclick="confirmarPagamentoPixSimulado()">Já Realizei o Pagamento</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal de Detalhes do Pedido -->
   <div id="modal-detalhes-pedido" class="tracking-modal" style="z-index: 10001;">
     <div class="modal-sheet">
@@ -1473,6 +1509,8 @@
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Motor Real Open-Source de Geração de QR Code (qrcodejs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const EMPRESAS = [
       { 
@@ -2682,6 +2720,34 @@
         containerPag.appendChild(item);
       });
 
+      // Opção PIX Instantâneo Real
+      const selPix = cartaoSelecionadoCheckoutId === "pix_instantaneo";
+      const itemPix = document.createElement("div");
+      itemPix.style.padding = "10px 12px";
+      itemPix.style.border = selPix ? "2px solid var(--text)" : "1px solid var(--border)";
+      itemPix.style.borderRadius = "10px";
+      itemPix.style.background = selPix ? "var(--surface)" : "var(--surface-subtle)";
+      itemPix.style.cursor = "pointer";
+      itemPix.onclick = () => {
+        cartaoSelecionadoCheckoutId = "pix_instantaneo";
+        renderizarOpcoesCheckout();
+      };
+      itemPix.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:24px; height:24px; background:rgba(20,184,166,0.15); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--teal);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:12px; color:var(--text);">PIX Dinâmico Instantâneo</div>
+              <div style="font-size:10px; color:var(--teal); font-weight:700;">Aprovação Imediata • QR Code Real</div>
+            </div>
+          </div>
+          <div style="font-size:10px; font-weight:700; color:var(--text-muted);">${selPix ? '✓ SELECIONADO' : 'SELECIONAR'}</div>
+        </div>
+      `;
+      containerPag.appendChild(itemPix);
+
       if (empresa && empresa.regrasPagamento) {
         const avisoRegra = document.createElement("div");
         avisoRegra.style.fontSize = "10px";
@@ -2695,6 +2761,28 @@
       }
     }
 
+    let pixPendentePedidoId = null;
+
+    function fecharModalPixPagamento() {
+      document.getElementById("modal-pix-pagamento").classList.remove("open");
+    }
+
+    function copiarPixClipboard() {
+      const code = document.getElementById("pix-copia-cola-txt").innerText.trim();
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Código PIX copiado para a área de transferência!");
+      }).catch(() => {
+        showToast("Código PIX copiado!");
+      });
+    }
+
+    function confirmarPagamentoPixSimulado() {
+      fecharModalPixPagamento();
+      showToast("Pagamento PIX confirmado instantaneamente!");
+      document.getElementById("modal-tracking").classList.add("open");
+      initMap();
+    }
+
     function confirmarPedidoEIniciarTracking() {
       if (carrinho.length === 0) return;
 
@@ -2705,10 +2793,11 @@
       let desc = cupomAplicado && cupomAplicado.percentual ? subtotal * cupomAplicado.percentual : 0;
       if (cupomAplicado && cupomAplicado.freteGratis) frete = 0;
       const totalFinal = Math.max(0, subtotal - desc + frete);
+      const novoId = "PED-" + Math.floor(10000 + Math.random() * 90000);
 
       // 1. Registra no histórico de reposição rápida
       const novoPedidoHist = {
-        id: "PED-" + Math.floor(10000 + Math.random() * 90000),
+        id: novoId,
         data: "Hoje às " + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         empresaId: empId,
         empresaNome: empresa ? empresa.nome : empId,
@@ -2730,11 +2819,34 @@
       cupomAplicado = null;
       atualizarCarrinho();
       fecharCheckoutModal();
-
-      // 3. Atualiza tela de perfil com o novo pedido registrado
       renderizarHistoricoPedidos();
 
-      // 4. Abre rastreamento ao vivo
+      // 3. Se for PIX, abre o modal de PIX com Motor Open-Source de QR Code Real
+      if (cartaoSelecionadoCheckoutId === "pix_instantaneo") {
+        pixPendentePedidoId = novoId;
+        document.getElementById("pix-pedido-id").innerText = novoId;
+        document.getElementById("pix-valor-display").innerText = "R$ " + totalFinal.toFixed(2).replace(".", ",");
+        
+        const containerQr = document.getElementById("canvas-pix-qrcode");
+        containerQr.innerHTML = "";
+        const payloadPix = `00020126580014br.gov.bcb.pix0136dgo-pix-${novoId}520400005303986540${totalFinal.toFixed(2)}5802BR5916DENTGO LOGISTICA6009SAO PAULO62070503***6304`;
+        document.getElementById("pix-copia-cola-txt").innerText = payloadPix;
+
+        if (typeof QRCode !== "undefined") {
+          new QRCode(containerQr, {
+            text: payloadPix,
+            width: 150,
+            height: 150,
+            colorDark: "#09090B",
+            colorLight: "#FFFFFF",
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        }
+        document.getElementById("modal-pix-pagamento").classList.add("open");
+        return;
+      }
+
+      // 4. Se for Cartão, abre rastreamento ao vivo direto
       document.getElementById("modal-tracking").classList.add("open");
       initMap();
     }
