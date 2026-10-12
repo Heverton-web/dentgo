@@ -830,6 +830,167 @@
       letter-spacing: 0.05em;
     }
 
+    /* Responsive & Mobile Coletor */
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        padding-bottom: 74px; /* Espaço para a barra inferior do coletor */
+      }
+
+      .sidebar {
+        display: none !important;
+      }
+
+      .main-wrapper {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .top-header {
+        padding: 10px 14px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(8px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        height: auto;
+      }
+
+      .header-context {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .tenant-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+      }
+
+      .header-badges {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .badge-status {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+
+      .card-bottom .btn-b2b-action {
+        width: 100%;
+        height: 38px;
+        font-size: 12px;
+        justify-content: center;
+      }
+
+      .card-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .content-area {
+        padding: 14px 12px;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .kpi-card {
+        padding: 12px;
+      }
+
+      .kpi-val {
+        font-size: 18px;
+      }
+
+      /* No mobile, Kanban vira lista contínua organizada ou tabulada */
+      .kanban-board {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .kanban-col {
+        min-height: auto;
+        border-radius: 12px;
+        padding: 12px;
+      }
+
+      .kanban-card {
+        padding: 14px;
+      }
+
+      /* Barra de Navegação Inferior Nativa do Coletor Mobile (Tátil >= 48px) */
+      .mobile-coletor-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: #09090B;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 2500;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 8px;
+      }
+
+      .mobile-nav-btn {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        background: transparent;
+        border: none;
+        color: #A1A1AA;
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 6px 0;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .mobile-nav-btn.active {
+        color: #38BDF8;
+      }
+
+      .mobile-nav-btn svg {
+        stroke-width: 2.2px;
+      }
+
+      .b2b-modal-dialog {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 10px;
+        padding: 18px !important;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    }
+
+    .mobile-coletor-nav {
+      display: none;
+    }
+
     #b2b-toast.show {
       transform: translateY(0);
       opacity: 1;
@@ -1002,131 +1163,184 @@
     </header>
 
     <div class="content-area">
-      <!-- KPIs do Fabricante -->
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <div class="kpi-label">Pedidos Hoje</div>
-          <div class="kpi-val mono" id="kpi-pedidos">14</div>
-          <div class="kpi-sub">8 Flash 2h • 6 D+1</div>
+      <!-- VIEW 1: TORRE DE EXPEDIÇÃO & KANBAN -->
+      <div id="view-expedicao">
+        <!-- KPIs do Fabricante -->
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Pedidos Hoje</div>
+            <div class="kpi-val mono" id="kpi-pedidos">14</div>
+            <div class="kpi-sub">8 Flash 2h • 6 D+1</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">SLA Médio de Separação</div>
+            <div class="kpi-val mono">11 min</div>
+            <div class="kpi-sub">Meta estrita: 15 min</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Faturamento Líquido (Dia)</div>
+            <div class="kpi-val mono">R$ 18.490,00</div>
+            <div class="kpi-sub">Cartão & PIX Direto</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Conformidade ANVISA</div>
+            <div class="kpi-val mono">100%</div>
+            <div class="kpi-sub">100% de lotes conferidos</div>
+          </div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">SLA Médio de Separação</div>
-          <div class="kpi-val mono">11 min</div>
-          <div class="kpi-sub">Meta estrita: 15 min</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Faturamento Líquido (Dia)</div>
-          <div class="kpi-val mono">R$ 18.490,00</div>
-          <div class="kpi-sub">Cartão & PIX Direto</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Conformidade ANVISA</div>
-          <div class="kpi-val mono">100%</div>
-          <div class="kpi-sub">100% de lotes conferidos</div>
+
+        <!-- Kanban de Separação em Tempo Real -->
+        <div class="kanban-board">
+          <!-- 1. Novos Pedidos -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">1. Novos Pedidos</div>
+              <span class="kanban-count" id="count-novos">2</span>
+            </div>
+            <div class="kanban-cards-wrapper" id="col-novos">
+              <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9821', 'Dr. Roberto Fontes (Jardins)', ['4x Implante Flash CM 3.5x10 (SKU: CX-FL-3510)', '4x Munhão Angulado 17° CM 3.5 (SKU: CX-MN-17-3525)'])">
+                <div class="card-top">
+                  <span class="card-id mono">PED-9821</span>
+                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                </div>
+                <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
+                <div class="card-items-desc">4x Implante Flash CM • 4x Munhão Angulado 17°</div>
+                <div class="card-bottom">
+                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.110,00</span>
+                  <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9821', 'picking')">Iniciar Picking</button>
+                </div>
+              </div>
+
+              <div class="kanban-card" onclick="abrirModalConferencia('PED-9818', 'Dra. Camila Prado (Moema)', ['1x Scan Body In-Lego Intraoral CM (SKU: CX-INL-CM-INTRA)'])">
+                <div class="card-top">
+                  <span class="card-id mono">PED-9818</span>
+                  <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
+                </div>
+                <div class="card-client">Dra. Camila Prado (Moema)</div>
+                <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
+                <div class="card-bottom">
+                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 120,00</span>
+                  <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9818', 'picking')">Iniciar Picking</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Picking / Separação -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">2. Picking & Bipagem</div>
+              <span class="kanban-count" id="count-picking">1</span>
+            </div>
+            <div class="kanban-cards-wrapper" id="col-picking">
+              <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna (Itaim Bibi)', ['1x Kit Cirúrgico Compacto Cone Morse (SKU: CX-KIT-CM-COMP)'])">
+                <div class="card-top">
+                  <span class="card-id mono">PED-9799</span>
+                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                </div>
+                <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
+                <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
+                <div class="card-bottom">
+                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.890,00</span>
+                  <button class="btn-b2b-action" onclick="event.stopPropagation(); abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna', ['1x Kit Cirúrgico Compacto CM'])">Bipar Lote</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Pronto para Coleta -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">3. Pronto / Coleta</div>
+              <span class="kanban-count" id="count-pronto">1</span>
+            </div>
+            <div class="kanban-cards-wrapper" id="col-pronto">
+              <div class="kanban-card flash">
+                <div class="card-top">
+                  <span class="card-id mono">PED-9755</span>
+                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                </div>
+                <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
+                <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
+                <div class="card-bottom">
+                  <span style="font-size:11px; color:var(--text-muted);">Aguardando Despacho</span>
+                  <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800;" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar &rarr;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Em Rota Flash -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">4. Em Rota Flash</div>
+              <span class="kanban-count" id="count-rota">1</span>
+            </div>
+            <div class="kanban-cards-wrapper" id="col-rota">
+              <div class="kanban-card flash" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira (Paulista)')" style="cursor:pointer;" title="Clique para rastrear piloto em tempo real">
+                <div class="card-top">
+                  <span class="card-id mono">PED-91042</span>
+                  <span class="card-sla-badge badge-flash">Em Trânsito</span>
+                </div>
+                <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
+                <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
+                <div class="card-bottom">
+                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
+                  <span style="font-size:10px; font-weight:800; color:var(--emerald); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">Radar GPS &nearr;</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Kanban de Separação em Tempo Real -->
-      <div class="kanban-board">
-        <!-- 1. Novos Pedidos -->
-        <div class="kanban-col">
-          <div class="kanban-col-header">
-            <div class="kanban-col-title">1. Novos Pedidos</div>
-            <span class="kanban-count" id="count-novos">2</span>
+      <!-- VIEW 2: ESTOQUE EXCLUSIVO DENTGO & BI -->
+      <div id="view-estoque" style="display: none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="font-size:16px; font-weight:800; letter-spacing:-0.02em;">Estoque Exclusivo DentGo & Análise BI</h2>
+            <p style="font-size:12px; color:var(--text-muted);">Pulmão dedicado reservado no CD para pronta-entrega clínica imediata.</p>
           </div>
-          <div class="kanban-cards-wrapper" id="col-novos">
-            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9821', 'Dr. Roberto Fontes (Jardins)', ['4x Implante Flash CM 3.5x10 (SKU: CX-FL-3510)', '4x Munhão Angulado 17° CM 3.5 (SKU: CX-MN-17-3525)'])">
-              <div class="card-top">
-                <span class="card-id mono">PED-9821</span>
-                <span class="card-sla-badge badge-flash">Flash 2h</span>
-              </div>
-              <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
-              <div class="card-items-desc">4x Implante Flash CM • 4x Munhão Angulado 17°</div>
-              <div class="card-bottom">
-                <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.110,00</span>
-                <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9821', 'picking')">Iniciar Picking</button>
-              </div>
-            </div>
-
-            <div class="kanban-card" onclick="abrirModalConferencia('PED-9818', 'Dra. Camila Prado (Moema)', ['1x Scan Body In-Lego Intraoral CM (SKU: CX-INL-CM-INTRA)'])">
-              <div class="card-top">
-                <span class="card-id mono">PED-9818</span>
-                <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
-              </div>
-              <div class="card-client">Dra. Camila Prado (Moema)</div>
-              <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
-              <div class="card-bottom">
-                <span class="mono" style="font-size:11px; font-weight:800;">R$ 120,00</span>
-                <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9818', 'picking')">Iniciar Picking</button>
-              </div>
-            </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-b2b-action" onclick="abrirModalReporEstoque()" style="background:#09090B; color:#FFF; font-weight:700;">+ Adicionar Lote / Reposição</button>
           </div>
         </div>
 
-        <!-- 2. Picking / Separação -->
-        <div class="kanban-col">
-          <div class="kanban-col-header">
-            <div class="kanban-col-title">2. Picking & Bipagem</div>
-            <span class="kanban-count" id="count-picking">1</span>
-          </div>
-          <div class="kanban-cards-wrapper" id="col-picking">
-            <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna (Itaim Bibi)', ['1x Kit Cirúrgico Compacto Cone Morse (SKU: CX-KIT-CM-COMP)'])">
-              <div class="card-top">
-                <span class="card-id mono">PED-9799</span>
-                <span class="card-sla-badge badge-flash">Flash 2h</span>
-              </div>
-              <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
-              <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
-              <div class="card-bottom">
-                <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.890,00</span>
-                <button class="btn-b2b-action" onclick="event.stopPropagation(); abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna', ['1x Kit Cirúrgico Compacto CM'])">Bipar Lote</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Pronto para Coleta -->
-        <div class="kanban-col">
-          <div class="kanban-col-header">
-            <div class="kanban-col-title">3. Pronto / Coleta</div>
-            <span class="kanban-count" id="count-pronto">1</span>
-          </div>
-          <div class="kanban-cards-wrapper" id="col-pronto">
-            <div class="kanban-card flash">
-              <div class="card-top">
-                <span class="card-id mono">PED-9755</span>
-                <span class="card-sla-badge badge-flash">Flash 2h</span>
-              </div>
-              <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
-              <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
-              <div class="card-bottom">
-                <span style="font-size:11px; color:var(--text-muted);">Motoboy: Carlos (3 min)</span>
-                <button class="btn-b2b-action" onclick="moverPedidoKanban('PED-9755', 'rota')">Despachar</button>
-              </div>
-            </div>
+        <!-- Tabela Cirúrgica de Estoque Exclusivo -->
+        <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="background:var(--surface-subtle); border-bottom:1px solid var(--border); font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">
+                  <th style="padding:12px 16px;">SKU / Produto</th>
+                  <th style="padding:12px 16px;">Lote ANVISA</th>
+                  <th style="padding:12px 16px;">Validade</th>
+                  <th style="padding:12px 16px;">Buffer DentGo</th>
+                  <th style="padding:12px 16px;">Giro (7d)</th>
+                  <th style="padding:12px 16px;">Status</th>
+                  <th style="padding:12px 16px; text-align:right;">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-estoque-dentgo">
+                <!-- Linhas preenchidas via JS com dados vivos -->
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
-        <!-- 4. Em Rota Flash -->
-        <div class="kanban-col">
-          <div class="kanban-col-header">
-            <div class="kanban-col-title">4. Em Rota Flash</div>
-            <span class="kanban-count" id="count-rota">1</span>
+      <!-- VIEW 3: COMBOS CIRÚRGICOS & PROMOÇÕES -->
+      <div id="view-combos" style="display: none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="font-size:16px; font-weight:800; letter-spacing:-0.02em;">Combos Cirúrgicos do Fabricante</h2>
+            <p style="font-size:12px; color:var(--text-muted);">Monte pacotes promocionais com produtos disponíveis no seu estoque DentGo.</p>
           </div>
-          <div class="kanban-cards-wrapper" id="col-rota">
-            <div class="kanban-card flash" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira (Paulista)')" style="cursor:pointer;" title="Clique para rastrear piloto em tempo real">
-              <div class="card-top">
-                <span class="card-id mono">PED-91042</span>
-                <span class="card-sla-badge badge-flash">Em Trânsito</span>
-              </div>
-              <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
-              <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
-              <div class="card-bottom">
-                <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
-                <span style="font-size:10px; font-weight:800; color:var(--emerald); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">Radar GPS &nearr;</span>
-              </div>
-            </div>
-          </div>
+          <button class="btn-b2b-action" onclick="abrirModalNovoCombo()" style="background:#09090B; color:#FFF; font-weight:700;">+ Criar Novo Pacote</button>
+        </div>
+
+        <div id="grid-combos-cirurgicos" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px;">
+          <!-- Cards de Combos montados via JS -->
         </div>
       </div>
     </div>
@@ -1160,9 +1374,12 @@
         <div id="reader-camera-b2b" style="display:none; width:100%; max-width:320px; margin:10px auto 0; border:1px solid var(--border); border-radius:8px; overflow:hidden;"></div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
-        <button class="btn-b2b-action" onclick="fecharModalConferencia()">Fechar</button>
-        <button class="btn-b2b-action" style="background:var(--text); color:#FFFFFF; border-color:var(--text);" onclick="confirmarBipLote()">Concluir Separação & Liberar Despacho</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:14px;">
+        <button class="btn-b2b-action" style="color:var(--rose); border-color:rgba(244,63,94,0.3); font-size:11px;" onclick="reportarRupturaEstoque()">Reportar Ruptura / Avaria</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-b2b-action" onclick="fecharModalConferencia()">Fechar</button>
+          <button class="btn-b2b-action" style="background:var(--text); color:#FFFFFF; border-color:var(--text);" onclick="confirmarBipLote()">Concluir Separação & Liberar Despacho</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1273,6 +1490,196 @@
     </div>
   </div>
 
+  <!-- Modal Cirúrgico Despacho Híbrido (Frota Própria vs. DentGo Flash) -->
+  <div class="b2b-modal-backdrop" id="modal-despacho-hibrido">
+    <div class="b2b-modal-dialog" style="max-width: 520px;">
+      <div class="b2b-modal-header">
+        <div>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);" id="despacho-id">PED-9755</span>
+          <h3 class="b2b-modal-title">Despacho de Pedido Cirúrgico</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharModalDespachoHibrido()">&times;</button>
+      </div>
+
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; color:var(--text);" id="despacho-cliente">Dra. Fernanda Dias</div>
+        <div style="font-size:11px; color:var(--text-muted);" id="despacho-endereco">Rua Pamplona, 1420 - Bela Vista</div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label class="form-label">Selecione o Modelo de Despacho Logístico:</label>
+        
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+          <!-- Opção 1: DentGo Flash 2h -->
+          <label style="display:flex; align-items:flex-start; gap:12px; padding:12px; border:2px solid #09090B; border-radius:10px; cursor:pointer; background:#FFF;" id="opt-label-dentgo">
+            <input type="radio" name="tipo_despacho" value="dentgo" checked onchange="alternarTipoDespacho('dentgo')" style="margin-top:3px;" />
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong style="font-size:13px;">DentGo Flash 2h (Malha Dedicada)</strong>
+                <span class="badge-flash" style="font-size:9px; padding:2px 6px;">SLA 2 HORAS</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Motoboy cirúrgico com bag térmica lacrada alocado via GPS.</div>
+            </div>
+          </label>
+
+          <!-- Opção 2: Frota Própria do Fabricante -->
+          <label style="display:flex; align-items:flex-start; gap:12px; padding:12px; border:1px solid var(--border); border-radius:10px; cursor:pointer; background:#FFF;" id="opt-label-propria">
+            <input type="radio" name="tipo_despacho" value="propria" onchange="alternarTipoDespacho('propria')" style="margin-top:3px;" />
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong style="font-size:13px;">Frota Própria do Fabricante</strong>
+                <span style="font-size:9px; font-weight:800; background:#E4E4E7; padding:2px 6px; border-radius:4px;">VEÍCULO DO CD</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Despachado com motorista interno e código PIN de custódia.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Campos complementares se for Frota Própria -->
+      <div id="campos-frota-propria" style="display:none; background:var(--surface-subtle); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label class="form-label">Nome do Motorista:</label>
+            <input type="text" id="input-motorista-proprio" class="form-input" placeholder="Ex: Rogério Silva" value="Rogério Silva" />
+          </div>
+          <div>
+            <label class="form-label">Placa / Veículo:</label>
+            <input type="text" id="input-veiculo-proprio" class="form-input mono" placeholder="Ex: BRA-2E19" value="BRA-2E19" />
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
+        <button class="btn-b2b-action" onclick="fecharModalDespachoHibrido()">Cancelar</button>
+        <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="confirmarDespachoHibrido()">Confirmar e Notificar Dentista &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Adicionar Reposição / Lote no Buffer DentGo -->
+  <div class="b2b-modal-backdrop" id="modal-repor-estoque">
+    <div class="b2b-modal-dialog" style="max-width: 500px;">
+      <div class="b2b-modal-header">
+        <div>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);">PULMÃO DE ESTOQUE DENTGO</span>
+          <h3 class="b2b-modal-title">Alocar Reposição para o App</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharModalReporEstoque()">&times;</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <div>
+          <label class="form-label">Selecione o Produto (SKU):</label>
+          <select id="select-repor-sku" class="form-input" style="background:#FFF;">
+            <option value="CX-FL-3510">Implante Flash CM 3.5 x 10mm (Conexão)</option>
+            <option value="CX-FL-3511">Implante Flash CM 3.5 x 11.5mm (Conexão)</option>
+            <option value="CX-FL-4310">Implante Flash CM 4.3 x 10mm (Conexão)</option>
+            <option value="CX-MN-17-3525">Munhão Angulado 17° CM 3.5 x 2.5 (Conexão)</option>
+            <option value="CX-INL-CM-INTRA">Scan Body In-Lego Intraoral CM (Conexão)</option>
+            <option value="CX-KIT-CM-COMP">Kit Cirúrgico Compacto Cone Morse (Conexão)</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label class="form-label">Lote ANVISA:</label>
+            <input type="text" id="input-repor-lote" class="form-input mono" placeholder="LOT-CX-2026-..." value="LOT-CX-2026-902" />
+          </div>
+          <div>
+            <label class="form-label">Validade Esterilização:</label>
+            <input type="text" id="input-repor-validade" class="form-input mono" placeholder="MM/AAAA" value="10/2031" />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Quantidade de Peças a Alocar:</label>
+          <input type="number" id="input-repor-qtd" class="form-input mono" value="20" min="1" />
+          <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Estas unidades ficam reservadas exclusivamente para pedidos Flash e agendados DentGo.</span>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
+        <button class="btn-b2b-action" onclick="fecharModalReporEstoque()">Cancelar</button>
+        <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="salvarReposicaoEstoque()">Alocar no Estoque Ativo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Criação de Combo Cirúrgico Promocional -->
+  <div class="b2b-modal-backdrop" id="modal-novo-combo">
+    <div class="b2b-modal-dialog" style="max-width: 580px;">
+      <div class="b2b-modal-header">
+        <div>
+          <span class="mono" style="font-size:11px; font-weight:800; color:var(--text-muted);">MONTAGEM COMERCIAL</span>
+          <h3 class="b2b-modal-title">Novo Combo Cirúrgico Promocional</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharModalNovoCombo()">&times;</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+        <div>
+          <label class="form-label">Título Comercial do Pacote:</label>
+          <input type="text" id="input-combo-titulo" class="form-input" placeholder="Ex: Pacote Implantação Flash 10x" value="Combo Cirurgia Segura Flash CM" />
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label class="form-label">Preço Promocional do Combo (R$):</label>
+            <input type="number" id="input-combo-preco" class="form-input mono" value="1990.00" />
+          </div>
+          <div>
+            <label class="form-label">Preço Original de Tabela (R$):</label>
+            <input type="number" id="input-combo-original" class="form-input mono" value="2490.00" />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Composição dos Produtos (Selecionados do Buffer DentGo):</label>
+          <div style="display:flex; flex-direction:column; gap:6px; background:var(--surface-subtle); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:12px;">
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" checked id="cb-item-1" />
+              <span>10x Implante Flash CM (3.5 ou 4.3mm)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" checked id="cb-item-2" />
+              <span>10x Parafuso de Cobertura CM</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" checked id="cb-item-3" />
+              <span style="color:#0284C7; font-weight:700;">+ 1x Scan Body In-Lego CM Grátis (Brinde da Fábrica)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
+        <button class="btn-b2b-action" onclick="fecharModalNovoCombo()">Cancelar</button>
+        <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="salvarNovoCombo()">Publicar Combo no App Dentista &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Navegação Inferior Nativa do Modo Coletor Mobile (Tátil >= 48px) -->
+  <nav class="mobile-coletor-nav" aria-label="Navegação Coletor B2B">
+    <button class="mobile-nav-btn active" id="mob-btn-expedicao" onclick="trocarAbaB2B('expedicao', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Expedição</span>
+    </button>
+    <button class="mobile-nav-btn" id="mob-btn-estoque" onclick="trocarAbaB2B('estoque', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="8" height="8" x="13" y="13" rx="1"/></svg>
+      <span>Estoque BI</span>
+    </button>
+    <button class="mobile-nav-btn" id="mob-btn-combos" onclick="trocarAbaB2B('combos', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Combos</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+      <span>Radar GPS</span>
+    </button>
+  </nav>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Motor Real Open-Source de Leitura Óptica e Câmera de QR/Barcodes (html5-qrcode) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -1333,12 +1740,274 @@
       exibirToast("Sessão finalizada com segurança.");
     }
 
+    // =========================================================================
+    // DADOS VIVOS DO ESTOQUE DENTGO & COMBOS CIRÚRGICOS
+    // =========================================================================
+    let ESTOQUE_DENTGO = [
+      { sku: "CX-FL-3510", nome: "Implante Flash CM 3.5 x 10mm", lote: "LOT-CX-2026-881", validade: "10/2031", buffer: 48, giro7d: 32, ativo: true },
+      { sku: "CX-FL-4310", nome: "Implante Flash CM 4.3 x 10mm", lote: "LOT-CX-2026-884", validade: "10/2031", buffer: 35, giro7d: 26, ativo: true },
+      { sku: "CX-MN-17-3525", nome: "Munhão Angulado 17° CM 3.5x2.5", lote: "LOT-CX-2026-772", validade: "08/2030", buffer: 6, giro7d: 18, ativo: true },
+      { sku: "CX-INL-CM-INTRA", nome: "Scan Body In-Lego Intraoral CM", lote: "LOT-CX-2026-905", validade: "12/2032", buffer: 3, giro7d: 14, ativo: true },
+      { sku: "CX-KIT-CM-COMP", nome: "Kit Cirúrgico Compacto CM", lote: "LOT-CX-2026-550", validade: "05/2035", buffer: 8, giro7d: 4, ativo: true }
+    ];
+
+    let COMBOS_FABRICANTE = [
+      {
+        id: "CMB-01",
+        titulo: "Combo Cirurgia Segura Flash CM",
+        preco: 1990.00,
+        original: 2490.00,
+        itens: ["10x Implante Flash CM (3.5 ou 4.3mm)", "10x Parafuso de Cobertura CM", "1x Scan Body In-Lego CM Grátis"],
+        ativo: true
+      },
+      {
+        id: "CMB-02",
+        titulo: "Kit Prótese Imediata Munhões Angulados",
+        preco: 1120.00,
+        original: 1380.00,
+        itens: ["6x Munhão Angulado 17° CM", "6x Transferente de Moldeira Aberta", "6x Análogo Cone Morse"],
+        ativo: true
+      }
+    ];
+
     function trocarAbaB2B(aba, btn) {
       document.querySelectorAll(".menu-item").forEach(m => m.classList.remove("active"));
-      btn.classList.add("active");
-      if (aba !== "expedicao") {
-        exibirToast("Módulo " + aba.toUpperCase() + " selecionado para " + (usuarioAtivo ? usuarioAtivo.empresa : "fabricante"));
+      document.querySelectorAll(".mobile-nav-btn").forEach(m => m.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+
+      // Sincroniza botão mobile correspondente
+      const mobBtn = document.getElementById("mob-btn-" + aba);
+      if (mobBtn) mobBtn.classList.add("active");
+
+      document.getElementById("view-expedicao").style.display = "none";
+      document.getElementById("view-estoque").style.display = "none";
+      document.getElementById("view-combos").style.display = "none";
+
+      if (aba === "expedicao") {
+        document.getElementById("view-expedicao").style.display = "block";
+      } else if (aba === "estoque") {
+        document.getElementById("view-estoque").style.display = "block";
+        renderizarTabelaEstoque();
+      } else if (aba === "combos") {
+        document.getElementById("view-combos").style.display = "block";
+        renderizarGridCombos();
       }
+    }
+
+    function renderizarTabelaEstoque() {
+      const tbody = document.getElementById("tabela-estoque-dentgo");
+      tbody.innerHTML = "";
+      ESTOQUE_DENTGO.forEach(item => {
+        const isBaixo = item.buffer <= 5;
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid var(--border)";
+        tr.innerHTML = `
+          <td style="padding:12px 16px;">
+            <div style="font-weight:700; color:var(--text);">${item.nome}</div>
+            <div class="mono" style="font-size:10px; color:var(--text-muted);">${item.sku}</div>
+          </td>
+          <td style="padding:12px 16px;" class="mono">${item.lote}</td>
+          <td style="padding:12px 16px;" class="mono">${item.validade}</td>
+          <td style="padding:12px 16px;">
+            <span class="mono" style="font-weight:800; font-size:13px; color:${isBaixo ? 'var(--rose)' : 'var(--text)'};">
+              ${item.buffer} un
+            </span>
+            ${isBaixo ? '<span style="font-size:9px; font-weight:800; color:var(--rose); background:rgba(244,63,94,0.1); padding:2px 5px; border-radius:4px; margin-left:6px;">ÚLTIMAS PEÇAS</span>' : ''}
+          </td>
+          <td style="padding:12px 16px;" class="mono" style="color:var(--emerald); font-weight:700;">+${item.giro7d} un</td>
+          <td style="padding:12px 16px;">
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:99px; ${item.ativo ? 'background:rgba(16,185,129,0.1); color:var(--emerald);' : 'background:#F4F4F5; color:var(--text-muted);'}">
+              ${item.ativo ? 'DISPONÍVEL NO APP' : 'PAUSADO'}
+            </span>
+          </td>
+          <td style="padding:12px 16px; text-align:right;">
+            <button class="btn-b2b-action" style="padding:4px 10px; font-size:10px;" onclick="alternarStatusItemEstoque('${item.sku}')">
+              ${item.ativo ? 'Pausar Grade' : 'Ativar Grade'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function alternarStatusItemEstoque(sku) {
+      const it = ESTOQUE_DENTGO.find(x => x.sku === sku);
+      if (it) {
+        it.ativo = !it.ativo;
+        exibirToast(`Produto ${it.sku} agora está ${it.ativo ? 'ATIVO' : 'PAUSADO'} na vitrine dos dentistas.`);
+        renderizarTabelaEstoque();
+      }
+    }
+
+    function abrirModalReporEstoque() {
+      document.getElementById("modal-repor-estoque").classList.add("open");
+    }
+
+    function fecharModalReporEstoque() {
+      document.getElementById("modal-repor-estoque").classList.remove("open");
+    }
+
+    function salvarReposicaoEstoque() {
+      const sku = document.getElementById("select-repor-sku").value;
+      const lote = document.getElementById("input-repor-lote").value.trim();
+      const validade = document.getElementById("input-repor-validade").value.trim();
+      const qtd = parseInt(document.getElementById("input-repor-qtd").value) || 0;
+
+      if (qtd <= 0) {
+        exibirToast("Informe uma quantidade válida.");
+        return;
+      }
+
+      const item = ESTOQUE_DENTGO.find(x => x.sku === sku);
+      if (item) {
+        item.buffer += qtd;
+        item.lote = lote;
+        item.validade = validade;
+        item.ativo = true;
+      }
+      exibirToast(`Buffer DentGo atualizado: +${qtd} unidades alocadas para ${sku}.`);
+      fecharModalReporEstoque();
+      renderizarTabelaEstoque();
+    }
+
+    function renderizarGridCombos() {
+      const grid = document.getElementById("grid-combos-cirurgicos");
+      grid.innerHTML = "";
+      COMBOS_FABRICANTE.forEach(combo => {
+        const card = document.createElement("div");
+        card.style.background = "#FFFFFF";
+        card.style.border = "1px solid var(--border)";
+        card.style.borderRadius = "12px";
+        card.style.padding = "16px";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.justifyContent = "space-between";
+
+        let itensHtml = combo.itens.map(it => `<li style="margin-bottom:4px;">${it}</li>`).join("");
+
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+              <span class="mono" style="font-size:10px; font-weight:800; color:var(--text-muted);">${combo.id}</span>
+              <span style="font-size:9px; font-weight:800; background:rgba(2,132,199,0.1); color:#0284C7; padding:2px 6px; border-radius:4px;">PROMO FABRICANTE</span>
+            </div>
+            <h3 style="font-size:14px; font-weight:800; margin-bottom:10px;">${combo.titulo}</h3>
+            <ul style="font-size:11px; color:var(--text-muted); padding-left:16px; margin-bottom:14px;">
+              ${itensHtml}
+            </ul>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:10px; color:var(--text-muted); text-decoration:line-through;">De R$ ${combo.original.toFixed(2)}</div>
+              <div class="mono" style="font-size:15px; font-weight:800; color:var(--text);">R$ ${combo.preco.toFixed(2)}</div>
+            </div>
+            <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:700;" onclick="exibirToast('Pacote ativo e sincronizado com os carrinhos dos dentistas.')">Ativo no App</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function abrirModalNovoCombo() {
+      document.getElementById("modal-novo-combo").classList.add("open");
+    }
+
+    function fecharModalNovoCombo() {
+      document.getElementById("modal-novo-combo").classList.remove("open");
+    }
+
+    function salvarNovoCombo() {
+      const titulo = document.getElementById("input-combo-titulo").value.trim();
+      const preco = parseFloat(document.getElementById("input-combo-preco").value) || 0;
+      const original = parseFloat(document.getElementById("input-combo-original").value) || 0;
+
+      if (!titulo || preco <= 0) {
+        exibirToast("Preencha o título e o valor do combo.");
+        return;
+      }
+
+      COMBOS_FABRICANTE.push({
+        id: "CMB-" + (COMBOS_FABRICANTE.length + 1).toString().padStart(2, '0'),
+        titulo: titulo,
+        preco: preco,
+        original: original,
+        itens: [
+          document.getElementById("cb-item-1").checked ? "10x Implante Flash CM" : null,
+          document.getElementById("cb-item-2").checked ? "10x Parafuso de Cobertura CM" : null,
+          document.getElementById("cb-item-3").checked ? "1x Scan Body In-Lego CM Grátis" : null
+        ].filter(Boolean),
+        ativo: true
+      });
+
+      exibirToast(`Combo "${titulo}" publicado com sucesso!`);
+      fecharModalNovoCombo();
+      renderizarGridCombos();
+    }
+
+    // Modal Despacho Híbrido
+    let pedidoDespachoAtual = null;
+    function abrirModalDespachoHibrido(id, cliente, endereco) {
+      pedidoDespachoAtual = id;
+      document.getElementById("despacho-id").innerText = id;
+      document.getElementById("despacho-cliente").innerText = cliente;
+      document.getElementById("despacho-endereco").innerText = endereco;
+      alternarTipoDespacho("dentgo");
+      document.getElementById("modal-despacho-hibrido").classList.add("open");
+    }
+
+    function fecharModalDespachoHibrido() {
+      document.getElementById("modal-despacho-hibrido").classList.remove("open");
+    }
+
+    function alternarTipoDespacho(tipo) {
+      const camposPropria = document.getElementById("campos-frota-propria");
+      const optDentgo = document.getElementById("opt-label-dentgo");
+      const optPropria = document.getElementById("opt-label-propria");
+
+      if (tipo === "dentgo") {
+        camposPropria.style.display = "none";
+        optDentgo.style.borderColor = "#09090B";
+        optPropria.style.borderColor = "var(--border)";
+      } else {
+        camposPropria.style.display = "block";
+        optDentgo.style.borderColor = "var(--border)";
+        optPropria.style.borderColor = "#09090B";
+      }
+    }
+
+    function confirmarDespachoHibrido() {
+      const radios = document.getElementsByName("tipo_despacho");
+      let selecionado = "dentgo";
+      for (const r of radios) {
+        if (r.checked) selecionado = r.value;
+      }
+
+      if (selecionado === "dentgo") {
+        exibirToast(`Pedido ${pedidoDespachoAtual}: Malha DentGo Flash acionada via GPS.`);
+      } else {
+        const mot = document.getElementById("input-motorista-proprio").value;
+        const vec = document.getElementById("input-veiculo-proprio").value;
+        exibirToast(`Pedido ${pedidoDespachoAtual}: Frota própria (${mot} - ${vec}) liberada com PIN.`);
+      }
+      moverPedidoKanban(pedidoDespachoAtual, "rota");
+      fecharModalDespachoHibrido();
+    }
+
+    // Parser Inteligente GS1 Data Matrix (Lote + Validade + GTIN)
+    function parseGS1DataMatrix(rawCode) {
+      // Exemplo padrão GS1: (01)07891234567890(17)311026(10)LOT-CX-884
+      let clean = rawCode.trim();
+      let resultado = { raw: clean, gtin: null, lote: null, validade: null };
+      
+      const regexLote = /\(10\)([A-Za-z0-9\-_]+)/;
+      const matchLote = clean.match(regexLote);
+      if (matchLote) resultado.lote = matchLote[1];
+
+      const regexVal = /\(17\)(\d{6})/;
+      const matchVal = clean.match(regexVal);
+      if (matchVal) resultado.validade = matchVal[1];
+
+      return resultado;
     }
 
     function abrirModalConferencia(id, cliente, itens) {
@@ -1401,7 +2070,13 @@
             { facingMode: "environment" },
             { fps: 10, qrbox: { width: 220, height: 220 } },
             (decodedText) => {
-              exibirToast("Código Bipado via Câmera: " + decodedText);
+              const parse = parseGS1DataMatrix(decodedText);
+              if (parse.lote) {
+                exibirToast(`Lote ANVISA ${parse.lote} decodificado via Câmera!`);
+              } else {
+                exibirToast("Código Bipado via Câmera: " + decodedText);
+              }
+              if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
               document.getElementById("input-bip-lote").value = decodedText;
               alternarScannerCamera();
             },
@@ -1428,10 +2103,25 @@
         e.preventDefault();
         const cod = e.target.value.trim();
         if (!cod) return;
-        exibirToast("Lote ANVISA validado: " + cod);
+        
+        const parse = parseGS1DataMatrix(cod);
+        if (parse.lote) {
+          exibirToast(`Lote ANVISA ${parse.lote} decodificado com sucesso!`);
+          if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+        } else {
+          exibirToast("Código registrado: " + cod);
+          if (navigator.vibrate) navigator.vibrate(80);
+        }
+
         e.target.value = "";
-        setTimeout(fecharModalConferencia, 400);
+        setTimeout(fecharModalConferencia, 450);
       }
+    }
+
+    function reportarRupturaEstoque() {
+      const ped = document.getElementById("conf-id").innerText;
+      exibirToast(`Alerta de Ruptura enviado! Notificando dentista e equipe de estoque.`);
+      fecharModalConferencia();
     }
 
     function confirmarBipLote() {
