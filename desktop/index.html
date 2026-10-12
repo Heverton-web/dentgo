@@ -2917,7 +2917,37 @@
       const track = document.getElementById("carrossel-promocoes-track");
       if (!secao || !track) return;
 
-      const pacotes = PACOTES_PROMOCIONAIS.filter(p => p.empresaId === empresaSelecionadaId);
+      // Unir pacotes padrão com combos criados no B2B Hub da fábrica
+      let pacotes = PACOTES_PROMOCIONAIS.filter(p => p.empresaId === empresaSelecionadaId);
+      
+      if (empresaSelecionadaId === "conexao") {
+        try {
+          const combosB2B = JSON.parse(localStorage.getItem("dentgo_b2b_combos_v1") || "null");
+          if (combosB2B && Array.isArray(combosB2B)) {
+            combosB2B.forEach(cb => {
+              if (cb.ativo && !pacotes.some(p => p.titulo === cb.titulo)) {
+                pacotes.push({
+                  id: cb.id,
+                  empresaId: "conexao",
+                  titulo: cb.titulo,
+                  tag: "PROMO DA FÁBRICA",
+                  descontoBadge: "EXCLUSIVO B2B",
+                  descricao: "Pacote especial configurado e homologado pelo Centro de Distribuição da Conexão Implantes.",
+                  itensDescricao: cb.itens,
+                  precoOriginal: cb.original || (cb.preco * 1.25),
+                  precoPromocional: cb.preco,
+                  validade: "Lote Promocional Ativo",
+                  formasPagamento: "Até 6x no cartão ou PIX Direto",
+                  skusInclusos: [
+                    { sku: "CX-FL-3510", qtd: 10, nome: "10x Implante Flash CM", preco: cb.preco }
+                  ]
+                });
+              }
+            });
+          }
+        } catch(e) {}
+      }
+
       if (pacotes.length === 0 || buscaProdutoAtual) {
         secao.style.display = "none";
         return;
@@ -3498,6 +3528,24 @@
     }
 
     function obterControleItemCatalogo(id) {
+      // Sincronização B2B: Checar se o produto foi pausado no estoque B2B Hub
+      const prodObj = PRODUTOS.find(p => p.id === id);
+      if (prodObj) {
+        try {
+          const estoqueB2B = JSON.parse(localStorage.getItem("dentgo_b2b_estoque_v1") || "null");
+          if (estoqueB2B && Array.isArray(estoqueB2B)) {
+            const itemEstoque = estoqueB2B.find(x => x.sku === prodObj.sku);
+            if (itemEstoque && itemEstoque.ativo === false) {
+              return `
+                <button class="btn-action" disabled style="padding:10px 18px; font-size:12px; font-weight:800; background:#E4E4E7; color:#71717A; border:1px solid #D4D4D8; cursor:not-allowed;">
+                  Esgotado no CD
+                </button>
+              `;
+            }
+          }
+        } catch(e) {}
+      }
+
       const itemCarrinho = carrinho.find(p => p.id === id);
       const qtd = itemCarrinho ? itemCarrinho.qtd : 0;
 

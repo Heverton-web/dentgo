@@ -1189,6 +1189,19 @@
           </div>
         </div>
 
+        <!-- Filtros Rápidos de SLA e Corte Operacional -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn-b2b-action filter-btn active" id="filter-todos" onclick="filtrarKanbanPorSLA('todos', this)" style="font-size:11px; padding:6px 12px; font-weight:700;">Todos os Pedidos</button>
+            <button class="btn-b2b-action filter-btn" id="filter-flash" onclick="filtrarKanbanPorSLA('flash', this)" style="font-size:11px; padding:6px 12px; font-weight:700;">Apenas Flash 2h</button>
+            <button class="btn-b2b-action filter-btn" id="filter-urgente" onclick="filtrarKanbanPorSLA('urgente', this)" style="font-size:11px; padding:6px 12px; font-weight:700; color:var(--rose); border-color:rgba(244,63,94,0.3);">Corte Iminente (&lt; 30 min)</button>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10B981;"></span>
+            <span>Relógio de Separação Ativo (SLA 15 min)</span>
+          </div>
+        </div>
+
         <!-- Kanban de Separação em Tempo Real -->
         <div class="kanban-board">
           <!-- 1. Novos Pedidos -->
@@ -1201,7 +1214,10 @@
               <div class="kanban-card flash" onclick="abrirModalConferencia('PED-9821', 'Dr. Roberto Fontes (Jardins)', ['4x Implante Flash CM 3.5x10 (SKU: CX-FL-3510)', '4x Munhão Angulado 17° CM 3.5 (SKU: CX-MN-17-3525)'])">
                 <div class="card-top">
                   <span class="card-id mono">PED-9821</span>
-                  <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  <div style="display:flex; gap:4px; align-items:center;">
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--rose); background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px;">⏱ 18 min</span>
+                    <span class="card-sla-badge badge-flash">Flash 2h</span>
+                  </div>
                 </div>
                 <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
                 <div class="card-items-desc">4x Implante Flash CM • 4x Munhão Angulado 17°</div>
@@ -1214,7 +1230,10 @@
               <div class="kanban-card" onclick="abrirModalConferencia('PED-9818', 'Dra. Camila Prado (Moema)', ['1x Scan Body In-Lego Intraoral CM (SKU: CX-INL-CM-INTRA)'])">
                 <div class="card-top">
                   <span class="card-id mono">PED-9818</span>
-                  <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
+                  <div style="display:flex; gap:4px; align-items:center;">
+                    <span class="timer-corte" style="font-size:9.5px; font-weight:800; color:var(--text-muted); background:var(--surface-subtle); padding:2px 6px; border-radius:4px;">⏱ 52 min</span>
+                    <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
+                  </div>
                 </div>
                 <div class="card-client">Dra. Camila Prado (Moema)</div>
                 <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
@@ -1263,7 +1282,7 @@
                 <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
                 <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
                 <div class="card-bottom">
-                  <span style="font-size:11px; color:var(--text-muted);">Aguardando Despacho</span>
+                  <button class="btn-b2b-action" style="font-size:11px;" onclick="abrirEtiquetaExpedicao('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista', 'LOT-CX-2026-884', '4829')">🖨️ Etiqueta ZPL/PDF</button>
                   <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800;" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar &rarr;</button>
                 </div>
               </div>
@@ -1550,9 +1569,92 @@
         </div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); padding-top:14px;">
-        <button class="btn-b2b-action" onclick="fecharModalDespachoHibrido()">Cancelar</button>
-        <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="confirmarDespachoHibrido()">Confirmar e Notificar Dentista &rarr;</button>
+      <!-- Campo Fiscal: Chave NF-e / DANFE -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <label class="form-label">Chave de Acesso NF-e / DANFE Simplificada (ANVISA):</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="input-nfe-chave" class="form-input mono" style="font-size:11px;" placeholder="3526 1001 8842 3800 0109 5500 1000 0982 1210 9821 4410" value="3526 1001 8842 3800 0109 5500 1000 0982 1210 9821 4410" />
+          <button class="btn-b2b-action" type="button" onclick="exibirToast('XML da NF-e transmitido para a SEFAZ e anexado ao transporte.')" style="white-space:nowrap; font-size:11px;">Validar SEFAZ</button>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted); margin-top:4px; display:block;">Obrigatório para emissão do manifesto eletrônico de trânsito rodoviário.</span>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:14px;">
+        <button class="btn-b2b-action" type="button" onclick="abrirEtiquetaExpedicao(pedidoDespachoAtual, document.getElementById('despacho-cliente').innerText, document.getElementById('despacho-endereco').innerText, 'LOT-CX-2026-884', '4829')">Visualizar Etiqueta 🖨️</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-b2b-action" onclick="fecharModalDespachoHibrido()">Cancelar</button>
+          <button class="btn-b2b-action" style="background:#09090B; color:#FFFFFF; font-weight:800;" onclick="confirmarDespachoHibrido()">Confirmar e Notificar Dentista &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Impressão de Etiqueta Térmica ZPL / AWB 100x150mm -->
+  <div class="b2b-modal-backdrop" id="modal-etiqueta-expedicao">
+    <div class="b2b-modal-dialog" style="max-width: 480px; background:#FFFFFF; color:#09090B;">
+      <div class="b2b-modal-header" style="border-bottom:2px dashed #D4D4D8; padding-bottom:12px;">
+        <div>
+          <span class="mono" style="font-size:10px; font-weight:800; color:#71717A; letter-spacing:0.05em;">CONEXÃO IMPLANTES • EXPEDIÇÃO CD</span>
+          <h3 class="b2b-modal-title" style="color:#09090B; font-size:16px;">Etiqueta Térmica de Despacho (AWB)</h3>
+        </div>
+        <button class="btn-close-modal" onclick="fecharEtiquetaExpedicao()">&times;</button>
+      </div>
+
+      <!-- Pré-visualização da Etiqueta Térmica 100x150mm -->
+      <div id="etiqueta-termica-preview" style="border:2px solid #09090B; border-radius:6px; padding:16px; margin:16px 0; background:#FFF; font-family:'JetBrains Mono', monospace; color:#000;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:10px;">
+          <div>
+            <div style="font-size:16px; font-weight:900; letter-spacing:-0.03em;">DENTGO FLASH 2H</div>
+            <div style="font-size:10px; font-weight:700;">CONEXÃO LOGÍSTICA CIRÚRGICA</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="badge-flash" style="background:#000; color:#FFF; font-size:11px; padding:4px 8px; border-radius:4px; font-weight:900;">URGENTE</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <div style="font-size:10px; color:#52525B;">PEDIDO:</div>
+            <div style="font-size:18px; font-weight:900;" id="lbl-etiqueta-id">PED-9755</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px; color:#52525B;">PIN DE CUSTÓDIA:</div>
+            <div style="font-size:22px; font-weight:900; letter-spacing:2px; background:#F4F4F5; padding:2px 8px; border-radius:4px; border:1px solid #000;" id="lbl-etiqueta-pin">4829</div>
+          </div>
+        </div>
+
+        <div style="border-top:1px dashed #71717A; border-bottom:1px dashed #71717A; padding:8px 0; margin-bottom:12px;">
+          <div style="font-size:10px; color:#52525B;">DESTINATÁRIO / CIRURGIÃO:</div>
+          <div style="font-size:13px; font-weight:800;" id="lbl-etiqueta-cliente">Dra. Fernanda Dias</div>
+          <div style="font-size:11px; margin-top:2px;" id="lbl-etiqueta-endereco">Rua Pamplona, 1420 - Bela Vista - São Paulo/SP</div>
+        </div>
+
+        <div style="margin-bottom:12px; font-size:10px;">
+          <div style="font-weight:800; margin-bottom:4px;">RASTREABILIDADE ANVISA RDC 319/430:</div>
+          <div style="background:#F4F4F5; padding:6px; border-radius:4px; border:1px solid #E4E4E7;" id="lbl-etiqueta-rastreio">
+            Lote: <strong>LOT-CX-2026-884</strong> • Val: <strong>10/2031</strong><br>
+            GTIN: <strong>07898529381024</strong> (EAN Data Matrix)
+          </div>
+        </div>
+
+        <!-- QR Code Simulado e Código de Barras -->
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:2px solid #000; padding-top:10px;">
+          <div style="width:72px; height:72px; border:2px solid #000; display:flex; align-items:center; justify-content:center; background:#FFF; font-size:8px; text-align:center; padding:4px;">
+            [QR CUSTÓDIA ENTREGADOR]
+          </div>
+          <div style="flex:1; text-align:center;">
+            <div style="height:38px; background:repeating-linear-gradient(90deg, #000 0, #000 2px, transparent 2px, transparent 4px, #000 4px, #000 7px, transparent 7px, transparent 9px); margin-bottom:4px;"></div>
+            <div style="font-size:9px; letter-spacing:1px;" id="lbl-etiqueta-barcode">35261001884238000109550010000982121098214410</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:11px; color:#71717A;">Padrão Zebra ZPL / 100x150 mm</span>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-b2b-action" type="button" onclick="fecharEtiquetaExpedicao()">Fechar</button>
+          <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800;" onclick="imprimirEtiquetaZPL()">Imprimir Etiqueta (Térmica) 🖨️</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1741,9 +1843,12 @@
     }
 
     // =========================================================================
-    // DADOS VIVOS DO ESTOQUE DENTGO & COMBOS CIRÚRGICOS
+    // DADOS VIVOS DO ESTOQUE DENTGO & COMBOS CIRÚRGICOS (SINCRONIZADOS COM APP DENTISTA)
     // =========================================================================
-    let ESTOQUE_DENTGO = [
+    const CHAVE_STORAGE_ESTOQUE = "dentgo_b2b_estoque_v1";
+    const CHAVE_STORAGE_COMBOS = "dentgo_b2b_combos_v1";
+
+    let ESTOQUE_PADRAO = [
       { sku: "CX-FL-3510", nome: "Implante Flash CM 3.5 x 10mm", lote: "LOT-CX-2026-881", validade: "10/2031", buffer: 48, giro7d: 32, ativo: true },
       { sku: "CX-FL-4310", nome: "Implante Flash CM 4.3 x 10mm", lote: "LOT-CX-2026-884", validade: "10/2031", buffer: 35, giro7d: 26, ativo: true },
       { sku: "CX-MN-17-3525", nome: "Munhão Angulado 17° CM 3.5x2.5", lote: "LOT-CX-2026-772", validade: "08/2030", buffer: 6, giro7d: 18, ativo: true },
@@ -1751,7 +1856,7 @@
       { sku: "CX-KIT-CM-COMP", nome: "Kit Cirúrgico Compacto CM", lote: "LOT-CX-2026-550", validade: "05/2035", buffer: 8, giro7d: 4, ativo: true }
     ];
 
-    let COMBOS_FABRICANTE = [
+    let COMBOS_PADRAO = [
       {
         id: "CMB-01",
         titulo: "Combo Cirurgia Segura Flash CM",
@@ -1769,6 +1874,18 @@
         ativo: true
       }
     ];
+
+    let ESTOQUE_DENTGO = JSON.parse(localStorage.getItem(CHAVE_STORAGE_ESTOQUE) || "null") || ESTOQUE_PADRAO;
+    let COMBOS_FABRICANTE = JSON.parse(localStorage.getItem(CHAVE_STORAGE_COMBOS) || "null") || COMBOS_PADRAO;
+
+    function salvarPersistenciaB2B() {
+      localStorage.setItem(CHAVE_STORAGE_ESTOQUE, JSON.stringify(ESTOQUE_DENTGO));
+      localStorage.setItem(CHAVE_STORAGE_COMBOS, JSON.stringify(COMBOS_FABRICANTE));
+      // Sincroniza evento cruzado entre abas/janelas
+      try {
+        window.dispatchEvent(new Event("storage"));
+      } catch(e) {}
+    }
 
     function trocarAbaB2B(aba, btn) {
       document.querySelectorAll(".menu-item").forEach(m => m.classList.remove("active"));
@@ -1834,7 +1951,8 @@
       const it = ESTOQUE_DENTGO.find(x => x.sku === sku);
       if (it) {
         it.ativo = !it.ativo;
-        exibirToast(`Produto ${it.sku} agora está ${it.ativo ? 'ATIVO' : 'PAUSADO'} na vitrine dos dentistas.`);
+        salvarPersistenciaB2B();
+        exibirToast(`Produto ${it.sku} agora está ${it.ativo ? 'ATIVO' : 'PAUSADO (Esgotado)'} na vitrine dos dentistas.`);
         renderizarTabelaEstoque();
       }
     }
@@ -1865,6 +1983,7 @@
         item.validade = validade;
         item.ativo = true;
       }
+      salvarPersistenciaB2B();
       exibirToast(`Buffer DentGo atualizado: +${qtd} unidades alocadas para ${sku}.`);
       fecharModalReporEstoque();
       renderizarTabelaEstoque();
@@ -1939,7 +2058,8 @@
         ativo: true
       });
 
-      exibirToast(`Combo "${titulo}" publicado com sucesso!`);
+      salvarPersistenciaB2B();
+      exibirToast(`Combo "${titulo}" publicado com sucesso no App!`);
       fecharModalNovoCombo();
       renderizarGridCombos();
     }
@@ -2010,11 +2130,16 @@
       return resultado;
     }
 
+    let conferenciaItensAtuais = [];
+    let pedidoConferenciaAtual = null;
+
     function abrirModalConferencia(id, cliente, itens) {
+      pedidoConferenciaAtual = id;
       document.getElementById("conf-id").innerText = id;
       document.getElementById("conf-cliente").innerText = cliente;
       const cItens = document.getElementById("conf-itens-container");
       cItens.innerHTML = "";
+      conferenciaItensAtuais = itens;
       itens.forEach(item => {
         const div = document.createElement("div");
         div.innerText = "• " + item;
@@ -2104,17 +2229,34 @@
         const cod = e.target.value.trim();
         if (!cod) return;
         
+        // Trava de Segurança Clínica (Anti-Divergência de SKU)
         const parse = parseGS1DataMatrix(cod);
+        
+        // Verifica se o SKU ou diâmetro diverge
+        const temFlash43 = cod.includes("CX-FL-43") || cod.includes("4.3");
+        const pedidoExigeFlash35 = conferenciaItensAtuais.some(it => it.includes("3.5x10") || it.includes("CX-FL-3510"));
+
+        if (temFlash43 && pedidoExigeFlash35) {
+          // Disparo de bloqueio de segurança
+          if (navigator.vibrate) navigator.vibrate([150, 100, 150, 100, 250]);
+          alert("⚠️ TRAVA DE SEGURANÇA CLÍNICA ATIVADA!\n\nVocê bipou um Implante de diâmetro 4.3mm, mas a prescrição cirúrgica do Dr. Roberto Fontes exige 3.5mm!\n\nBipagem rejeitada para evitar intercorrência cirúrgica.");
+          e.target.value = "";
+          return;
+        }
+
         if (parse.lote) {
-          exibirToast(`Lote ANVISA ${parse.lote} decodificado com sucesso!`);
+          exibirToast(`Lote ANVISA ${parse.lote} conferido com sucesso!`);
           if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
         } else {
-          exibirToast("Código registrado: " + cod);
+          exibirToast("Código registrado com sucesso: " + cod);
           if (navigator.vibrate) navigator.vibrate(80);
         }
 
         e.target.value = "";
-        setTimeout(fecharModalConferencia, 450);
+        setTimeout(() => {
+          if (pedidoConferenciaAtual) moverPedidoKanban(pedidoConferenciaAtual, 'pronto');
+          fecharModalConferencia();
+        }, 500);
       }
     }
 
@@ -2131,6 +2273,60 @@
 
     function moverPedidoKanban(id, destino) {
       exibirToast("Pedido " + id + " transferido para " + destino.toUpperCase());
+    }
+
+    // Gerenciador de Impressão de Etiquetas Térmicas (Zebra ZPL / AWB 100x150mm)
+    function abrirEtiquetaExpedicao(id, cliente, endereco, lote, pin) {
+      document.getElementById("lbl-etiqueta-id").innerText = id || "PED-9755";
+      document.getElementById("lbl-etiqueta-cliente").innerText = cliente || "Dra. Fernanda Dias";
+      document.getElementById("lbl-etiqueta-endereco").innerText = endereco || "Rua Pamplona, 1420 - Bela Vista - São Paulo/SP";
+      document.getElementById("lbl-etiqueta-pin").innerText = pin || "4829";
+      document.getElementById("lbl-etiqueta-rastreio").innerHTML = `
+        Lote: <strong>${lote || 'LOT-CX-2026-884'}</strong> • Val: <strong>10/2031</strong><br>
+        GTIN: <strong>07898529381024</strong> (EAN Data Matrix GS1)
+      `;
+      document.getElementById("modal-etiqueta-expedicao").classList.add("open");
+    }
+
+    function fecharEtiquetaExpedicao() {
+      document.getElementById("modal-etiqueta-expedicao").classList.remove("open");
+    }
+
+    function imprimirEtiquetaZPL() {
+      exibirToast("Enviando comando ZPL para impressora térmica de etiquetas (100x150mm)...");
+      setTimeout(() => {
+        window.print();
+        fecharEtiquetaExpedicao();
+      }, 350);
+    }
+
+    // Filtros Rápidos de SLA e Corte Operacional
+    function filtrarKanbanPorSLA(tipo, btn) {
+      document.querySelectorAll(".filter-btn").forEach(b => {
+        b.classList.remove("active");
+        b.style.background = "";
+        b.style.color = "";
+      });
+      if (btn) {
+        btn.classList.add("active");
+        btn.style.background = "#09090B";
+        btn.style.color = "#FFFFFF";
+      }
+
+      const cards = document.querySelectorAll(".kanban-card");
+      cards.forEach(card => {
+        const isFlash = card.classList.contains("flash");
+        const temTimerUrgente = card.innerText.includes("18 min");
+
+        if (tipo === "todos") {
+          card.style.display = "block";
+        } else if (tipo === "flash") {
+          card.style.display = isFlash ? "block" : "none";
+        } else if (tipo === "urgente") {
+          card.style.display = temTimerUrgente ? "block" : "none";
+        }
+      });
+      exibirToast("Filtro Kanban aplicado: " + tipo.toUpperCase());
     }
 
     let mapRastreioInstance = null;
