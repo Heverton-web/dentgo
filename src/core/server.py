@@ -235,6 +235,29 @@ class DentGoRequestHandler(BaseHTTPRequestHandler):
             self._send_json(200, {"total": len(noticias), "noticias": noticias})
             return
 
+        if path.startswith("/assets/"):
+            caminho_asset = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / path.lstrip("/")
+            if caminho_asset.exists() and caminho_asset.is_file():
+                ext = caminho_asset.suffix.lower()
+                mimes = {
+                    ".png": "image/png",
+                    ".jpg": "image/jpeg",
+                    ".jpeg": "image/jpeg",
+                    ".svg": "image/svg+xml",
+                    ".webp": "image/webp",
+                    ".js": "application/javascript",
+                    ".css": "text/css"
+                }
+                ctype = mimes.get(ext, "application/octet-stream")
+                data = caminho_asset.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", ctype)
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.end_headers()
+                self.wfile.write(data)
+                return
+
         if path == "/" or path == "/index.html" or path == "/app":
             caminho_app = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "index.html"
             if caminho_app.exists():
