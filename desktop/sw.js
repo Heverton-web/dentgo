@@ -1,10 +1,10 @@
-const CACHE_NAME = 'dentgo-v1';
+const CACHE_NAME = 'dentgo-v2';
 const ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/assets/icons/icon-192.png',
-  '/assets/icons/icon-512.png'
+  '/manifest.json?v=2',
+  '/assets/icons/icon-192.png?v=2',
+  '/assets/icons/icon-512.png?v=2'
 ];
 
 self.addEventListener('install', (event) => {
@@ -15,7 +15,15 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((k) => {
+          if (k !== CACHE_NAME) return caches.delete(k);
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {
