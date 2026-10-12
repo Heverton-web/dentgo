@@ -475,9 +475,9 @@
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 14px;
-      height: 148px !important;
-      min-height: 148px !important;
-      max-height: 148px !important;
+      height: 184px !important;
+      min-height: 184px !important;
+      max-height: 184px !important;
       flex-shrink: 0;
       box-sizing: border-box;
       display: flex;
@@ -501,9 +501,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
       height: 22px;
       flex-shrink: 0;
+      gap: 6px;
     }
 
     .card-id {
@@ -521,6 +521,11 @@
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
     }
 
     .badge-flash {
@@ -533,14 +538,20 @@
       color: var(--text-muted);
     }
 
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin: 6px 0;
+      flex: 1;
+      justify-content: center;
+    }
+
     .card-client {
       font-size: 12px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 4px;
-      height: 16px;
-      line-height: 16px;
-      flex-shrink: 0;
+      line-height: 1.3;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -549,13 +560,12 @@
     .card-items-desc {
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 8px;
-      height: 16px;
-      line-height: 16px;
-      flex-shrink: 0;
-      white-space: nowrap;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
+      height: 30px;
     }
 
     .card-bottom {
@@ -563,14 +573,30 @@
       justify-content: space-between;
       align-items: center;
       border-top: 1px dashed var(--border);
-      padding-top: 8px;
+      padding-top: 10px;
       height: 38px;
       flex-shrink: 0;
       box-sizing: border-box;
+      gap: 8px;
+    }
+
+    .card-bottom .card-price {
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-bottom-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .btn-b2b-action {
-      padding: 6px 10px;
+      height: 28px;
+      padding: 0 10px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
@@ -578,13 +604,47 @@
       cursor: pointer;
       background: var(--surface-subtle);
       color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-sizing: border-box;
       transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
-    .btn-b2b-action:hover {
-      background: var(--text);
+    .btn-b2b-action.btn-primary {
+      background: #09090B;
       color: #FFFFFF;
+      border-color: #09090B;
+    }
+
+    .btn-b2b-action.btn-primary:hover {
+      background: #27272A;
+      border-color: #27272A;
+      color: #FFFFFF;
+    }
+
+    .btn-b2b-action.btn-secondary {
+      background: var(--surface-subtle);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-b2b-action.btn-secondary:hover {
+      background: var(--surface);
       border-color: var(--text);
+    }
+
+    .btn-b2b-action.btn-status {
+      background: rgba(16, 185, 129, 0.08);
+      color: var(--emerald);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-b2b-action.btn-status:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--emerald);
     }
 
     /* Modal Cirúrgico Nativo HTML/CSS */
@@ -909,8 +969,14 @@
         padding: 3px 8px;
       }
 
-      .card-bottom .btn-b2b-action {
+      .card-bottom-actions {
         width: 100%;
+        display: flex;
+        gap: 6px;
+      }
+
+      .card-bottom-actions .btn-b2b-action {
+        flex: 1;
         height: 38px;
         font-size: 12px;
         justify-content: center;
@@ -920,6 +986,7 @@
         flex-direction: column;
         align-items: stretch;
         gap: 8px;
+        height: auto;
       }
 
       .content-area {
@@ -1246,11 +1313,15 @@
                     <span class="card-sla-badge badge-flash">Flash 2h</span>
                   </div>
                 </div>
-                <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
-                <div class="card-items-desc">4x Implante Flash CM • 4x Munhão Angulado 17°</div>
+                <div class="card-body">
+                  <div class="card-client">Dr. Roberto Fontes (Jardins)</div>
+                  <div class="card-items-desc">4x Implante Flash CM 3.5 • 4x Munhão Angulado 17°</div>
+                </div>
                 <div class="card-bottom">
-                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.110,00</span>
-                  <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9821', 'picking')">Iniciar Picking</button>
+                  <span class="card-price mono">R$ 1.110,00</span>
+                  <div class="card-bottom-actions">
+                    <button class="btn-b2b-action btn-secondary" onclick="event.stopPropagation(); moverPedidoKanban('PED-9821', 'picking')">Iniciar Picking</button>
+                  </div>
                 </div>
               </div>
 
@@ -1265,11 +1336,15 @@
                     <span class="card-sla-badge badge-normal">Normal (Hoje)</span>
                   </div>
                 </div>
-                <div class="card-client">Dra. Camila Prado (Moema)</div>
-                <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
+                <div class="card-body">
+                  <div class="card-client">Dra. Camila Prado (Moema)</div>
+                  <div class="card-items-desc">1x Scan Body In-Lego Intraoral CM</div>
+                </div>
                 <div class="card-bottom">
-                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 120,00</span>
-                  <button class="btn-b2b-action" onclick="event.stopPropagation(); moverPedidoKanban('PED-9818', 'picking')">Iniciar Picking</button>
+                  <span class="card-price mono">R$ 120,00</span>
+                  <div class="card-bottom-actions">
+                    <button class="btn-b2b-action btn-secondary" onclick="event.stopPropagation(); moverPedidoKanban('PED-9818', 'picking')">Iniciar Picking</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1293,11 +1368,15 @@
                     <span class="card-sla-badge badge-flash">Flash 2h</span>
                   </div>
                 </div>
-                <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
-                <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
+                <div class="card-body">
+                  <div class="card-client">Dr. Marcos Vianna (Itaim Bibi)</div>
+                  <div class="card-items-desc">1x Kit Cirúrgico Compacto Cone Morse</div>
+                </div>
                 <div class="card-bottom">
-                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.890,00</span>
-                  <button class="btn-b2b-action" onclick="event.stopPropagation(); abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna', ['1x Kit Cirúrgico Compacto CM'])">Bipar Lote</button>
+                  <span class="card-price mono">R$ 1.890,00</span>
+                  <div class="card-bottom-actions">
+                    <button class="btn-b2b-action btn-secondary" onclick="event.stopPropagation(); abrirModalConferencia('PED-9799', 'Dr. Marcos Vianna', ['1x Kit Cirúrgico Compacto CM'])">Bipar Lote</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1321,16 +1400,17 @@
                     <span class="card-sla-badge badge-flash">Flash 2h</span>
                   </div>
                 </div>
-                <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
-                <div class="card-items-desc">Lote: LOT-CX-2026-884 (Validade: 10/2031)</div>
+                <div class="card-body">
+                  <div class="card-client">Dra. Fernanda Dias (Bela Vista)</div>
+                  <div class="card-items-desc">Lote: <strong class="mono" style="color:var(--text); font-weight:700;">LOT-CX-2026-884</strong> • Val: 10/2031</div>
+                </div>
                 <div class="card-bottom">
-                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 1.450,00</span>
-                  <div style="display:flex; gap:6px;">
-                    <button class="btn-b2b-action" style="font-size:11px; display:inline-flex; align-items:center; gap:4px; padding:4px 8px;" onclick="abrirEtiquetaExpedicao('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista', 'LOT-CX-2026-884', '4829')">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                      Etiqueta
+                  <span class="card-price mono">R$ 1.450,00</span>
+                  <div class="card-bottom-actions">
+                    <button class="btn-b2b-action btn-secondary" style="padding:0 7px;" title="Imprimir Etiqueta Térmica" onclick="abrirEtiquetaExpedicao('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista', 'LOT-CX-2026-884', '4829')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                     </button>
-                    <button class="btn-b2b-action" style="background:#09090B; color:#FFF; font-weight:800; padding:4px 10px;" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar &rarr;</button>
+                    <button class="btn-b2b-action btn-primary" onclick="abrirModalDespachoHibrido('PED-9755', 'Dra. Fernanda Dias', 'Rua Pamplona, 1420 - Bela Vista')">Despachar</button>
                   </div>
                 </div>
               </div>
@@ -1352,17 +1432,21 @@
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                       18 min
                     </span>
-                    <span class="card-sla-badge badge-flash">Em Trânsito</span>
+                    <span class="card-sla-badge badge-flash">Flash 2h</span>
                   </div>
                 </div>
-                <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
-                <div class="card-items-desc">PIN de Entrega: <strong class="mono">7421</strong> • ETA: 18 min</div>
+                <div class="card-body">
+                  <div class="card-client">Dr. Lucas Silveira (Paulista)</div>
+                  <div class="card-items-desc">PIN: <strong class="mono">7421</strong> • ETA: 18 min</div>
+                </div>
                 <div class="card-bottom">
-                  <span class="mono" style="font-size:11px; font-weight:800;">R$ 420,00</span>
-                  <button class="btn-b2b-action" style="font-size:11px; color:var(--emerald); border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.06); font-weight:800; display:inline-flex; align-items:center; gap:4px; padding:4px 10px;" onclick="abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira')">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-                    Radar GPS &nearr;
-                  </button>
+                  <span class="card-price mono">R$ 420,00</span>
+                  <div class="card-bottom-actions">
+                    <button class="btn-b2b-action btn-status" onclick="event.stopPropagation(); abrirRastreioLive('PED-91042', 'Dr. Lucas Silveira')">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                      Radar GPS
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2382,11 +2466,11 @@
         const temTimerUrgente = card.innerText.includes("18 min");
 
         if (tipo === "todos") {
-          card.style.display = "block";
+          card.style.display = "flex";
         } else if (tipo === "flash") {
-          card.style.display = isFlash ? "block" : "none";
+          card.style.display = isFlash ? "flex" : "none";
         } else if (tipo === "urgente") {
-          card.style.display = temTimerUrgente ? "block" : "none";
+          card.style.display = temTimerUrgente ? "flex" : "none";
         }
       });
       exibirToast("Filtro Kanban aplicado: " + tipo.toUpperCase());
