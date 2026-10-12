@@ -2414,12 +2414,110 @@
     }
 
     function confirmarBipLote() {
+      if (pedidoConferenciaAtual) {
+        moverPedidoKanban(pedidoConferenciaAtual, 'pronto');
+      }
       exibirToast("Conferência física concluída com sucesso.");
       fecharModalConferencia();
     }
 
+    function atualizarContadoresKanban() {
+      const colNovos = document.getElementById("col-novos");
+      const colPicking = document.getElementById("col-picking");
+      const colPronto = document.getElementById("col-pronto");
+      const colRota = document.getElementById("col-rota");
+
+      if (colNovos && document.getElementById("count-novos")) {
+        document.getElementById("count-novos").innerText = colNovos.querySelectorAll(".kanban-card").length;
+      }
+      if (colPicking && document.getElementById("count-picking")) {
+        document.getElementById("count-picking").innerText = colPicking.querySelectorAll(".kanban-card").length;
+      }
+      if (colPronto && document.getElementById("count-pronto")) {
+        document.getElementById("count-pronto").innerText = colPronto.querySelectorAll(".kanban-card").length;
+      }
+      if (colRota && document.getElementById("count-rota")) {
+        document.getElementById("count-rota").innerText = colRota.querySelectorAll(".kanban-card").length;
+      }
+    }
+
     function moverPedidoKanban(id, destino) {
-      exibirToast("Pedido " + id + " transferido para " + destino.toUpperCase());
+      // Localiza o card pelo texto do ID dentro de .card-id
+      const todosCards = document.querySelectorAll(".kanban-card");
+      let cardAlvo = null;
+      todosCards.forEach(c => {
+        const spanId = c.querySelector(".card-id");
+        if (spanId && spanId.innerText.trim() === id.trim()) {
+          cardAlvo = c;
+        }
+      });
+
+      if (!cardAlvo) {
+        exibirToast("Card " + id + " não localizado.");
+        return;
+      }
+
+      const colPicking = document.getElementById("col-picking");
+      const colPronto = document.getElementById("col-pronto");
+      const colRota = document.getElementById("col-rota");
+
+      const clientEl = cardAlvo.querySelector(".card-client");
+      const nomeCliente = clientEl ? clientEl.innerText.trim() : "Cirurgião";
+      const descEl = cardAlvo.querySelector(".card-items-desc");
+      const actionsEl = cardAlvo.querySelector(".card-bottom-actions");
+      const timerCorte = cardAlvo.querySelector(".timer-corte");
+
+      if (destino === "picking" && colPicking) {
+        colPicking.appendChild(cardAlvo);
+        if (actionsEl) {
+          actionsEl.innerHTML = `
+            <button class="btn-b2b-action btn-secondary" onclick="event.stopPropagation(); abrirModalConferencia('${id}', '${nomeCliente}', ['${descEl ? descEl.innerText.trim() : 'Implantes/Componentes'}'])">Bipar Lote</button>
+          `;
+        }
+        cardAlvo.onclick = function() {
+          abrirModalConferencia(id, nomeCliente, [descEl ? descEl.innerText.trim() : 'Implantes/Componentes']);
+        };
+        exibirToast(`Pedido ${id} movido para PICKING & BIPAGEM`);
+      } else if (destino === "pronto" && colPronto) {
+        colPronto.appendChild(cardAlvo);
+        if (timerCorte) {
+          timerCorte.style.color = "var(--emerald)";
+          timerCorte.style.background = "rgba(16,185,129,0.1)";
+          timerCorte.innerHTML = `
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Pronto
+          `;
+        }
+        if (actionsEl) {
+          actionsEl.innerHTML = `
+            <button class="btn-b2b-action btn-secondary" style="padding:0 7px;" title="Imprimir Etiqueta Térmica" onclick="event.stopPropagation(); abrirEtiquetaExpedicao('${id}', '${nomeCliente}', 'Av. Paulista, 1000', 'LOT-CX-2026-884', '4829')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            </button>
+            <button class="btn-b2b-action btn-primary" onclick="event.stopPropagation(); abrirModalDespachoHibrido('${id}', '${nomeCliente}', 'Av. Paulista, 1000')">Despachar</button>
+          `;
+        }
+        cardAlvo.onclick = null;
+        exibirToast(`Pedido ${id} conferido e pronto para coleta!`);
+      } else if (destino === "rota" && colRota) {
+        colRota.appendChild(cardAlvo);
+        if (actionsEl) {
+          actionsEl.innerHTML = `
+            <button class="btn-b2b-action btn-status" onclick="event.stopPropagation(); abrirRastreioLive('${id}', '${nomeCliente}')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+              Radar GPS
+            </button>
+          `;
+        }
+        if (descEl) {
+          descEl.innerHTML = `PIN: <strong class="mono">7421</strong> • Em Rota Flash`;
+        }
+        cardAlvo.onclick = function() {
+          abrirRastreioLive(id, nomeCliente);
+        };
+        exibirToast(`Pedido ${id} despachado! Piloto acionado.`);
+      }
+
+      atualizarContadoresKanban();
     }
 
     // Gerenciador de Impressão de Etiquetas Térmicas (Zebra ZPL / AWB 100x150mm)
