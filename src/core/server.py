@@ -247,6 +247,18 @@ class DentGoRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(data)
                 return
 
+        if path == "/manifest-b2b.json" or path.startswith("/manifest-b2b.json?"):
+            caminho_manifest = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "manifest-b2b.json"
+            if caminho_manifest.exists():
+                data = caminho_manifest.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/manifest+json; charset=utf-8")
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.end_headers()
+                self.wfile.write(data)
+                return
+
         if path == "/sw.js" or path.startswith("/sw.js?"):
             caminho_sw = pathlib.Path(__file__).resolve().parent.parent.parent / "desktop" / "sw.js"
             if caminho_sw.exists():
