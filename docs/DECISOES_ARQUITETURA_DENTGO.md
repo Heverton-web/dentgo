@@ -102,6 +102,13 @@
 
 ---
 
+## 7.1. Regra Canônica Inviolável de Modais (100% In-App)
+* **Banimento Estrito de Caixas de Diálogo Nativas**: É estritamente proibido o uso de `window.alert()`, `window.confirm()`, `window.prompt()` ou quaisquer diálogos nativos do sistema operacional (Windows, Android, iOS, macOS) em todos os ecossistemas DentGo (`/app`, `/b2b`, `/driver`).
+* **Padrão Obrigatório de Modais**:
+  - Todos os diálogos, confirmações, alertas, inserções de dados e visualizações devem ser construídos como componentes DOM estilizados com backdrops semitransparentes (`.modal-overlay`, `.b2b-modal-backdrop`), garantindo identidade visual, suporte PWA e blindagem contra travamento de thread do SO.
+
+---
+
 ## 8. Logística Avançada, Roteirização TSP e Custódia
 
 ### 8.1. Agrupamento (Batching) e Limites de Entregas por Corrida

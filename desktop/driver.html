@@ -781,6 +781,30 @@
       </div>
     </div>
 
+    <!-- Modal de Edição de PIX da Aplicação -->
+    <div class="modal-overlay" id="modal-editar-pix">
+      <div class="modal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:14px; font-weight:800; color:#FFF;">Atualizar Chave PIX</div>
+          <button onclick="fecharModalEditarPix()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</button>
+        </div>
+
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+          A chave PIX deve obrigatoriamente ser do mesmo titular do CPF cadastrado na CNH para liberação dos repasses diários:
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--text-muted);">Nova Chave PIX (CPF / Celular / E-mail / Aleatória):</label>
+          <input type="text" id="input-nova-chave-pix" class="mono" style="width:100%; height:44px; background:var(--surface-elevated); border:1px solid var(--border); border-radius:10px; padding:0 12px; color:#FFF; font-size:13px; font-weight:700; outline:none;" placeholder="ex: 388.192.408-11" value="388.192.408-11">
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:6px;">
+          <button class="btn-driver-secondary" onclick="fecharModalEditarPix()">Cancelar</button>
+          <button class="btn-driver-cta" style="min-height:44px; font-size:11px;" onclick="salvarChavePixApp()">Salvar Chave</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de Coleta / Bipagem de Custódia -->
     <div class="modal-overlay" id="modal-coleta-fabricante">
       <div class="modal-card">
@@ -1187,10 +1211,19 @@
     }
 
     function abrirModalEditarPix() {
-      const novoPix = prompt("Digite sua nova chave PIX (deve ser do titular do CPF cadastrado):", "388.192.408-11");
-      if (novoPix) {
-        document.getElementById("txt-pix-cadastrado").innerText = novoPix + " (Validado)";
-        exibirToast("Chave PIX atualizada e validada contra CPF da CNH.");
+      document.getElementById("modal-editar-pix").classList.add("open");
+    }
+
+    function fecharModalEditarPix() {
+      document.getElementById("modal-editar-pix").classList.remove("open");
+    }
+
+    function salvarChavePixApp() {
+      const val = document.getElementById("input-nova-chave-pix").value.trim();
+      if (val) {
+        document.getElementById("txt-pix-cadastrado").innerText = val + " (Validado)";
+        fecharModalEditarPix();
+        exibirToast("Chave PIX atualizada no app e validada contra CPF da CNH.");
       }
     }
 
